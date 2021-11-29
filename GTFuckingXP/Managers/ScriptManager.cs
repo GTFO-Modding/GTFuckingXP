@@ -58,9 +58,8 @@ namespace GTFuckingXP.Managers
         public void StartLevelScripts()
         {
             UpdateEverything();
-            var xpHandler = _instanceCache.CreateRegisterAndReturnComponent<XpHandler>();
-            
-            //TODO @Tobias Register the current LevelLayout instance!
+            _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
+            _ = _instanceCache.CreateRegisterAndReturnComponent<XpHandler>();
         }
 
         /// <summary>
@@ -68,7 +67,8 @@ namespace GTFuckingXP.Managers
         /// </summary>
         public void EndLevelScripts()
         {
-            //TODO @Tobias unregister the current LevelLayout instance!
+            _instanceCache.KillScript<XpHandler>();
+            _instanceCache.KillScript<XpBar>();
         }
 
         public (List<EnemyXp> enemyXpList, List<ExpeditionsLevelMapping> expeditionLevelLayoutMapping, List<LevelLayout> levelLayouts) ReadJsonBlocks()
@@ -170,8 +170,7 @@ namespace GTFuckingXP.Managers
 
         private void CreateXpBarInUi()
         {
-            var test = GuiManager.Current.m_playerLayer;
-            test.AddRectComp()
+            _instanceCache.AddSingleComponentToGameObjectAndRegister<XpBar>(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject);
         }
     }
 }

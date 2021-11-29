@@ -122,7 +122,7 @@ namespace GTFuckingXP.Patches
             {
                 //No data found, creating a new instance and 
                 LogManager.Warn($"There was no Enemy XP data found for {killedEnemy.EnemyDataID}!");
-                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, 20000, 10000, 400);
+                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 400);
                 enemyData.Add(enemyXpData);
                 instanceCache.SetInstance(enemyData);
             }

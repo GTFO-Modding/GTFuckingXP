@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Enums\PlayerBuff.cs" />
+    <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\Enemies\EnemyXp.cs" />

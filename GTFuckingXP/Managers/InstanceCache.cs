@@ -38,31 +38,55 @@ namespace GTFuckingXP.Managers
             instance = gameObject.AddComponent<Tscript>();
 
             SetInstance(instance);
-
             return instance;
         }
 
         /// <summary>
-        /// Registers the <paramref name="instance"/> as a new instance.
+        /// Kills the <typeparamref name="Tscript"/> component
         /// </summary>
-        /// <param name="instance">The instance you want to register.</param>
-        /// <returns>If the instance was succesfully registered.</returns>
-        public bool RegisterInstance<Tinstance>(Tinstance instance, Type instanceType = null)
+        /// <typeparam name="Tscript"></typeparam>
+        public void KillScript<Tscript>() where Tscript : Component
         {
-            if (instanceType is null)
+            if(TryGetinstance<Tscript>(out var script))
             {
-                instanceType = typeof(Tinstance);
+                UnityEngine.Object.Destroy(script);
+                _typeInstances.Remove(typeof(Tscript));
             }
-
-            if (!_typeInstances.ContainsKey(instanceType))
-            {
-                _typeInstances.Add(instanceType, instance);
-                return true;
-            }
-
-            return false;
-            //throw new Exception($"Can not add a instance of Type {instanceType} to the cache, because there is already a instance registered of this Type!");
         }
+
+        /// <summary>
+        /// Adds a component of type <typeparamref name="Tscript"/> to <paramref name="parentGameobject"/> if the gameobject does not contain it yet.
+        /// Returns the newly generated or already existing component of <typeparamref name="Tscript"/> in <paramref name="parentGameobject"/>.
+        /// </summary>
+        public Tscript AddSingleComponentToGameObjectAndRegister<Tscript>(GameObject parentGameobject) where Tscript : Component
+        {
+            var tscriptComponent = parentGameobject.AddComponent<Tscript>();
+
+            SetInstance(tscriptComponent);
+            return tscriptComponent;
+        }
+
+        ///// <summary>
+        ///// Registers the <paramref name="instance"/> as a new instance.
+        ///// </summary>
+        ///// <param name="instance">The instance you want to register.</param>
+        ///// <returns>If the instance was succesfully registered.</returns>
+        //public bool RegisterInstance<Tinstance>(Tinstance instance, Type instanceType = null)
+        //{
+        //    if (instanceType is null)
+        //    {
+        //        instanceType = typeof(Tinstance);
+        //    }
+
+        //    if (!_typeInstances.ContainsKey(instanceType))
+        //    {
+        //        _typeInstances.Add(instanceType, instance);
+        //        return true;
+        //    }
+
+        //    return false;
+        //    //throw new Exception($"Can not add a instance of Type {instanceType} to the cache, because there is already a instance registered of this Type!");
+        //}
 
         /// <summary>
         /// Sets <paramref name="instance"/> directly into the cache.
@@ -76,7 +100,7 @@ namespace GTFuckingXP.Managers
         /// Tries to get the instance of type <typeparamref name="Tinstance"/>.
         /// Throws an Exception if the requested instance is not in the cache.
         /// </summary>
-        public  Tinstance GetInstance<Tinstance>()
+        public Tinstance GetInstance<Tinstance>()
         {
             if (_typeInstances.TryGetValue(typeof(Tinstance), out var instance))
             {

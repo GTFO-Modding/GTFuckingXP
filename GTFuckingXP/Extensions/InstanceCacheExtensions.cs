@@ -12,7 +12,7 @@ namespace GTFuckingXP.Extensions
         private const string LevelLayoutKey = "LevelLayout";
         private const string ActiveLevelKey = "ActiveLevel";
         private const string DefaultDataBlockMaxHpKey = "MaxHpDefault";
-
+        //private const string WaterMarkPrefixKey = "WaterMark";
 
         public static void SetCurrentLevelLayout(this InstanceCache instanceCache, LevelLayout levelLayout)
         {
@@ -54,5 +54,15 @@ namespace GTFuckingXP.Extensions
         {
             instanceCache.SetInformation(DefaultDataBlockMaxHpKey, defaultMaxHp);
         }
+
+        //public static string GetWaterMarkPrefix(this InstanceCache instanceCache)
+        //{
+        //    return instanceCache.GetInformation<string>(WaterMarkPrefixKey);
+        //}
+
+        //public static void SetWaterMarkPrefix(this InstanceCache instanceCache, string watermarkPrefix)
+        //{
+        //    instanceCache.SetInformation(WaterMarkPrefixKey, watermarkPrefix);
+        //}
     }
 }

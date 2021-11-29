@@ -1,10 +1,10 @@
 ﻿using BepInEx.IL2CPP;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
+using GTFuckingXP.Managers;
 using System;
-using TMPro;
+using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace GTFuckingXP.Scripts
 {
@@ -13,67 +13,47 @@ namespace GTFuckingXP.Scripts
     /// </summary>
     public class XpBar : MonoBehaviour
     {
-        //private bool _initialized = false;
+        private static string _prefix;
+        private readonly InstanceCache _instanceCache;
 
-        //private TextMeshPro _xpText;
         private RectTransform _xpBar;
         private SpriteRenderer _xpProgressBar;
-
-        //private DateTime _dateTime;
+        
+        static XpBar()
+        { }
 
         public XpBar(IntPtr intPtr) : base(intPtr)
         {
-            //_dateTime = DateTime.Now.AddSeconds(1);
-
-            bool oxygenPluginExists = false;
-            if (IL2CPPChainloader.Instance.Plugins.TryGetValue("com.chasetug.Oxygen", out var info))
-            {
-                oxygenPluginExists = true;
-            }
-
-            var playerstatus = GuiManager.Current.m_playerLayer.m_playerStatus;
-
-            //_xpText = playerstatus.m_healthText.gameObject.Instantiate<TextMeshPro>("AirText");
-            //_xpText.m_max_characters = 1000;
-            //_xpText.m_max_numberOfLines = 1000;
-
-            //_xpText.SetText("XPREEEEEEEE");
-            //_xpText.ForceMeshUpdate();
-
+            _instanceCache = InstanceCache.Instance;
 
             XpBarStuff();
         }
 
-        public Vector3 XpBarLocalPosition => _xpBar.localPosition;
 
-        //public void Update()
-        //{
-        //    if (_initialized)
-        //        return;
+        public void UpdateUiString(Level currentLevel, Level nextLevel, uint currentTotalXp)
+        {
+            if(string.IsNullOrEmpty(_prefix))
+            {
+                _prefix = GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.text;
+            }
 
-        //    if(_dateTime < DateTime.Now)
-        //    {
-        //        _xpText.transform.localPosition = _xpBar.transform.localPosition;
-        //        _xpText.transform.Translate(new Vector3(140f, 80f, 0));
-        //        _xpText.alignment = TextAlignmentOptions.BottomLeft;
-                
-        //        //var rectTransform = _xpText.m_renderer.transform.Cast<RectTransform>();
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(_prefix);
+            stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+            stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
+            stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
+            stringBuilder.AppendLine($"Level :{currentLevel.LevelNumber} => {currentTotalXp - currentLevel.TotalXpRequired} / {nextLevel.TotalXpRequired / currentLevel.TotalXpRequired}");
 
-        //        //rectTransform.offsetMax = Vector2.zero;
-        //        //rectTransform.offsetMin = Vector2.zero;
+            GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.SetText(stringBuilder.ToString());
+            GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.ForceMeshUpdate();
 
-        //        //rectTransform.anchorMax = new Vector2(-0.25f, 0);
-        //        //rectTransform.anchorMin = Vector2.zero;
-
-        //        //rectTransform.anchoredPosition = Vector2.zero;
-        //        //rectTransform.anchoredPosition3D = Vector2.zero;
-        //    }
-        //}
+            //TODO NextLevel can be null!!!!
+        }
 
         public void XpBarStuff()
         {
-            if(_xpBar != null)
-            Destroy(_xpBar);
+            if (_xpBar != null)
+                Destroy(_xpBar);
 
             bool oxygenPluginExists = false;
             if (IL2CPPChainloader.Instance.Plugins.TryGetValue("com.chasetug.Oxygen", out var info))

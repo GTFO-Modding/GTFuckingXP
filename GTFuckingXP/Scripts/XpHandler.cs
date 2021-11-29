@@ -7,7 +7,6 @@ using System.Linq;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using Player;
-using static UnityEngine.GUI;
 
 namespace GTFuckingXP.Scripts
 {
@@ -18,30 +17,10 @@ namespace GTFuckingXP.Scripts
     {
         private readonly InstanceCache _instanceCache = InstanceCache.Instance;
 
-        private readonly Rect _position1;
-        private readonly Rect _position2;
-        private readonly Rect _position3;
-        private readonly Rect _position4;
-        private readonly Rect _position5;
-
-        private string _levelString1;
-        private string _levelString2;
-        private string _levelString3;
-        private string _levelString4;
-        private string _levelString5;
-
         private bool _hasDebuff;
 
         public XpHandler(IntPtr intPtr) : base(intPtr)
-        {
-            var xpBarPosition = _instanceCache.GetInstance<XpBar>().XpBarLocalPosition;
-
-            _position1 = new Rect(xpBarPosition.x, xpBarPosition.y + 200, 300, 30);
-            _position2 = new Rect(xpBarPosition.x, xpBarPosition.y + 170, 300, 30);
-            _position3 = new Rect(xpBarPosition.x, xpBarPosition.y + 140, 300, 30);
-            _position4 = new Rect(xpBarPosition.x, xpBarPosition.y + 110, 300, 30);
-            _position5 = new Rect(xpBarPosition.x, xpBarPosition.y + 80, 300, 30);
-        }
+        { }
 
         /// <summary>
         /// Gets or sets the total xp you have to this point.
@@ -57,23 +36,6 @@ namespace GTFuckingXP.Scripts
         /// Gets if you're already max level.
         /// </summary>
         public bool IsMaxLevel => NextLevel is null;
-
-        ///// <summary>
-        ///// Gets the single instance of <see cref="XpBar"/>.
-        ///// </summary>
-        //protected XpBar XpBarInstance
-        //{
-        //    get
-        //    {
-        //        XpBar bar;
-        //        if (!_instanceCache.TryGetinstance(out bar))
-        //        {
-        //            bar = GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>();
-        //            _instanceCache.SetInstance(bar);
-        //        }
-        //        return bar;
-        //    }
-        //}
 
         public void Awake()
         {
@@ -103,7 +65,7 @@ namespace GTFuckingXP.Scripts
             LogManager.Debug($"Giving xp Amount {xpValue}, new total Xp is {CurrentTotalXp}");
             CheckForLevelThresholdReached();
 
-            ChangeUiStrings();
+            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp);
         }
         
         public void CheckForLevelThresholdReached()
@@ -129,28 +91,12 @@ namespace GTFuckingXP.Scripts
 
         private IXpData _testData = new EnemyXp(0, "", 20, 20, 0);
 
-        private XpBar _xpBar;
-
         public void Update()
         {
             if(Input.GetKey(KeyCode.P))
             {
                 AddXp(_testData);
             }
-        }
-
-        public void OnGUI()
-        {
-            GUI.Window(100, new Rect(0, 0, Screen.width, Screen.height), (WindowFunction)Ui, "");
-        }
-
-        private void Ui(int windowId)
-        {
-            GUI.Label(_position1, _levelString1);
-            GUI.Label(_position2, _levelString2);
-            GUI.Label(_position3, _levelString3);
-            GUI.Label(_position4, _levelString4);
-            GUI.Label(_position5, _levelString5);
         }
 
         private void ChangeCurrentLevel(Level newLevel)
@@ -164,16 +110,6 @@ namespace GTFuckingXP.Scripts
             localDamage.Health += newMaxHealth - oldMaxHealth;
 
             localDamage.Cast<Dam_PlayerDamageLocal>().UpdateHealthGui();
-        }
-
-        private void ChangeUiStrings()
-        {
-            var currentLevel = _instanceCache.GetActiveLevel();
-            _levelString1 = $"Level {currentLevel.LevelNumber}";
-            _levelString2 = $"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {NextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}";
-            _levelString3 = $"MD {currentLevel.MeleeDamageMultiplier} => {NextLevel.MeleeDamageMultiplier}";
-            _levelString4 = $"WD {currentLevel.WeaponDamageMultiplier} => {NextLevel.WeaponDamageMultiplier}";
-            _levelString5 = $"XP {CurrentTotalXp - currentLevel.TotalXpRequired} / {NextLevel.TotalXpRequired / currentLevel.TotalXpRequired}";
         }
     }
 }

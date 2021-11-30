@@ -32,12 +32,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BepInExLoader.cs" />
+    <Compile Include="Communication\Info\Commands.cs" />
+    <Compile Include="Communication\Info\CommunicationCommand.cs" />
     <Compile Include="Enums\PlayerBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\Enemies\EnemyXp.cs" />
     <Compile Include="Information\Expeditions\ExpeditionsLevelMapping.cs" />
+    <Compile Include="Communication\Info\GameState.cs" />
     <Compile Include="Information\IXpData.cs" />
     <Compile Include="Information\Level\Level.cs" />
     <Compile Include="Information\Level\LevelBuffs.cs" />

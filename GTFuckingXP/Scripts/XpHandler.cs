@@ -86,6 +86,7 @@ namespace GTFuckingXP.Scripts
                 ChangeCurrentLevel(newLevel);
 
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
+                //LogManager.Debug($"NextLevel is number: {NextLevel.LevelNumber} and xp required is {NextLevel.TotalXpRequired}");
             }
         }
 

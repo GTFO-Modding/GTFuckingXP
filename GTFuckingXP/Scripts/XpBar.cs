@@ -35,17 +35,24 @@ namespace GTFuckingXP.Scripts
             if(string.IsNullOrEmpty(_prefix))
             {
                 _prefix = GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.text;
+                GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.transform.Translate(-5f, -5f, 0);
             }
+
+            var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
+            var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(_prefix);
             stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
             stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
             stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
-            stringBuilder.AppendLine($"Level :{currentLevel.LevelNumber} => {currentTotalXp - currentLevel.TotalXpRequired} / {nextLevel.TotalXpRequired / currentLevel.TotalXpRequired}");
+            stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
 
             GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.SetText(stringBuilder.ToString());
             GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.ForceMeshUpdate();
+
+            //TODO XpProgress 
+            //_xpProgressBar.size = new Vector2()
 
             //TODO NextLevel can be null!!!!
         }

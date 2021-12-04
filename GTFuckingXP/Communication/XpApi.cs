@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GTFuckingXP.Scripts
+namespace GTFuckingXP.Communication
 {
-    internal class XpNumberMovement
+    internal class XpApi
     {
     }
 }

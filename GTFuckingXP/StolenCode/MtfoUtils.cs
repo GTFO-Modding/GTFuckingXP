@@ -37,9 +37,9 @@ namespace GTFuckingXP.StolenCode
 
                 Type hotReloaderType = mtfoTypes.FirstOrDefault((x) => x.Name == "HotReloader");
             }
-            catch (Exception ex)
+            catch (Exception thisIsSomeGoodStuffKasuromi)
             {
-                LogManager.Error(ex.ToString());
+                LogManager.Error(thisIsSomeGoodStuffKasuromi.ToString());
             }
         }
     }

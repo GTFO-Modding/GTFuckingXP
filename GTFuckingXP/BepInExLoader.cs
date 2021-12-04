@@ -9,6 +9,8 @@ using UnhollowerRuntimeLib;
 namespace GTFuckingXP
 {
     [BepInPlugin(GUID, MODNAME, VERSION)]
+    [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("com.dak.DamageNumbers", BepInDependency.DependencyFlags.HardDependency)]
     public class BepInExLoader : BasePlugin
     {
         public const string
@@ -28,6 +30,7 @@ namespace GTFuckingXP
 
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();
+            NetworkApiXpManager.Setup();
 
             new Harmony(GUID).PatchAll();
         }

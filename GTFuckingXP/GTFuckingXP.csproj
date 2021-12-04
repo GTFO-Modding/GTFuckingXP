@@ -34,6 +34,7 @@
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Communication\Info\Commands.cs" />
     <Compile Include="Communication\Info\CommunicationCommand.cs" />
+    <Compile Include="Communication\XpApi.cs" />
     <Compile Include="Enums\PlayerBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
@@ -41,11 +42,15 @@
     <Compile Include="Information\Enemies\EnemyXp.cs" />
     <Compile Include="Information\Expeditions\ExpeditionsLevelMapping.cs" />
     <Compile Include="Communication\Info\GameState.cs" />
+    <Compile Include="Information\FloatingXpTextInfo.cs" />
+    <Compile Include="Information\NetworkingInfo\GtfoApiXpInfo.cs" />
     <Compile Include="Information\IXpData.cs" />
     <Compile Include="Information\Level\Level.cs" />
     <Compile Include="Information\Level\LevelBuffs.cs" />
     <Compile Include="Information\Level\LevelLayout.cs" />
+    <Compile Include="Information\NetworkingInfo\LevelReachedInfo.cs" />
     <Compile Include="Managers\LogManager.cs" />
+    <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
     <Compile Include="Managers\InstanceCache.cs" />
     <Compile Include="Patches\BulletWeaponPatches.cs" />
@@ -56,7 +61,6 @@
     <Compile Include="Scripts\RundownDevModeHandler.cs" />
     <Compile Include="Scripts\XpBar.cs" />
     <Compile Include="Scripts\XpHandler.cs" />
-    <Compile Include="Scripts\XpNumberMovement.cs" />
     <Compile Include="StolenCode\MtfoUtils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +97,9 @@
     <Reference Include="Cpp2IL.Core">
       <HintPath>LiB\Cpp2IL.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DamageNumbers">
+      <HintPath>LiB\DamageNumbers.dll</HintPath>
+    </Reference>
     <Reference Include="DevConsoleCommands-ASM">
       <HintPath>LiB\DevConsoleCommands-ASM.dll</HintPath>
     </Reference>
@@ -119,6 +126,9 @@
     </Reference>
     <Reference Include="GlobalFramework-ASM">
       <HintPath>LiB\GlobalFramework-ASM.dll</HintPath>
+    </Reference>
+    <Reference Include="GTFO-API">
+      <HintPath>LiB\GTFO-API.dll</HintPath>
     </Reference>
     <Reference Include="GUIX-ASM">
       <HintPath>LiB\GUIX-ASM.dll</HintPath>

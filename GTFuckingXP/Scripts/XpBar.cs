@@ -55,28 +55,30 @@ namespace GTFuckingXP.Scripts
             //_xpProgressBar.size = new Vector2()
 
             //TODO NextLevel can be null!!!!
+
+            var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
+            _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
         }
 
         public void XpBarStuff()
         {
-            if (_xpBar != null)
-                Destroy(_xpBar);
-
-            bool oxygenPluginExists = false;
-            if (IL2CPPChainloader.Instance.Plugins.TryGetValue("com.chasetug.Oxygen", out var info))
+            if(_instanceCache.TryGetinstance(out _xpBar))
             {
-                oxygenPluginExists = true;
+                if(_instanceCache.TryGetinstance(out _xpProgressBar))
+                {
+                    return;
+                }
             }
 
             var playerstatus = GuiManager.Current.m_playerLayer.m_playerStatus;
 
             _xpBar = playerstatus.m_health2.gameObject.transform.parent.gameObject.Instantiate<RectTransform>("XpBarRenderer");
 
-            _xpBar.transform.Translate(0, (float)(30 * (oxygenPluginExists ? 2.2 : 1)), 0);
+            _xpBar.transform.Translate(0, (30 *  1), 0);
 
             _xpBar.Rotate(0, 180, 0);
             _xpBar.localEulerAngles = new Vector3(0, 180, 180);
-            _xpBar.anchorMax = new Vector2(-0.5f, 0);
+            _xpBar.anchorMax = new Vector2(-0.5f, 0.5f);
             _xpBar.anchorMin = new Vector2(0f, 0f);
             _xpBar.localScale = new Vector3(3.1f, 1, 1);
 
@@ -84,6 +86,9 @@ namespace GTFuckingXP.Scripts
 
             _xpProgressBar = _xpBar.GetChild(1).GetComponent<SpriteRenderer>();
             _xpProgressBar.size = new Vector2(3, 10);
+
+            _instanceCache.SetInstance(_xpBar);
+            _instanceCache.SetInstance(_xpProgressBar);
         }
     }
 }

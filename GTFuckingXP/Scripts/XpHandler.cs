@@ -7,6 +7,8 @@ using System.Linq;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using Player;
+using DamageNumbers;
+using DamageNumbers.API;
 
 namespace GTFuckingXP.Scripts
 {
@@ -47,11 +49,11 @@ namespace GTFuckingXP.Scripts
             CurrentTotalXp = 0;
         }
 
-        public void AddXp(IXpData enemyKill, bool forceDebuffXp = false)
+        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false)
         {
-            uint xpValue = forceDebuffXp || _hasDebuff ? enemyKill.XpGain : enemyKill.DebuffXp;
+            uint xpValue = forceDebuffXp || _hasDebuff ? xpData.DebuffXp : xpData.XpGain;
 
-            var levelScalingDecreaseXp = (enemyKill.LevelScalingXpDecrese * _instanceCache.GetActiveLevel().LevelNumber);
+            var levelScalingDecreaseXp = (xpData.LevelScalingXpDecrese * _instanceCache.GetActiveLevel().LevelNumber);
             if(xpValue < levelScalingDecreaseXp)
             {
                 xpValue = 1;
@@ -63,14 +65,23 @@ namespace GTFuckingXP.Scripts
 
             CurrentTotalXp += xpValue;
             LogManager.Debug($"Giving xp Amount {xpValue}, new total Xp is {CurrentTotalXp}");
-            CheckForLevelThresholdReached();
+            if(!CheckForLevelThresholdReached(xpTextPosition))
+            {
+                LogManager.Debug("Creating Floating Text xp stuff. Nice;)");
+                DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#F80>{xpValue}XP"));
+            }
 
             _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp);
         }
         
-        public void CheckForLevelThresholdReached()
+        /// <summary>
+        /// Looks if the next level is reached and sets it, if it was reached.
+        /// </summary>
+        /// <returns>If a new level got reached when this method got called.</returns>
+        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition)
         {
             var levels = _instanceCache.GetCurrentLevelLayout();
+            var oldLevel = _instanceCache.GetActiveLevel();
 
             var availableLevels = levels.Levels.Where(it => it.LevelNumber > _instanceCache.GetActiveLevel().LevelNumber && it.TotalXpRequired <= CurrentTotalXp);
 
@@ -87,7 +98,16 @@ namespace GTFuckingXP.Scripts
 
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
                 //LogManager.Debug($"NextLevel is number: {NextLevel.LevelNumber} and xp required is {NextLevel.TotalXpRequired}");
+
+                DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, 
+                    $"<#f00>Level {newLevel.LevelNumber}\nMaxHP: +<#f80>{(newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp())}\n" +
+                    $"<#f00>MD: <#f80>{oldLevel.MeleeDamageMultiplier} => {newLevel.MeleeDamageMultiplier} \n" +
+                    $"<#f00>WD: <#f80>{oldLevel.WeaponDamageMultiplier} => {newLevel.WeaponDamageMultiplier}"));
+
+                return true;
             }
+
+            return false;
         }
 
         private IXpData _testData = new EnemyXp(0, "", 20, 20, 0);
@@ -96,7 +116,7 @@ namespace GTFuckingXP.Scripts
         {
             if(Input.GetKey(KeyCode.P))
             {
-                AddXp(_testData);
+                AddXp(_testData, PlayerManager.GetLocalPlayerAgent().Position);
             }
         }
 

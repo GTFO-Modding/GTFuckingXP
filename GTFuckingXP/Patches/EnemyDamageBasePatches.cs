@@ -4,16 +4,16 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using GTFuckingXP.Scripts;
-using Player;
-using Agents;
 using GTFuckingXP.Extensions;
 using Enemies;
+using Agents;
+using Player;
 
 namespace GTFuckingXP.Patches
 {
 
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
-    internal class EnemyDamageBasePatches 
+    internal class EnemyDamageBasePatches
     {
         //[HarmonyPatch(nameof(Dam_EnemyDamageBase.ProcessReceivedDamage))]
         //[HarmonyPrefix]
@@ -45,56 +45,57 @@ namespace GTFuckingXP.Patches
         //    }
         //}
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveMeleeDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.MeleeDamage))]
         [HarmonyPrefix]
-        public static void MeleePrefix(Dam_EnemyDamageBase __instance, pFullDamageData data)
+        public static void MeleePrefix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
         {
             if (!__instance.Owner.Alive)
                 return;
 
-            data.source.TryGet(out var agent);
-
-            if(agent.IsLocallyOwned)
+            if (sourceAgent.IsLocallyOwned)
             {
-                var damage = data.damage.Get(float.MaxValue);
+                var damage = dam;
                 LogManager.Debug($"Melee damage from local player registered. {damage} was scaled up to:");
                 damage *= InstanceCache.Instance.GetActiveLevel().WeaponDamageMultiplier;
                 LogManager.Debug($"{damage}");
-                data.damage.Set(damage, float.MaxValue);
+                dam = damage;
             }
         }
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveMeleeDamage))]
-        [HarmonyPrefix]
+        [HarmonyPostfix]
         public static void MeleePostfix(Dam_EnemyDamageBase __instance, pFullDamageData data)
         {
-            data.source.TryGet(out var agent);
-
-            if (agent.IsLocallyOwned)
+            if (!__instance.Owner.Alive)
             {
-                if (__instance.Owner.Alive)
+                data.source.TryGet(out var agent);
+                if (agent.IsLocallyOwned)
                 {
+
                     GiveXp(__instance.Owner);
+                }
+                else
+                {
+                    var source = agent.TryCast<PlayerAgent>();
+                    GiveXp(__instance.Owner, source);
                 }
             }
         }
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveBulletDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.BulletDamage))]
         [HarmonyPrefix]
-        public static void BulletPrefix(Dam_EnemyDamageBase __instance, pBulletDamageData data)
+        public static void BulletPrefix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
         {
             if (!__instance.Owner.Alive)
                 return;
 
-            data.source.TryGet(out var agent);
-
-            if (agent.IsLocallyOwned)
+            if (sourceAgent.IsLocallyOwned)
             {
-                var damage = data.damage.Get(float.MaxValue);
+                var damage = dam;
                 LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled up to:");
                 damage *= InstanceCache.Instance.GetActiveLevel().WeaponDamageMultiplier;
                 LogManager.Debug($"{damage}");
-                data.damage.Set(damage, float.MaxValue);
+                dam = damage;
             }
         }
 
@@ -102,18 +103,23 @@ namespace GTFuckingXP.Patches
         [HarmonyPostfix]
         public static void BulletPostfix(Dam_EnemyDamageBase __instance, pBulletDamageData data)
         {
-            data.source.TryGet(out var agent);
-
-            if (agent.IsLocallyOwned)
+            if (!__instance.Owner.Alive)
             {
-                if (__instance.Owner.Alive)
+                data.source.TryGet(out var agent);
+                if (agent.IsLocallyOwned)
                 {
+
                     GiveXp(__instance.Owner);
+                }
+                else
+                {
+                    var source = agent.TryCast<PlayerAgent>();
+                    GiveXp(__instance.Owner, source);
                 }
             }
         }
 
-        private static void GiveXp(EnemyAgent killedEnemy)
+        private static void GiveXp(EnemyAgent killedEnemy, PlayerAgent sourceAgent = null)
         {
             var instanceCache = InstanceCache.Instance;
             var enemyData = instanceCache.GetInstance<List<EnemyXp>>();
@@ -129,9 +135,18 @@ namespace GTFuckingXP.Patches
 
             LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");
 
-            if (instanceCache.TryGetinstance<XpHandler>(out var xpHandler))
+            var position = killedEnemy.Position;
+            position.y = position.y + 1f;
+            if (sourceAgent is null)
             {
-                xpHandler.AddXp(enemyXpData);
+                if (instanceCache.TryGetinstance<XpHandler>(out var xpHandler))
+                {
+                    xpHandler.AddXp(enemyXpData, position);
+                }
+            }
+            else
+            {
+                NetworkApiXpManager.SendReceiveXp(sourceAgent, enemyXpData, position);
             }
         }
     }

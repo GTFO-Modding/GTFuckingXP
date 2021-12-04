@@ -167,10 +167,5 @@ namespace GTFuckingXP.Managers
                 File.WriteAllText(levelLayoutsPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultLevelLayout(), serializerOptions));
             }
         }
-
-        private void CreateXpBarInUi()
-        {
-            _instanceCache.AddSingleComponentToGameObjectAndRegister<XpBar>(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject);
-        }
     }
 }

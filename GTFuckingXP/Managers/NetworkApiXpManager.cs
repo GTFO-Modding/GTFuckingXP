@@ -31,7 +31,7 @@ namespace GTFuckingXP.Managers
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)
         {
             LogManager.Debug("Received xp networking package");
-            if (_instanceCache.TryGetinstance(out XpHandler xpHandler))
+            if (_instanceCache.TryGetInstance(out XpHandler xpHandler))
             {
                 xpHandler.AddXp(xpData, new UnityEngine.Vector3(xpData.PositionX, xpData.PositionY, xpData.PositionZ));
             }

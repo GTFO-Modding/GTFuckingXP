@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 
 namespace GTFuckingXP.Information.Level
 {
@@ -12,7 +10,7 @@ namespace GTFuckingXP.Information.Level
         public Level()
         { }
 
-        public Level(int levelNumber, uint totalXp, float healthMultiplier, float meleeMultiplier, float weaponMultiplier)
+        public Level(int levelNumber, uint totalXp, float healthMultiplier, float meleeMultiplier, float weaponMultiplier, List<SingleUseBuff> singleUseBuffs)
         {
             LevelNumber = levelNumber;
             TotalXpRequired = totalXp;
@@ -20,6 +18,7 @@ namespace GTFuckingXP.Information.Level
             HealthMultiplier = healthMultiplier;
             MeleeDamageMultiplier = meleeMultiplier;
             WeaponDamageMultiplier = weaponMultiplier;
+            SingleUseBuffs = singleUseBuffs;
         }
 
         /// <summary>
@@ -46,5 +45,10 @@ namespace GTFuckingXP.Information.Level
         /// Gets or sets the amount the basic weapon damage gets scaled with this value.
         /// </summary>
         public float WeaponDamageMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the single use buffs that gets applied when reaching this level.
+        /// </summary>
+        public List<SingleUseBuff> SingleUseBuffs { get; set; }
     }
 }

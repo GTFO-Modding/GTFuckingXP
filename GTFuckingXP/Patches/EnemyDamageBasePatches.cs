@@ -8,6 +8,7 @@ using GTFuckingXP.Extensions;
 using Enemies;
 using Agents;
 using Player;
+using System.Threading.Tasks;
 
 namespace GTFuckingXP.Patches
 {
@@ -15,6 +16,8 @@ namespace GTFuckingXP.Patches
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
     internal class EnemyDamageBasePatches
     {
+        private readonly static object _lockObject = new object();
+
         //[HarmonyPatch(nameof(Dam_EnemyDamageBase.ProcessReceivedDamage))]
         //[HarmonyPrefix]
         //public static void Prefix(Dam_EnemyDamageBase __instance, ref float damage, Agent damageSource)
@@ -84,7 +87,7 @@ namespace GTFuckingXP.Patches
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.BulletDamage))]
         [HarmonyPrefix]
-        public static void BulletPrefix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
+        public static void BulletPostfix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
         {
             if (!__instance.Owner.Alive)
                 return;
@@ -99,27 +102,55 @@ namespace GTFuckingXP.Patches
             }
         }
 
+        internal static List<string> _aliveEnemieNames = new List<string>();
+
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveBulletDamage))]
+        [HarmonyPrefix]
+        public static void BulletPrefix(Dam_EnemyDamageBase __instance, out bool __state)
+        {
+            __state = __instance.Owner.Alive;
+        }
+
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveBulletDamage))]
         [HarmonyPostfix]
-        public static void BulletPostfix(Dam_EnemyDamageBase __instance, pBulletDamageData data)
+        public static void BulletPostfix(Dam_EnemyDamageBase __instance, bool __state, pBulletDamageData data)
         {
-            if (!__instance.Owner.Alive)
+            //Enemy was alive in the postfix but dead now :).
+            if(__state && !__instance.Owner.Alive)
             {
-                data.source.TryGet(out var agent);
-                if (agent.IsLocallyOwned)
+                data.source.TryGet(out var source);
+                if (source.IsLocallyOwned)
                 {
-
                     GiveXp(__instance.Owner);
                 }
                 else
                 {
-                    var source = agent.TryCast<PlayerAgent>();
-                    GiveXp(__instance.Owner, source);
+
+                    GiveXp(__instance.Owner, source.TryCast<PlayerAgent>());
                 }
             }
         }
 
-        private static void GiveXp(EnemyAgent killedEnemy, PlayerAgent sourceAgent = null)
+        private static Task CheckIfReceiveXp(EnemyAgent enemy, PlayerAgent source)
+        {
+            if(!_aliveEnemieNames.Contains(enemy.name))
+            {
+                return Task.CompletedTask;
+            }
+
+            lock (_lockObject)
+            {
+                LogManager.Debug("In LockObject");
+                if (!enemy.Alive && _aliveEnemieNames.Contains(enemy.name))
+                {
+                    _aliveEnemieNames.Remove(enemy.name);
+                    
+                }
+            }
+            return Task.CompletedTask;
+        }
+
+        private static void GiveXp(EnemyAgent killedEnemy, PlayerAgent sourceAgent = null, bool forceDebuffXp = false)
         {
             var instanceCache = InstanceCache.Instance;
             var enemyData = instanceCache.GetInstance<List<EnemyXp>>();
@@ -139,9 +170,9 @@ namespace GTFuckingXP.Patches
             position.y = position.y + 1f;
             if (sourceAgent is null)
             {
-                if (instanceCache.TryGetinstance<XpHandler>(out var xpHandler))
+                if (instanceCache.TryGetInstance<XpHandler>(out var xpHandler))
                 {
-                    xpHandler.AddXp(enemyXpData, position);
+                    xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
                 }
             }
             else

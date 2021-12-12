@@ -5,6 +5,7 @@ namespace GTFuckingXP.Managers
     public class LogManager
     {
         private static readonly ManualLogSource logger;
+        private static readonly bool _debugMessagesActive;
         static LogManager()
         {
             logger = new ManualLogSource(BepInExLoader.MODNAME);
@@ -13,27 +14,31 @@ namespace GTFuckingXP.Managers
 
         public static void Log(object msg)
         {
-            Message(msg);
+            if (_debugMessagesActive)
+                Message(msg);
         }
 
         public static void Verbose(object msg)
         {
-            logger.LogInfo(msg);
+            if (_debugMessagesActive)
+                logger.LogInfo(msg);
         }
 
         public static void Debug(object msg)
         {
-            logger.LogDebug(msg);
+            if (_debugMessagesActive)
+                logger.LogDebug(msg);
         }
 
         public static void Message(object msg)
         {
-            logger.LogMessage(msg);
+            if (_debugMessagesActive)
+                logger.LogMessage(msg);
         }
 
         public static void Error(object msg)
         {
-            logger.LogError(msg);
+                logger.LogError(msg);
         }
 
         public static void Warn(object msg)

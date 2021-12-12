@@ -4,12 +4,14 @@ using GTFuckingXP.Information;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Expeditions;
 using GTFuckingXP.Information.Level;
+using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
 using GTFuckingXP.StolenCode;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GTFuckingXP.Managers
 {
@@ -69,6 +71,7 @@ namespace GTFuckingXP.Managers
         {
             _instanceCache.KillScript<XpHandler>();
             _instanceCache.KillScript<XpBar>();
+            EnemyDamageBasePatches._aliveEnemieNames = new List<string>();
         }
 
         public (List<EnemyXp> enemyXpList, List<ExpeditionsLevelMapping> expeditionLevelLayoutMapping, List<LevelLayout> levelLayouts) ReadJsonBlocks()
@@ -80,6 +83,7 @@ namespace GTFuckingXP.Managers
                 PropertyNameCaseInsensitive = true,
                 WriteIndented = true
             };
+            serializerSettings.Converters.Add(new JsonStringEnumConverter());
 
             var enemyXpList = JsonSerializer.Deserialize<List<EnemyXp>>(
                 File.ReadAllText(Path.Combine(_folderPath, EnemyXpFileName)), serializerSettings);
@@ -148,6 +152,7 @@ namespace GTFuckingXP.Managers
                 PropertyNameCaseInsensitive = true,
                 WriteIndented = true
             };
+            serializerOptions.Converters.Add(new JsonStringEnumConverter());
 
             var enemyPath = Path.Combine(_folderPath, EnemyXpFileName);
             if(!File.Exists(enemyPath))

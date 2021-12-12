@@ -6,11 +6,12 @@ namespace GTFuckingXP.Information
 {
     public class FloatingXpTextInfo : IFloatingTextInfo
     {
-        public FloatingXpTextInfo(Vector3 position, string text)
+        public FloatingXpTextInfo(Vector3 position, string text, float lifeTime = 2)
         {
             Velocity = new Vector3(0f, 0.1f, 0f);
             SpawnPosition = position;
             Text = text;
+            LifeTime = lifeTime;
         }
 
         public Vector3 Velocity { get; }
@@ -19,7 +20,7 @@ namespace GTFuckingXP.Information
 
         public float Gravity => 0f;
 
-        public float LifeTime => 2f;
+        public float LifeTime { get; }
 
         public string Text { get; }
 

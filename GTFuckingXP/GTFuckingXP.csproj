@@ -36,6 +36,7 @@
     <Compile Include="Communication\Info\CommunicationCommand.cs" />
     <Compile Include="Communication\XpApi.cs" />
     <Compile Include="Enums\PlayerBuff.cs" />
+    <Compile Include="Enums\SingleBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
@@ -43,6 +44,7 @@
     <Compile Include="Information\Expeditions\ExpeditionsLevelMapping.cs" />
     <Compile Include="Communication\Info\GameState.cs" />
     <Compile Include="Information\FloatingXpTextInfo.cs" />
+    <Compile Include="Information\Level\SingleUseBuffs.cs" />
     <Compile Include="Information\NetworkingInfo\GtfoApiXpInfo.cs" />
     <Compile Include="Information\IXpData.cs" />
     <Compile Include="Information\Level\Level.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Information\Level\LevelLayout.cs" />
     <Compile Include="Information\NetworkingInfo\LevelReachedInfo.cs" />
     <Compile Include="Managers\LogManager.cs" />
+    <Compile Include="Managers\NamedPipeCommunicationManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
     <Compile Include="Managers\InstanceCache.cs" />

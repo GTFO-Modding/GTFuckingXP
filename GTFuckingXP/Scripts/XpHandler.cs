@@ -9,6 +9,7 @@ using GTFuckingXP.Information;
 using Player;
 using DamageNumbers;
 using DamageNumbers.API;
+using GTFuckingXP.Enums;
 
 namespace GTFuckingXP.Scripts
 {
@@ -18,16 +19,19 @@ namespace GTFuckingXP.Scripts
     public class XpHandler : MonoBehaviour
     {
         private readonly InstanceCache _instanceCache = InstanceCache.Instance;
+        private readonly bool _devMode;
 
         private bool _hasDebuff;
 
         public XpHandler(IntPtr intPtr) : base(intPtr)
-        { }
+        {
+            _devMode = BepInExLoader.RundownDevMode.Value;
+        }
 
         /// <summary>
         /// Gets or sets the total xp you have to this point.
         /// </summary>
-        public uint CurrentTotalXp { get; private set; }
+        public uint CurrentTotalXp { get; internal set; }
 
         /// <summary>
         /// Gets the stats for the next level.
@@ -49,12 +53,12 @@ namespace GTFuckingXP.Scripts
             CurrentTotalXp = 0;
         }
 
-        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false)
+        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, bool floatingText = true)
         {
             uint xpValue = forceDebuffXp || _hasDebuff ? xpData.DebuffXp : xpData.XpGain;
 
             var levelScalingDecreaseXp = (xpData.LevelScalingXpDecrese * _instanceCache.GetActiveLevel().LevelNumber);
-            if(xpValue < levelScalingDecreaseXp)
+            if(xpValue <= levelScalingDecreaseXp)
             {
                 xpValue = 1;
             }
@@ -65,9 +69,9 @@ namespace GTFuckingXP.Scripts
 
             CurrentTotalXp += xpValue;
             LogManager.Debug($"Giving xp Amount {xpValue}, new total Xp is {CurrentTotalXp}");
-            if(!CheckForLevelThresholdReached(xpTextPosition))
+            if(!CheckForLevelThresholdReached(xpTextPosition, floatingText) && floatingText)
             {
-                LogManager.Debug("Creating Floating Text xp stuff. Nice;)");
+                LogManager.Debug("Creating Floating Text xp stuff.");
                 DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#F80>{xpValue}XP"));
             }
 
@@ -77,8 +81,10 @@ namespace GTFuckingXP.Scripts
         /// <summary>
         /// Looks if the next level is reached and sets it, if it was reached.
         /// </summary>
+        /// <param name="xpTextPosition">The world position, where this floating level up position should spawn.</param>
+        /// <param name="floatingLevelUpMessage">If a floating level up message should appear.</param>
         /// <returns>If a new level got reached when this method got called.</returns>
-        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition)
+        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, bool floatingLevelUpMessage = true)
         {
             var levels = _instanceCache.GetCurrentLevelLayout();
             var oldLevel = _instanceCache.GetActiveLevel();
@@ -100,9 +106,10 @@ namespace GTFuckingXP.Scripts
                 //LogManager.Debug($"NextLevel is number: {NextLevel.LevelNumber} and xp required is {NextLevel.TotalXpRequired}");
 
                 DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, 
-                    $"<#f00>Level {newLevel.LevelNumber}\nMaxHP: +<#f80>{(newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp())}\n" +
-                    $"<#f00>MD: <#f80>{oldLevel.MeleeDamageMultiplier} => {newLevel.MeleeDamageMultiplier} \n" +
-                    $"<#f00>WD: <#f80>{oldLevel.WeaponDamageMultiplier} => {newLevel.WeaponDamageMultiplier}"));
+                    $"<#f00>LV {newLevel.LevelNumber}\n" + 
+                    $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()), 1)}\n" +
+                    $"<#f00>MD: <#f80>{Math.Round(newLevel.MeleeDamageMultiplier - oldLevel.MeleeDamageMultiplier, 2)}x \n" +
+                    $"<#f00>WD: <#f80>{Math.Round(newLevel.WeaponDamageMultiplier - oldLevel.WeaponDamageMultiplier, 2)}x", 4f));
 
                 return true;
             }
@@ -114,7 +121,7 @@ namespace GTFuckingXP.Scripts
 
         public void Update()
         {
-            if(Input.GetKey(KeyCode.P))
+            if(Input.GetKey(KeyCode.KeypadPlus) && _devMode)
             {
                 AddXp(_testData, PlayerManager.GetLocalPlayerAgent().Position);
             }
@@ -131,6 +138,33 @@ namespace GTFuckingXP.Scripts
             localDamage.Health += newMaxHealth - oldMaxHealth;
 
             localDamage.Cast<Dam_PlayerDamageLocal>().UpdateHealthGui();
+
+            ApplySingleUseBuffs(newLevel);
+        }
+
+        private void ApplySingleUseBuffs(Level reachedLevel)
+        {
+            var player = PlayerManager.GetLocalPlayerAgent();
+            foreach(var singleUseBuff in reachedLevel.SingleUseBuffs)
+            {
+                switch(singleUseBuff.SingleBuff)
+                {
+                    case SingleBuff.Heal:
+                        player.GiveHealth(singleUseBuff.Value);
+                        break;
+                    case SingleBuff.Desinfect:
+                        break;
+                    case SingleBuff.AmmunitionMain:
+                        player.GiveAmmoRel(singleUseBuff.Value, 0f, 0f);
+                        break;
+                    case SingleBuff.AmmunitionSpecial:
+                        player.GiveAmmoRel(0f, singleUseBuff.Value, 0f);
+                        break;
+                    case SingleBuff.AmmunitionTool:
+                        player.GiveAmmoRel(0f, 0f, singleUseBuff.Value);
+                        break;
+                }
+            }
         }
     }
 }

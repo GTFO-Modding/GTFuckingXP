@@ -27,7 +27,7 @@ namespace GTFuckingXP.Managers
         /// <typeparam name="Tscript">The component that should be created and registered</typeparam>
         public Tscript CreateRegisterAndReturnComponent<Tscript>() where Tscript : Component
         {
-            if(TryGetinstance<Tscript>(out var instance))
+            if(TryGetInstance<Tscript>(out var instance))
             {
                 instance.gameObject.SetActive(false);
                 UnityEngine.Object.Destroy(instance);
@@ -47,7 +47,7 @@ namespace GTFuckingXP.Managers
         /// <typeparam name="Tscript"></typeparam>
         public void KillScript<Tscript>() where Tscript : Component
         {
-            if(TryGetinstance<Tscript>(out var script))
+            if(TryGetInstance<Tscript>(out var script))
             {
                 UnityEngine.Object.Destroy(script);
                 _typeInstances.Remove(typeof(Tscript));
@@ -116,7 +116,7 @@ namespace GTFuckingXP.Managers
         /// </summary>
         /// <param name="instance">The found instance.</param>
         /// <returns>if a instance of type <typeparamref name="Tinstance"/> exists.</returns>
-        public  bool TryGetinstance<Tinstance>(out Tinstance instance)
+        public  bool TryGetInstance<Tinstance>(out Tinstance instance)
         {
             if (_typeInstances.TryGetValue(typeof(Tinstance), out var value))
             {

@@ -7,16 +7,22 @@ namespace GTFuckingXP.Information.Level
     /// </summary>
     public class LevelLayout
     {
-        public LevelLayout(int id, List<Level> levels)
+        public LevelLayout(string header, string infoText, List<Level> levels)
         {
-            Id = id;
+            Header = header;
+            InfoText = infoText;
             Levels = levels;
         }
 
         /// <summary>
         /// Gets or sets the id leading to that 
         /// </summary>
-        public int Id { get; set; }
+        public string Header { get; set; }
+
+        /// <summary>
+        /// Gets or sets the info text for this class.
+        /// </summary>
+        public string InfoText { get; set; }
 
         /// <summary>
         /// Gets or sets all levels containing in this layout.

@@ -48,7 +48,7 @@ namespace GTFuckingXP.Scripts
             var levelLayout = _instanceCache.GetCurrentLevelLayout();
             LogManager.Debug("GetCurrentLevelLayout ran through.");
             var newActiveLevel = levelLayout.Levels.First(it => it.LevelNumber == 0);
-            _instanceCache.SetActiveLevel(newActiveLevel);
+            ChangeCurrentLevel(newActiveLevel);
             NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
             CurrentTotalXp = 0;
         }
@@ -86,6 +86,11 @@ namespace GTFuckingXP.Scripts
         /// <returns>If a new level got reached when this method got called.</returns>
         public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, bool floatingLevelUpMessage = true)
         {
+            if(IsMaxLevel)
+            {
+                return false;
+            }
+
             var levels = _instanceCache.GetCurrentLevelLayout();
             var oldLevel = _instanceCache.GetActiveLevel();
 

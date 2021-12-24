@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
 using GTFuckingXP.Managers;
+using GTFuckingXP.Patches.MtfoPatches;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -36,6 +37,7 @@ namespace GTFuckingXP.StolenCode
                 DataLoaded = true;
 
                 Type hotReloaderType = mtfoTypes.FirstOrDefault((x) => x.Name == "HotReloader");
+                BepInExLoader.Harmony.Patch(hotReloaderType.GetMethod("ReloadData"), null, new HarmonyLib.HarmonyMethod(typeof(HotRealoaderPatch).GetMethod(nameof(HotRealoaderPatch.HotRealoadPostfix))));
             }
             catch (Exception thisIsSomeGoodStuffKasuromi)
             {

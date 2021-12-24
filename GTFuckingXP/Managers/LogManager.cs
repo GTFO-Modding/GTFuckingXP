@@ -8,6 +8,7 @@ namespace GTFuckingXP.Managers
         private static readonly bool _debugMessagesActive;
         static LogManager()
         {
+            _debugMessagesActive = BepInExLoader.DebugMessages.Value;
             logger = new ManualLogSource(BepInExLoader.MODNAME);
             Logger.Sources.Add(logger);
         }

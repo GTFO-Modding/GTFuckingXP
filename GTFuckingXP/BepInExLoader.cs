@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using GTFuckingXP.Managers;
 using GTFuckingXP.Scripts;
+using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
 using UnhollowerRuntimeLib;
 
@@ -21,6 +22,7 @@ namespace GTFuckingXP
 
         public static ConfigEntry<bool> RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
+        public static Harmony Harmony { get; private set; }
 
         public override void Load()
         {
@@ -29,12 +31,15 @@ namespace GTFuckingXP
 
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
+            ClassInjector.RegisterTypeInIl2Cpp<SelectLevelPathHandler>();
 
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();
+            InstanceCache.Instance.SetInstance(new SelectLevelPathManager());
             NetworkApiXpManager.Setup();
 
-            new Harmony(GUID).PatchAll();
+            Harmony = new Harmony(GUID);
+            Harmony.PatchAll();
         }
     }
 }

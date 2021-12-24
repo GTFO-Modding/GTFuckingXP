@@ -2,7 +2,6 @@
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Enemies;
-using GTFuckingXP.Information.Expeditions;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
@@ -48,10 +47,12 @@ namespace GTFuckingXP.Managers
             else
             {
                 LogManager.Warn("No MTFO was found, using assembly path...");
-                _folderPath = BepInEx.Paths.PluginPath;
+                _folderPath = Path.Combine(BepInEx.Paths.PluginPath, "XpJson");
             }
 
             WriteDefaultJsonBlocks();
+
+            UpdateEverything();
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace GTFuckingXP.Managers
         {
             UpdateEverything();
             _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
-            _ = _instanceCache.CreateRegisterAndReturnComponent<XpHandler>();
+            _ = _instanceCache.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace GTFuckingXP.Managers
             EnemyDamageBasePatches._aliveEnemieNames = new List<string>();
         }
 
-        public (List<EnemyXp> enemyXpList, List<ExpeditionsLevelMapping> expeditionLevelLayoutMapping, List<LevelLayout> levelLayouts) ReadJsonBlocks()
+        public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts) ReadJsonBlocks()
         {
             var serializerSettings = new JsonSerializerOptions
             {
@@ -93,13 +94,13 @@ namespace GTFuckingXP.Managers
                 LogManager.Warn("No Data received for enemies!");
             }
             
-            var expeditionLevelLayoutMapping = JsonSerializer.Deserialize<List<ExpeditionsLevelMapping>>(
-                File.ReadAllText(Path.Combine(_folderPath, ExpeditionLvlLayoutMappingFileName)), serializerSettings);
+            //var expeditionLevelLayoutMapping = JsonSerializer.Deserialize<List<ExpeditionsLevelMapping>>(
+            //    File.ReadAllText(Path.Combine(_folderPath, ExpeditionLvlLayoutMappingFileName)), serializerSettings);
 
-            if(expeditionLevelLayoutMapping is null || expeditionLevelLayoutMapping.Count == 0)
-            {
-                LogManager.Warn("No Data received for expeditionMapping!");
-            }
+            //if(expeditionLevelLayoutMapping is null || expeditionLevelLayoutMapping.Count == 0)
+            //{
+            //    LogManager.Warn("No Data received for expeditionMapping!");
+            //}
 
             var levelLayouts = JsonSerializer.Deserialize<List<LevelLayout>>(
                 File.ReadAllText(Path.Combine(_folderPath, LevelLayoutFileName)), serializerSettings);
@@ -109,32 +110,29 @@ namespace GTFuckingXP.Managers
                 LogManager.Warn("No Data received for XpLayouts/LevelLayouts!");
             }
             
-            return (enemyXpList, expeditionLevelLayoutMapping, levelLayouts);
+            return (enemyXpList, levelLayouts);
         }
 
         public void UpdateEverything()
         {
-            LogManager.Debug($"Reading json files.");
-
             var newData = ReadJsonBlocks();
             
-            LogManager.Debug($"Received: {newData.enemyXpList.Count} enemies, {newData.expeditionLevelLayoutMapping.Count} expeditionMapps, {newData.levelLayouts.Count} levelLayouts");
+            LogManager.Debug($"Received: {newData.enemyXpList.Count} enemies, {newData.levelLayouts.Count} levelLayouts");
 
             _instanceCache.SetInstance(newData.enemyXpList);
-            _instanceCache.SetInstance(newData.expeditionLevelLayoutMapping);
+            //_instanceCache.SetInstance(newData.expeditionLevelLayoutMapping);
             _instanceCache.SetInstance(newData.levelLayouts);
 
-            var currentMission = RundownManager.GetActiveExpeditionData();
+            //var currentMission = RundownManager.GetActiveExpeditionData();
+            //LogManager.Debug($"current mission data is: Tier={currentMission.tier}, ExpeditionIndex={currentMission.expeditionIndex}");
 
-            LogManager.Debug($"current mission data is: Tier={currentMission.tier}, ExpeditionIndex={currentMission.expeditionIndex}");
+            //foreach(var mapObj in newData.expeditionLevelLayoutMapping)
+            //{
+            //    LogManager.Debug($"ReadData contains file with: Tier={mapObj.Tier}, ExpeditionsIndex={mapObj.ExpeditionIndex}");
+            //}
 
-            foreach(var mapObj in newData.expeditionLevelLayoutMapping)
-            {
-                LogManager.Debug($"ReadData contains file with: Tier={mapObj.Tier}, ExpeditionsIndex={mapObj.ExpeditionIndex}");
-            }
-
-            _instanceCache.SetCurrentLevelLayout(newData.levelLayouts.FirstOrDefault(it => it.Id == newData.expeditionLevelLayoutMapping.First(x =>
-              x.Tier == currentMission.tier && x.ExpeditionIndex == currentMission.expeditionIndex).LevelLayoutId));
+            //_instanceCache.SetCurrentLevelLayout(newData.levelLayouts.FirstOrDefault(it => it.Id == newData.expeditionLevelLayoutMapping.First(x =>
+            //  x.Tier == currentMission.tier && x.ExpeditionIndex == currentMission.expeditionIndex).LevelLayoutId));
         }
 
         private void WriteDefaultJsonBlocks()
@@ -160,11 +158,11 @@ namespace GTFuckingXP.Managers
                 File.WriteAllText(enemyPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultEnemyXp(), serializerOptions));
             }
 
-            var expeditionLvlLayoutMappingPath = Path.Combine(_folderPath, ExpeditionLvlLayoutMappingFileName);
-            if(!File.Exists(expeditionLvlLayoutMappingPath))
-            {
-                File.WriteAllText(expeditionLvlLayoutMappingPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultExpeditionsLevelMapping(), serializerOptions));
-            }
+            //var expeditionLvlLayoutMappingPath = Path.Combine(_folderPath, ExpeditionLvlLayoutMappingFileName);
+            //if(!File.Exists(expeditionLvlLayoutMappingPath))
+            //{
+            //    File.WriteAllText(expeditionLvlLayoutMappingPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultExpeditionsLevelMapping(), serializerOptions));
+            //}
 
             var levelLayoutsPath = Path.Combine(_folderPath, LevelLayoutFileName);
             if(!File.Exists(levelLayoutsPath))

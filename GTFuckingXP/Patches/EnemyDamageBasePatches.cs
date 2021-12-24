@@ -59,7 +59,7 @@ namespace GTFuckingXP.Patches
             {
                 var damage = dam;
                 LogManager.Debug($"Melee damage from local player registered. {damage} was scaled up to:");
-                damage *= InstanceCache.Instance.GetActiveLevel().WeaponDamageMultiplier;
+                damage *= InstanceCache.Instance.GetActiveLevel().MeleeDamageMultiplier;
                 LogManager.Debug($"{damage}");
                 dam = damage;
             }

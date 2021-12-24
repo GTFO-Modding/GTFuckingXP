@@ -41,7 +41,6 @@
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\Enemies\EnemyXp.cs" />
-    <Compile Include="Information\Expeditions\ExpeditionsLevelMapping.cs" />
     <Compile Include="Communication\Info\GameState.cs" />
     <Compile Include="Information\FloatingXpTextInfo.cs" />
     <Compile Include="Information\Level\SingleUseBuffs.cs" />
@@ -56,12 +55,16 @@
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
     <Compile Include="Managers\InstanceCache.cs" />
+    <Compile Include="Managers\SelectLevelPathManager.cs" />
     <Compile Include="Patches\BulletWeaponPatches.cs" />
     <Compile Include="Patches\EnemyDamageBasePatches.cs" />
     <Compile Include="Patches\Gs_Patches.cs" />
+    <Compile Include="Patches\MtfoPatches\HotRealoaderPatch.cs" />
+    <Compile Include="Patches\SelectLevelPatches\MainMenuGuiLayerPatches.cs" />
+    <Compile Include="Patches\SelectLevelPatches\PlayerLobbyBarPatches.cs" />
     <Compile Include="Patches\PageRundownNewPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripts\RundownDevModeHandler.cs" />
+    <Compile Include="Scripts\SelectLevelPath\SelectLevelPathHandler.cs" />
     <Compile Include="Scripts\XpBar.cs" />
     <Compile Include="Scripts\XpHandler.cs" />
     <Compile Include="StolenCode\MtfoUtils.cs" />

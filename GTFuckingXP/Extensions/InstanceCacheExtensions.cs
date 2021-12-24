@@ -1,6 +1,5 @@
 ﻿using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
-using Player;
 
 namespace GTFuckingXP.Extensions
 {
@@ -9,14 +8,14 @@ namespace GTFuckingXP.Extensions
     /// </summary>
     public static class InstanceCacheExtensions
     {
-        private const string LevelLayoutKey = "LevelLayout";
+        internal const string LevelLayoutKey = "LevelLayout";
         private const string ActiveLevelKey = "ActiveLevel";
         private const string DefaultDataBlockMaxHpKey = "MaxHpDefault";
         //private const string WaterMarkPrefixKey = "WaterMark";
 
         public static void SetCurrentLevelLayout(this InstanceCache instanceCache, LevelLayout levelLayout)
         {
-            LogManager.Debug("Set current level layout.");
+            LogManager.Debug($"Set current level layout to {levelLayout.Header}.");
             instanceCache.SetInformation(LevelLayoutKey, levelLayout);
         }
 

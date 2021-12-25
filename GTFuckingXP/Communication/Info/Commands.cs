@@ -22,7 +22,20 @@
         /// </summary>
         GiveXp,
 
+        /// <summary>
+        /// The command the dev tool sents when the plugin should set the current level to the info count.
+        /// </summary>
+        SetLevel,
 
+        /// <summary>
+        /// The command that gets sent when the dev tool wants to know the path to the json files.
+        /// </summary>
+        AskForJsonDirectory,
+
+        /// <summary>
+        /// The command that gets send when the plugins send the dev tool the path to the json files.
+        /// </summary>
+        SendJsonDirectory
 
     }
 }

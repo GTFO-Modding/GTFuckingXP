@@ -10,6 +10,10 @@ namespace GTFuckingXP.Communication
 {
     public static class XpApi
     {
+        /// <summary>
+        /// Reloads the entire xp data.
+        /// </summary>
+        /// <returns>If the new layout was applied ingame.</returns>
         public static bool ReloadData()
         {
             var instanceCache = InstanceCache.Instance;

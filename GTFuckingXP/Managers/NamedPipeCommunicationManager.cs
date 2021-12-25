@@ -15,7 +15,10 @@ namespace GTFuckingXP.Managers
             }
 
             _server = new NamedPipeServerStream(NamedPipeServerStreamName, PipeDirection.InOut, 1);
+        }
 
+        public void ListenForMessages()
+        {
 
         }
     }

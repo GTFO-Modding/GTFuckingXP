@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GTFuckingXP.Communication.Info
+﻿namespace GTFuckingXP.Communication.Info
 {
     public class CommunicationCommand
     {
-        public CommunicationCommand()
+        public CommunicationCommand(Commands command, object message)
         {
-
+            Command = command;
+            Message = message;
         }
 
         public Commands Command { get; set; }
 
+        public object Message { get; set; }
     }
 }

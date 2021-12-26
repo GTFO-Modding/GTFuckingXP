@@ -3,6 +3,8 @@ using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.NetworkingInfo;
 using GTFuckingXP.Scripts;
 using Player;
+using SNetwork;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GTFuckingXP.Managers
@@ -37,10 +39,25 @@ namespace GTFuckingXP.Managers
             }
         }
 
-        public static void SendReceiveXp(PlayerAgent receiver, EnemyXp xpData, Vector3 position)
+        public static void SendReceiveXp(PlayerAgent receiver, EnemyXp xpData, Vector3 position, bool forceDebuffXp)
         {
-            NetworkAPI.InvokeEvent(_XpNetworkString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position),
+            NetworkAPI.InvokeEvent(_XpNetworkString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
                 receiver.Owner);
+        }
+
+        public static void SendReceiveXpToEveryone(EnemyXp xpData, Vector3 position, bool forceDebuffXp)
+        {
+            List<SNet_Player> players = new List<SNet_Player>();
+            foreach(var snet in SNet.LobbyPlayers)
+            {
+                if(!snet.IsLocal)
+                {
+                    players.Add(snet);
+                }
+            }
+
+            NetworkAPI.InvokeEvent(_XpNetworkString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
+                players);
         }
     }
 }

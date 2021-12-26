@@ -8,7 +8,6 @@ using GTFuckingXP.Extensions;
 using Enemies;
 using Agents;
 using Player;
-using System.Threading.Tasks;
 
 namespace GTFuckingXP.Patches
 {
@@ -16,38 +15,6 @@ namespace GTFuckingXP.Patches
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
     internal class EnemyDamageBasePatches
     {
-        private readonly static object _lockObject = new object();
-
-        //[HarmonyPatch(nameof(Dam_EnemyDamageBase.ProcessReceivedDamage))]
-        //[HarmonyPrefix]
-        //public static void Prefix(Dam_EnemyDamageBase __instance, ref float damage, Agent damageSource)
-        //{
-        //    if (!damageSource.IsLocallyOwned)
-        //        return;
-
-        //    if(__instance.WillDamageKill(damage))
-        //    {
-        //        var instanceCache = InstanceCache.Instance;
-        //        var enemyData = instanceCache.GetInstance<List<EnemyXp>>();
-        //        var enemyXpData = enemyData.FirstOrDefault(it => it.EnemyId == __instance.Owner.EnemyDataID);
-        //        if(enemyXpData is null)
-        //        {
-        //            //No data found, creating a new instance and 
-        //            LogManager.Warn($"There was no Enemy XP data found for {__instance.Owner.EnemyDataID}!");
-        //            enemyXpData = new EnemyXp(__instance.Owner.EnemyDataID, 20000, 10000, 400);
-        //            enemyData.Add(enemyXpData);
-        //            instanceCache.SetInstance(enemyData);
-        //        }
-
-        //        LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");
-
-        //        if(instanceCache.TryGetinstance<XpHandler>(out var xpHandler))
-        //        {
-        //            xpHandler.AddXp(enemyXpData);
-        //        }
-        //    }
-        //}
-
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.MeleeDamage))]
         [HarmonyPrefix]
         public static void MeleePrefix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
@@ -131,54 +98,74 @@ namespace GTFuckingXP.Patches
             }
         }
 
-        private static Task CheckIfReceiveXp(EnemyAgent enemy, PlayerAgent source)
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveExplosionDamage))]
+        [HarmonyPrefix]
+        public static void ExplosionPrefix(Dam_EnemyDamageBase __instance, out bool __state)
         {
-            if(!_aliveEnemieNames.Contains(enemy.name))
-            {
-                return Task.CompletedTask;
-            }
+            __state = __instance.Owner.Alive;
+        }
 
-            lock (_lockObject)
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveExplosionDamage))]
+        [HarmonyPrefix]
+        public static void ExplosionPostfix(Dam_EnemyDamageBase __instance, bool __state, pExplosionDamageData data)
+        {
+            //Enemy was alive in the postfix but dead now :).
+            if (__state && !__instance.Owner.Alive)
             {
-                LogManager.Debug("In LockObject");
-                if (!enemy.Alive && _aliveEnemieNames.Contains(enemy.name))
-                {
-                    _aliveEnemieNames.Remove(enemy.name);
-                    
-                }
+                LogManager.Debug("Explosion postfix, Enemy dead");
+                GiveXpToEveryone(__instance.Owner, true);
             }
-            return Task.CompletedTask;
         }
 
         private static void GiveXp(EnemyAgent killedEnemy, PlayerAgent sourceAgent = null, bool forceDebuffXp = false)
         {
-            var instanceCache = InstanceCache.Instance;
-            var enemyData = instanceCache.GetInstance<List<EnemyXp>>();
-            var enemyXpData = enemyData.FirstOrDefault(it => it.EnemyId == killedEnemy.EnemyDataID);
-            if (enemyXpData is null)
-            {
-                //No data found, creating a new instance and 
-                LogManager.Warn($"There was no Enemy XP data found for {killedEnemy.EnemyDataID}!");
-                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 400);
-                enemyData.Add(enemyXpData);
-                instanceCache.SetInstance(enemyData);
-            }
-
-            LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");
+            var enemyXpData = GetEnemyXp(killedEnemy);
 
             var position = killedEnemy.Position;
             position.y = position.y + 1f;
             if (sourceAgent is null)
             {
-                if (instanceCache.TryGetInstance<XpHandler>(out var xpHandler))
+                if (InstanceCache.Instance.TryGetInstance<XpHandler>(out var xpHandler))
                 {
                     xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
                 }
             }
             else
             {
-                NetworkApiXpManager.SendReceiveXp(sourceAgent, enemyXpData, position);
+                NetworkApiXpManager.SendReceiveXp(sourceAgent, enemyXpData, position, forceDebuffXp);
             }
+        }
+
+        private static void GiveXpToEveryone(EnemyAgent killedEnemy, bool forceDebuffXp)
+        {
+            var enemyXpData = GetEnemyXp(killedEnemy);
+
+            var position = killedEnemy.Position;
+            position.y = position.y + 1f;
+
+            if (InstanceCache.Instance.TryGetInstance<XpHandler>(out var xpHandler))
+            {
+                xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
+            }
+            NetworkApiXpManager.SendReceiveXpToEveryone(enemyXpData, position, forceDebuffXp);
+        }
+
+        private static EnemyXp GetEnemyXp(EnemyAgent killedEnemy)
+        {
+            var enemyData = InstanceCache.Instance.GetInstance<List<EnemyXp>>();
+            var enemyXpData = enemyData.FirstOrDefault(it => it.EnemyId == killedEnemy.EnemyDataID);
+            if (enemyXpData is null)
+            {
+                //No data found, creating a new instance and 
+                LogManager.Warn($"There was no enemy XP data found for {killedEnemy.EnemyDataID}!");
+                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 400);
+                enemyData.Add(enemyXpData);
+                InstanceCache.Instance.SetInstance(enemyData);
+            }
+
+            LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");
+
+            return enemyXpData;
         }
     }
 }

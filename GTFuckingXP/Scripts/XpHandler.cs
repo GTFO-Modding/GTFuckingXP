@@ -10,6 +10,7 @@ using Player;
 using DamageNumbers;
 using DamageNumbers.API;
 using GTFuckingXP.Enums;
+using System.Collections.Generic;
 
 namespace GTFuckingXP.Scripts
 {
@@ -169,6 +170,22 @@ namespace GTFuckingXP.Scripts
                         player.GiveAmmoRel(0f, 0f, singleUseBuff.Value);
                         break;
                 }
+            }
+        }
+
+        private void AddBoosterEffects(Dictionary<AgentModifier, float> modifiers)
+        {
+            ModifierInstance modifierInstance;
+            if (!AgentModifierManager.TryGetModifierInstance(PlayerManager.GetLocalPlayerAgent(), out modifierInstance))
+            {
+                modifierInstance = new ModifierInstance();
+                AgentModifierManager.Current.m_agentToModifiers[PlayerManager.GetLocalPlayerAgent()] = modifierInstance;
+            }
+
+            foreach(var modification in modifiers)
+            {
+                var oldValue = modifierInstance.GetModifierValue(modification.Key);
+                modifierInstance.m_modifierValues[modification.Key] = oldValue + modification.Value;
             }
         }
     }

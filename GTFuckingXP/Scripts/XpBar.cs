@@ -19,9 +19,6 @@ namespace GTFuckingXP.Scripts
         private SpriteRenderer _xpProgressBar;
         private TextMeshPro _textUi;
         
-        static XpBar()
-        { }
-
         public XpBar(IntPtr intPtr) : base(intPtr)
         {
             _instanceCache = InstanceCache.Instance;

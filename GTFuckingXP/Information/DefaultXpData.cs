@@ -188,6 +188,24 @@ namespace GTFuckingXP.Information
             levelLayouts.Add(new LevelLayout("Kamikaze", "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
             #endregion
 
+            #region MeleeMain
+            var meleeMainLevels = new List<Level.Level>();
+
+            for (int i = 0; i < 20; i++)
+            {
+                var defaultMultiplier = (float)(1 + (0.25f * i));
+                //Random calculation so later levels actually take longer in the default levellayout
+                var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
+
+                var singleUseBuffs = new List<SingleUseBuff>();
+                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.2f));
+
+                meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
+            }
+
+            levelLayouts.Add(new LevelLayout("Melee Main", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
+            #endregion
+
             return levelLayouts;
         }
     }

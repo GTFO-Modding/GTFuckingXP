@@ -44,6 +44,7 @@
     <Compile Include="Information\Enemies\EnemyXp.cs" />
     <Compile Include="Communication\Info\GameState.cs" />
     <Compile Include="Information\FloatingXpTextInfo.cs" />
+    <Compile Include="Information\Level\ConstantMultipliers.cs" />
     <Compile Include="Information\Level\SingleUseBuffs.cs" />
     <Compile Include="Information\NetworkingInfo\GtfoApiXpInfo.cs" />
     <Compile Include="Information\IXpData.cs" />

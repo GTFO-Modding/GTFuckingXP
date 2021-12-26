@@ -1,5 +1,4 @@
-﻿using CellMenu;
-using GTFuckingXP.Extensions;
+﻿using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using System;
@@ -57,13 +56,11 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
             if(Input.GetKeyDown(KeyCode.DownArrow))
             {
                 CurrentIndex++;
-                //TODO Index um eins decreasen
             }
 
             if(Input.GetKeyDown(KeyCode.UpArrow))
             {
                 CurrentIndex--;
-                //TODO Index um eins erhöhen
             }
         }
 
@@ -94,7 +91,7 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
             }
 
             GUI.contentColor = Color.white;
-            GUI.Label(new Rect(_xPos + 200f, _yPos, 450, 24 * LevelLayoutsSelectable.Count()), 
+            GUI.Label(new Rect(_xPos + 200f, _yPos, 600, 24 * LevelLayoutsSelectable.Count()), 
                 LevelLayoutsSelectable[CurrentIndex].InfoText, _normalStyle);
         }
     }

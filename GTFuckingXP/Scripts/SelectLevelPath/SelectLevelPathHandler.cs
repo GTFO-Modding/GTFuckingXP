@@ -77,12 +77,10 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
                 if(index == CurrentIndex)
                 {
                     GUI.contentColor = Color.red;
-                    GUI.backgroundColor = Color.green;
                 }
                 else
                 {
                     GUI.contentColor = Color.gray;
-                    GUI.backgroundColor = Color.green;
                 }
 
                 var level = LevelLayoutsSelectable[index];

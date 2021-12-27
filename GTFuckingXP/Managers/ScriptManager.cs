@@ -5,6 +5,7 @@ using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
+using GTFuckingXP.Scripts.SelectLevelPath;
 using GTFuckingXP.StolenCode;
 using System.Collections.Generic;
 using System.IO;
@@ -60,9 +61,17 @@ namespace GTFuckingXP.Managers
         /// </summary>
         public void StartLevelScripts()
         {
+            GuiManager.Current.m_mainMenuLayer.PageLoadout.m_menuBar.m_expIcon.SetText("Reee");
+            GuiManager.Current.m_mainMenuLayer.PageLoadout.m_menuBar.m_expIcon.FullName = "FullName";
+
             UpdateEverything();
             _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
             _ = _instanceCache.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
+            InstanceCache.Instance.KillScript<SelectLevelPathHandler>();
+            if (BepInExLoader.RundownDevMode.Value)
+            {
+                _instanceCache.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
+            }
         }
 
         /// <summary>
@@ -72,6 +81,7 @@ namespace GTFuckingXP.Managers
         {
             _instanceCache.KillScript<XpHandler>();
             _instanceCache.KillScript<XpBar>();
+            _instanceCache.KillScript<DevModeTools>();
             EnemyDamageBasePatches._aliveEnemieNames = new List<string>();
         }
 

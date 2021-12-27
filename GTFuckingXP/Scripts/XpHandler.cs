@@ -37,7 +37,7 @@ namespace GTFuckingXP.Scripts
         /// <summary>
         /// Gets the stats for the next level.
         /// </summary>
-        public Level NextLevel { get; private set; }
+        public Level NextLevel { get; internal set; }
 
         /// <summary>
         /// Gets if you're already max level.
@@ -49,9 +49,10 @@ namespace GTFuckingXP.Scripts
             var levelLayout = _instanceCache.GetCurrentLevelLayout();
             LogManager.Debug("GetCurrentLevelLayout ran through.");
             var newActiveLevel = levelLayout.Levels.First(it => it.LevelNumber == 0);
-            ChangeCurrentLevel(newActiveLevel);
             NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
             CurrentTotalXp = 0;
+            ChangeCurrentLevel(newActiveLevel);
+            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp);
         }
 
         public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, bool floatingText = true)
@@ -123,17 +124,7 @@ namespace GTFuckingXP.Scripts
             return false;
         }
 
-        private IXpData _testData = new EnemyXp(0, "", 20, 20, 0);
-
-        public void Update()
-        {
-            if(Input.GetKey(KeyCode.KeypadPlus) && _devMode)
-            {
-                AddXp(_testData, PlayerManager.GetLocalPlayerAgent().Position);
-            }
-        }
-
-        private void ChangeCurrentLevel(Level newLevel)
+        internal void ChangeCurrentLevel(Level newLevel)
         {
             _instanceCache.SetActiveLevel(newLevel);
             var localDamage = PlayerManager.GetLocalPlayerAgent().Damage;

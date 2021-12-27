@@ -24,10 +24,10 @@ namespace GTFuckingXP.Information.Level
         /// </summary>
         public string InfoText { get; set; }
 
-        /// <summary>
-        /// Gets or sets all constant booster effects that does gets applied, when this <see cref="LevelLayout"/> is chosen.
-        /// </summary>
-        public Dictionary<AgentModifier, float> ConstantBoosterEffects { get; set; }
+        ///// <summary>
+        ///// Gets or sets all constant booster effects that does gets applied, when this <see cref="LevelLayout"/> is chosen.
+        ///// </summary>
+        //public Dictionary<AgentModifier, float> ConstantBoosterEffects { get; set; }
 
         /// <summary>
         /// Gets or sets all levels containing in this layout.

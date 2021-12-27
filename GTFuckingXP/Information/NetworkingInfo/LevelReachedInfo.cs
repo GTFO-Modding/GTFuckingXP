@@ -1,13 +1,20 @@
 ﻿namespace GTFuckingXP.Information.NetworkingInfo
 {
-    //TODO Show in level which level each person is
     public struct LevelReachedInfo
     {
-        public LevelReachedInfo(int levelNumber)
+        public LevelReachedInfo(Level.Level newLevel)
+        {
+            LevelNumber = newLevel.LevelNumber;
+            HealthMultiplier = newLevel.HealthMultiplier;
+        }
+
+        public LevelReachedInfo(int levelNumber, float healthMultiplier)
         {
             LevelNumber = levelNumber;
+            HealthMultiplier = healthMultiplier;
         }
 
         public int LevelNumber { get; set; }
+        public float HealthMultiplier { get; set; }
     }
 }

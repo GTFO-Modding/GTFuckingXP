@@ -13,7 +13,6 @@ namespace GTFuckingXP.Patches
         {
             LogManager.Debug("Level Enter");
             ScriptManager.Instance.StartLevelScripts();
-            InstanceCache.Instance.KillScript<SelectLevelPathHandler>();
         }
     }
 

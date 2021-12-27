@@ -30,6 +30,7 @@ namespace GTFuckingXP.Extensions
         public static void SetActiveLevel(this InstanceCache instanceCache, Level newLevel)
         {
             LogManager.Debug($"Setting new level to {newLevel.LevelNumber}.");
+            NetworkApiXpManager.SendNewLevelActive(newLevel);
             instanceCache.SetInformation(ActiveLevelKey, newLevel);
         }
 

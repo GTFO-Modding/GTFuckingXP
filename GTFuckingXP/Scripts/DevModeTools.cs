@@ -1,0 +1,124 @@
+﻿using GTFuckingXP.Communication;
+using GTFuckingXP.Extensions;
+using GTFuckingXP.Managers;
+using Player;
+using System;
+using UnityEngine;
+
+namespace GTFuckingXP.Scripts
+{
+    public class DevModeTools : MonoBehaviour
+    {
+        private static bool _guiInitialized = false;
+        private static GUIStyle _normalStyle;
+
+        private readonly InstanceCache _instanceCache;
+
+        private readonly float _xPos = 30f;
+        private readonly float _yPos = Screen.height / 2 - 300f;
+
+        private bool _active = true;
+        private string _addXpNumber;
+        private float _timeTillXpNumberInvalid;
+
+        public DevModeTools(IntPtr intPtr) : base(intPtr)
+        {
+            _instanceCache = InstanceCache.Instance;
+        }
+
+        public void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Delete))
+            {
+                _active = !_active;
+            }
+
+            if(!_active)
+            {
+                return;
+            }
+
+            if(Input.GetKeyDown(KeyCode.KeypadPlus))
+            {
+                if(XpApi.SetCurrentLevel(_instanceCache.GetActiveLevel().LevelNumber + 1, out var cheatedXp))
+                {
+                    CheatedXpMessage(cheatedXp);
+                }
+            }
+
+            if(Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                if (XpApi.SetCurrentLevel(_instanceCache.GetActiveLevel().LevelNumber -1, out var cheatedXp))
+                {
+                    CheatedXpMessage(cheatedXp);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad0))
+                AddCharToXpNumber("0");
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+                AddCharToXpNumber("1");
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+                AddCharToXpNumber("2");
+            if (Input.GetKeyDown(KeyCode.Keypad3))
+                AddCharToXpNumber("3");
+            if (Input.GetKeyDown(KeyCode.Keypad4))
+                AddCharToXpNumber("4");
+            if (Input.GetKeyDown(KeyCode.Keypad5))
+                AddCharToXpNumber("5");
+            if (Input.GetKeyDown(KeyCode.Keypad6))
+                AddCharToXpNumber("6");
+            if (Input.GetKeyDown(KeyCode.Keypad7))
+                AddCharToXpNumber("7");
+            if (Input.GetKeyDown(KeyCode.Keypad8))
+                AddCharToXpNumber("8");
+            if (Input.GetKeyDown(KeyCode.Keypad9))
+                AddCharToXpNumber("9");
+
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                if (!string.IsNullOrEmpty(_addXpNumber))
+                {
+                    XpApi.AddXp(Convert.ToUInt32(_addXpNumber));
+                    PlayerChatManager.WantToSentTextMessage(PlayerManager.GetLocalPlayerAgent(), $"Cheated {_addXpNumber}XP");
+                }
+            }
+        }
+
+        public void OnGUI()
+        {
+            if(!_active)
+            {
+                return;
+            }
+
+            if (!_guiInitialized)
+            {
+                _normalStyle = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 25 };
+                _guiInitialized = true;
+            }
+
+            GUI.contentColor = Color.white;
+            GUI.Label(new Rect(_xPos, _yPos, 400, 30), $"Xp dev tools:", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 30f, 400, 30), $"Level up : Keypad+", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 60f, 400, 30), $"Level down : Keypad-", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 90f, 400, 30), $"AddXP \"{_addXpNumber}\" KeypadEnter to add XP", _normalStyle);
+        }
+
+        private void AddCharToXpNumber(string number)
+        {
+            if(Time.time > _timeTillXpNumberInvalid)
+            {
+                _addXpNumber = string.Empty;
+            }
+
+            _addXpNumber += number;
+            _timeTillXpNumberInvalid = Time.time + 2f;
+        }
+
+        private void CheatedXpMessage(float xpAmount)
+        {
+            PlayerChatManager.WantToSentTextMessage(PlayerManager.GetLocalPlayerAgent(), $"Cheated {xpAmount}XP");
+        }
+    }
+}

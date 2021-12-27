@@ -32,6 +32,7 @@ namespace GTFuckingXP
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
             ClassInjector.RegisterTypeInIl2Cpp<SelectLevelPathHandler>();
+            ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
 
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();

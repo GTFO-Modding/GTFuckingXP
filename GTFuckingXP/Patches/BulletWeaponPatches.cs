@@ -1,10 +1,4 @@
-﻿using Gear;
-using GTFuckingXP.Extensions;
-using GTFuckingXP.Managers;
-using HarmonyLib;
-using static Weapon;
-
-namespace GTFuckingXP.Patches
+﻿namespace GTFuckingXP.Patches
 {
     //[HarmonyPatch(typeof(BulletWeapon))]
     //public class BulletWeaponPatches

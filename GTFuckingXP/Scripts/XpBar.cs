@@ -29,22 +29,32 @@ namespace GTFuckingXP.Scripts
 
         public void UpdateUiString(Level currentLevel, Level nextLevel, uint currentTotalXp)
         {
-            var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
-            var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
-
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
-            stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
-            stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
-            stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
+
+            if (nextLevel != null)
+            {
+                var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
+                var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
+
+                stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+                stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
+                stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
+                stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
+
+                var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
+                _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
+            }
+            else
+            {
+                stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+                stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier}");
+                stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier}");
+                stringBuilder.AppendLine($"Level {currentLevel.LevelNumber}");
+                _xpProgressBar.gameObject.SetActive(false);
+            }
 
             _textUi.text = stringBuilder.ToString();
             _textUi.ForceMeshUpdate();
-
-            //TODO NextLevel can be null!!!!
-
-            var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
-            _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
         }
 
         public void XpBarStuff()

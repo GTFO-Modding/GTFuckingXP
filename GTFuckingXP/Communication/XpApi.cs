@@ -55,7 +55,6 @@ namespace GTFuckingXP.Communication
             try
             {
                 var xpHandler = InstanceCache.Instance.GetInstance<XpHandler>();
-
                 xpHandler.AddXp(new EnemyXp(0, "", xpAmount, xpAmount, 0), default, false, false);
 
                 return true;
@@ -69,7 +68,7 @@ namespace GTFuckingXP.Communication
 
         /// <summary>
         /// Sets the current total xp to <paramref name="newTotalXpAmount"/>.<br/>
-        /// WARNING: This call does not support backwards leveling! Which will cause problems.<br/>
+        /// WARNING: This call does not support backwards leveling! Which will cause problems, like a buggy xp bar.<br/>
         /// For lowering levels you may use <see cref="SetCurrentLevel(int, out int)"/>!
         /// </summary>
         /// <returns>If the call was successful.</returns>
@@ -126,11 +125,6 @@ namespace GTFuckingXP.Communication
             }
 
             return true;
-        }
-
-        internal static void SetCurrentLevelInternal()
-        {
-
         }
     }
 }

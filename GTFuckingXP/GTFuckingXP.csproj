@@ -52,6 +52,7 @@
     <Compile Include="Information\Level\LevelBuffs.cs" />
     <Compile Include="Information\Level\LevelLayout.cs" />
     <Compile Include="Information\NetworkingInfo\LevelReachedInfo.cs" />
+    <Compile Include="Information\NetworkingInfo\StaticXpInfo.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\NamedPipeCommunicationManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />

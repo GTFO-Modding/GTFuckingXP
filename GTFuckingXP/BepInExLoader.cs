@@ -26,13 +26,16 @@ namespace GTFuckingXP
 
         public override void Load()
         {
-            RundownDevMode = Config.Bind("Dev Settings", "RundownDev Mode", false, "!WIP! !This setting opens up a communication way for the external GTFuckingXP Dev tools.\nThis will allow as an example hot realoading while in a Level.");
+            RundownDevMode = Config.Bind("Dev Settings", "RundownDev Mode", false, "This will activate the xp dev tool while in an expedition \nPress \"Delete\" to hide/show it");
             DebugMessages = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.");
 
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
             ClassInjector.RegisterTypeInIl2Cpp<SelectLevelPathHandler>();
-            ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
+            if (RundownDevMode.Value)
+            {
+                ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
+            }
 
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();

@@ -13,12 +13,6 @@ namespace GTFuckingXP.Managers
             Logger.Sources.Add(logger);
         }
 
-        public static void Log(object msg)
-        {
-            if (_debugMessagesActive)
-                Message(msg);
-        }
-
         public static void Verbose(object msg)
         {
             if (_debugMessagesActive)

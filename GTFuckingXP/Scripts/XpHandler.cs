@@ -110,13 +110,15 @@ namespace GTFuckingXP.Scripts
                 ChangeCurrentLevel(newLevel);
 
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
-                //LogManager.Debug($"NextLevel is number: {NextLevel.LevelNumber} and xp required is {NextLevel.TotalXpRequired}");
 
-                DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, 
-                    $"<#f00>LV {newLevel.LevelNumber}\n" + 
-                    $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()), 1)}\n" +
-                    $"<#f00>MD: <#f80>{Math.Round(newLevel.MeleeDamageMultiplier - oldLevel.MeleeDamageMultiplier, 2)}x \n" +
-                    $"<#f00>WD: <#f80>{Math.Round(newLevel.WeaponDamageMultiplier - oldLevel.WeaponDamageMultiplier, 2)}x", 4f));
+                if (floatingLevelUpMessage)
+                {
+                    DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition,
+                        $"<#f00>LV {newLevel.LevelNumber}\n" +
+                        $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()), 1)}\n" +
+                        $"<#f00>MD: <#f80>{Math.Round(newLevel.MeleeDamageMultiplier - oldLevel.MeleeDamageMultiplier, 2)}x \n" +
+                        $"<#f00>WD: <#f80>{Math.Round(newLevel.WeaponDamageMultiplier - oldLevel.WeaponDamageMultiplier, 2)}x", 4f));
+                }
 
                 return true;
             }

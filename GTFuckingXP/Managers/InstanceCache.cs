@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GTFuckingXP.Managers
 {
-    public class InstanceCache
+    public class InstanceCache  
     {
         private Dictionary<Type, object> _typeInstances;
         private Dictionary<object, object> _informationCache;
@@ -76,17 +76,17 @@ namespace GTFuckingXP.Managers
             }
         }
 
-        /// <summary>
-        /// Adds a component of type <typeparamref name="Tscript"/> to <paramref name="parentGameobject"/> if the gameobject does not contain it yet.
-        /// Returns the newly generated or already existing component of <typeparamref name="Tscript"/> in <paramref name="parentGameobject"/>.
-        /// </summary>
-        public Tscript AddSingleComponentToGameObjectAndRegister<Tscript>(GameObject parentGameobject) where Tscript : Component
-        {
-            var tscriptComponent = parentGameobject.AddComponent<Tscript>();
+        ///// <summary>
+        ///// Adds a component of type <typeparamref name="Tscript"/> to <paramref name="parentGameobject"/> if the gameobject does not contain it yet.
+        ///// Returns the newly generated or already existing component of <typeparamref name="Tscript"/> in <paramref name="parentGameobject"/>.
+        ///// </summary>
+        //public Tscript AddSingleComponentToGameObjectAndRegister<Tscript>(GameObject parentGameobject) where Tscript : Component
+        //{
+        //    var tscriptComponent = parentGameobject.AddComponent<Tscript>();
 
-            SetInstance(tscriptComponent);
-            return tscriptComponent;
-        }
+        //    SetInstance(tscriptComponent);
+        //    return tscriptComponent;
+        //}
 
         ///// <summary>
         ///// Registers the <paramref name="instance"/> as a new instance.
@@ -146,6 +146,7 @@ namespace GTFuckingXP.Managers
                 return true;
             }
 
+            LogManager.Warn($"There was no instance with ${typeof(Tinstance)} as the Type!");
             instance = default;
             return false;
         }
@@ -169,7 +170,8 @@ namespace GTFuckingXP.Managers
                 return (Tinformation)info;
             }
 
-            throw new KeyNotFoundException($"There was no information with the key {key}");
+            LogManager.Error($"There was no information with the key {key}!");
+            throw new KeyNotFoundException($"There was no information with the key {key}!");
         }
 
         /// <summary>
@@ -186,6 +188,7 @@ namespace GTFuckingXP.Managers
                 return true;
             }
 
+            LogManager.Warn($"There was no information with the key {key}!");
             information = default;
             return false;
         }

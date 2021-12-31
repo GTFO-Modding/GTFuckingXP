@@ -12,9 +12,12 @@ using Player;
 namespace GTFuckingXP.Patches
 {
 
+    [HarmonyBefore(BepInExLoader.GUID, DamageNumbers.Main.GUID)]
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
     internal class EnemyDamageBasePatches
     {
+        internal static Dictionary<string, Dictionary<int, float>> DamageDistribution;
+
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.MeleeDamage))]
         [HarmonyPrefix]
         public static void MeleePrefix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
@@ -33,25 +36,43 @@ namespace GTFuckingXP.Patches
         }
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveMeleeDamage))]
-        [HarmonyPostfix]
-        public static void MeleePostfix(Dam_EnemyDamageBase __instance, pFullDamageData data)
+        [HarmonyPrefix]
+        public static void MeleePrefix(Dam_EnemyDamageBase __instance, out bool __state)
         {
-            if (!__instance.Owner.Alive)
+            __state = __instance.Owner.Alive;
+        }
+
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveMeleeDamage))]
+        [HarmonyPostfix]
+        public static void MeleePostfix(Dam_EnemyDamageBase __instance, bool __state, pFullDamageData data)
+        {
+            if (__state)
             {
                 data.source.TryGet(out var agent);
-                if (agent.IsLocallyOwned)
-                {
+                var source = agent.TryCast<PlayerAgent>();
+                var enemyXpData = GetEnemyXp(__instance.Owner);
+                //For some reason melee damage is consistently halfed ...
+                XpDistributionAddDamageDealt(__instance, source, data.damage.Get(__instance.HealthMax)*2);
 
-                    GiveXp(__instance.Owner);
-                }
-                else
+                if (!__instance.Owner.Alive)
                 {
-                    var source = agent.TryCast<PlayerAgent>();
-                    GiveXp(__instance.Owner, source);
+                    
+                    if (source.IsLocallyOwned)
+                    {
+
+                        GiveXp(__instance.Owner, enemyXpData: enemyXpData);
+                    }
+                    else
+                    {
+                        GiveXp(__instance.Owner, enemyXpData, source);
+                    }
+
+                    DistributeDamagePercentageXp(__instance, source, enemyXpData);
                 }
             }
         }
 
+        [HarmonyBefore(BepInExLoader.GUID, DamageNumbers.Main.GUID)]
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.BulletDamage))]
         [HarmonyPrefix]
         public static void BulletPostfix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
@@ -69,8 +90,6 @@ namespace GTFuckingXP.Patches
             }
         }
 
-        internal static List<string> _aliveEnemieNames = new List<string>();
-
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveBulletDamage))]
         [HarmonyPrefix]
         public static void BulletPrefix(Dam_EnemyDamageBase __instance, out bool __state)
@@ -82,18 +101,26 @@ namespace GTFuckingXP.Patches
         [HarmonyPostfix]
         public static void BulletPostfix(Dam_EnemyDamageBase __instance, bool __state, pBulletDamageData data)
         {
-            //Enemy was alive in the postfix but dead now :).
-            if(__state && !__instance.Owner.Alive)
+            if (__state)
             {
-                data.source.TryGet(out var source);
-                if (source.IsLocallyOwned)
-                {
-                    GiveXp(__instance.Owner);
-                }
-                else
-                {
+                data.source.TryGet(out var agent);
+                var source = agent.TryCast<PlayerAgent>();
+                var enemyXpData = GetEnemyXp(__instance.Owner);
+                XpDistributionAddDamageDealt(__instance, source, data.damage.Get(__instance.HealthMax));
 
-                    GiveXp(__instance.Owner, source.TryCast<PlayerAgent>());
+                //Enemy was alive in the postfix but dead now :).
+                if (!__instance.Owner.Alive)
+                {
+                    if (source.IsLocallyOwned)
+                    {
+                        GiveXp(__instance.Owner, enemyXpData);
+                    }
+                    else
+                    {
+                        GiveXp(__instance.Owner, enemyXpData, source);
+                    }
+
+                    DistributeDamagePercentageXp(__instance, source, enemyXpData);
                 }
             }
         }
@@ -117,10 +144,8 @@ namespace GTFuckingXP.Patches
             }
         }
 
-        private static void GiveXp(EnemyAgent killedEnemy, PlayerAgent sourceAgent = null, bool forceDebuffXp = false)
+        private static void GiveXp(EnemyAgent killedEnemy, EnemyXp enemyXpData, PlayerAgent sourceAgent = null, bool forceDebuffXp = false)
         {
-            var enemyXpData = GetEnemyXp(killedEnemy);
-
             var position = killedEnemy.Position;
             position.y = position.y + 1f;
             if (sourceAgent is null)
@@ -166,6 +191,56 @@ namespace GTFuckingXP.Patches
             LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");
 
             return enemyXpData;
+        }
+
+        private static void XpDistributionAddDamageDealt(Dam_EnemyDamageBase hitEnemy, PlayerAgent damageDealer, float damageDealt)
+        {
+            if (!DamageDistribution.TryGetValue(hitEnemy.Owner.name, out var playerDamages))
+            {
+                LogManager.Debug("Enemy not known, generating new entry");
+                playerDamages = new Dictionary<int, float>();
+                DamageDistribution[hitEnemy.Owner.name] = playerDamages;
+            }
+
+            if(!playerDamages.ContainsKey(damageDealer.PlayerSlotIndex))
+            {
+                playerDamages.Add(damageDealer.PlayerSlotIndex, damageDealt);
+            }
+            else
+            {
+                LogManager.Debug($"damage score before += was {playerDamages[damageDealer.PlayerSlotIndex]}");
+                playerDamages[damageDealer.PlayerSlotIndex] += damageDealt;
+                LogManager.Debug($"Now is {playerDamages[damageDealer.PlayerSlotIndex]}");
+            }
+        }
+
+        private static void DistributeDamagePercentageXp(Dam_EnemyDamageBase killedEnemy, Agent lastHit, EnemyXp enemyXpData)
+        {
+            if (DamageDistribution.ContainsKey(killedEnemy.Owner.name))
+            {
+                foreach (var playerToDamageDealt in DamageDistribution[killedEnemy.Owner.name])
+                {
+                    foreach (var player in PlayerManager.PlayerAgentsInLevel)
+                    {
+                        if (player.name != lastHit.name)
+                        {
+                            if (player.PlayerSlotIndex == playerToDamageDealt.Key)
+                            {
+                                var percentageDealt = playerToDamageDealt.Value / killedEnemy.HealthMax;
+                                var xpPercentage = (uint)(enemyXpData.XpGain * percentageDealt);
+
+                                LogManager.Debug($"Found damage distribution of {player.name} having done {playerToDamageDealt.Value} damage ({percentageDealt}%)" +
+                                    $"\n xpGain is {(uint)(enemyXpData.XpGain * percentageDealt)}");
+
+                                NetworkApiXpManager.SendStaticXpInfo(player, (uint)(enemyXpData.XpGain * percentageDealt),
+                                    (uint)(enemyXpData.DebuffXp * percentageDealt), enemyXpData.LevelScalingXpDecrese);
+                            }
+                        }
+                    }
+                }
+
+                DamageDistribution.Remove(killedEnemy.Owner.name);
+            }
         }
     }
 }

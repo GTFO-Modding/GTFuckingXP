@@ -18,6 +18,7 @@ namespace GTFuckingXP.Managers
     {
         private const string _XpNetworkString = "ThisSeemsLikeItComesFromTheRandomXpMod...";
         private const string _xpNetworkString2 = "ThisSeemsLikeItComesFromTheXpMod";
+        private const string _xpNetworkString3 = "ThisSeemsLikeItComesFromTheXpModAgain";
 
         private static readonly InstanceCache _instanceCache;
 
@@ -30,6 +31,7 @@ namespace GTFuckingXP.Managers
         {
             NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_XpNetworkString, ReceiveXp);
             NetworkAPI.RegisterEvent<LevelReachedInfo>(_xpNetworkString2, ReceiveLevelReached);
+            NetworkAPI.RegisterEvent<StaticXpInfo>(_xpNetworkString3, ReceiveStaticXp);
         }
 
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)
@@ -38,6 +40,15 @@ namespace GTFuckingXP.Managers
             if (_instanceCache.TryGetInstance(out XpHandler xpHandler))
             {
                 xpHandler.AddXp(xpData, new UnityEngine.Vector3(xpData.PositionX, xpData.PositionY, xpData.PositionZ));
+            }
+        }
+
+        public static void ReceiveStaticXp(ulong snetPlayer, StaticXpInfo xpInfo)
+        {
+            LogManager.Debug("Received static xp networking package");
+            if (_instanceCache.TryGetInstance(out XpHandler xpHandler))
+            {
+                xpHandler.AddXp(xpInfo, default, false, false);
             }
         }
 
@@ -50,7 +61,9 @@ namespace GTFuckingXP.Managers
                 {
                     if(player.PlayerSlotIndex == snet.PlayerSlotIndex())
                     {
-                        player.Damage.HealthMax = levelData.HealthMultiplier * InstanceCache.Instance.GetDefaultMaxHp();
+                        var newHealth = levelData.HealthMultiplier * InstanceCache.Instance.GetDefaultMaxHp();
+                        LogManager.Debug($"Setting HP of {player.name} to {newHealth}");
+                        player.Damage.HealthMax = newHealth;
                     }
                 }
             }
@@ -89,6 +102,11 @@ namespace GTFuckingXP.Managers
             }
 
             NetworkAPI.InvokeEvent(_xpNetworkString2, new LevelReachedInfo(newLevel), players);
+        }
+
+        public static void SendStaticXpInfo(PlayerAgent receiver, uint xpGain, uint debuffXp, int levelScalingDecrease)
+        {
+            NetworkAPI.InvokeEvent(_xpNetworkString3, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease), receiver.Owner);
         }
     }
 }

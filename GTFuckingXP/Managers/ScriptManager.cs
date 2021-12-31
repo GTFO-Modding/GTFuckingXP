@@ -1,4 +1,5 @@
-﻿using GameData;
+﻿using Enemies;
+using GameData;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Enemies;
@@ -58,11 +59,10 @@ namespace GTFuckingXP.Managers
 
         /// <summary>
         /// Prepares everything to start leveling with 0 xp.
-        /// </summary>
+        /// </summary>  
         public void StartLevelScripts()
         {
-            GuiManager.Current.m_mainMenuLayer.PageLoadout.m_menuBar.m_expIcon.SetText("Reee");
-            GuiManager.Current.m_mainMenuLayer.PageLoadout.m_menuBar.m_expIcon.FullName = "FullName";
+            EnemyDamageBasePatches.DamageDistribution = new Dictionary<string, Dictionary<int, float>>();
 
             UpdateEverything();
             _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
@@ -82,7 +82,7 @@ namespace GTFuckingXP.Managers
             _instanceCache.KillScript<XpHandler>();
             _instanceCache.KillScript<XpBar>();
             _instanceCache.KillScript<DevModeTools>();
-            EnemyDamageBasePatches._aliveEnemieNames = new List<string>();
+            EnemyDamageBasePatches.DamageDistribution = null;
         }
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts) ReadJsonBlocks()

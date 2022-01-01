@@ -169,5 +169,13 @@ namespace GTFuckingXP.Managers
             information = default;
             return false;
         }
+
+        /// <summary>
+        /// removes <paramref name="key"/> of the information cache.
+        /// </summary>
+        public bool RemoveInformation(object key)
+        {
+            return _informationCache.Remove(key);
+        }
     }
 }

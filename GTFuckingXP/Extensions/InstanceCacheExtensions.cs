@@ -10,6 +10,7 @@ namespace GTFuckingXP.Extensions
     public static class InstanceCacheExtensions
     {
         internal const string LevelLayoutKey = "LevelLayout";
+        internal const string CheckpointData = "XpCheckpointData";
         private const string ActiveLevelKey = "ActiveLevel";
         private const string DefaultDataBlockMaxHpKey = "MaxHpDefault";
         private const string PlayerSlotToLevelIndexMappingKey = "PlayerLevelIndexMapping";
@@ -29,10 +30,13 @@ namespace GTFuckingXP.Extensions
         /// <summary>
         /// Sets the new current active level to <paramref name="newLevel"/>
         /// </summary>
-        public static void SetActiveLevel(this InstanceCache instanceCache, Level newLevel)
+        public static void SetActiveLevel(this InstanceCache instanceCache, Level newLevel, bool sendToOtherPeople = true)
         {
             LogManager.Debug($"Setting new level to {newLevel.LevelNumber}.");
-            NetworkApiXpManager.SendNewLevelActive(newLevel);
+            if (sendToOtherPeople)
+            {
+                NetworkApiXpManager.SendNewLevelActive(newLevel);
+            }
             instanceCache.SetInformation(ActiveLevelKey, newLevel);
         }
 
@@ -70,5 +74,14 @@ namespace GTFuckingXP.Extensions
             return instanceCache.GetInformation<Dictionary<int, int>>(PlayerSlotToLevelIndexMappingKey);
         }
 
+        public static void SetXpStorageData(this InstanceCache instanceCache, uint knownXpState)
+        {
+            instanceCache.SetInformation(CheckpointData, (instanceCache.GetCurrentLevelLayout(), knownXpState));
+        }
+
+        public static bool TryGetXpStorageData(this InstanceCache instanceCache, out (LevelLayout levelLayout, uint totalXp) checkpointData)
+        {
+            return instanceCache.TryGetInformation(CheckpointData, out checkpointData, false);
+        }
     }
 }

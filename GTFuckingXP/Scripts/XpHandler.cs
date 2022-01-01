@@ -43,13 +43,27 @@ namespace GTFuckingXP.Scripts
 
         public void Awake()
         {
-            var levelLayout = _instanceCache.GetCurrentLevelLayout();
-            LogManager.Debug("GetCurrentLevelLayout ran through.");
-            var newActiveLevel = levelLayout.Levels.First(it => it.LevelNumber == 0);
-            NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
-            CurrentTotalXp = 0;
-            ChangeCurrentLevel(newActiveLevel);
-            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
+            if(_instanceCache.TryGetXpStorageData(out var checkpointXpData))
+            {
+                LogManager.Message("Found old xp storage data!");
+                //Old level layout may be changed because of xp dev tools or other future plans :)
+                _instanceCache.SetCurrentLevelLayout(checkpointXpData.levelLayout);
+
+                var level0 = checkpointXpData.levelLayout.Levels.First(it => it.LevelNumber == 0);
+                NextLevel = checkpointXpData.levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == level0.LevelNumber + 1);
+                _instanceCache.SetActiveLevel(level0, false);
+                CurrentTotalXp = 0;
+                AddXp(new DummyXp(checkpointXpData.totalXp, checkpointXpData.totalXp), default, false, false);
+            }
+            else
+            {
+                var levelLayout = _instanceCache.GetCurrentLevelLayout();
+                var newActiveLevel = levelLayout.Levels.First(it => it.LevelNumber == 0);
+                NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
+                CurrentTotalXp = 0;
+                ChangeCurrentLevel(newActiveLevel);
+                _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
+            }
             _nextUpdate = Time.time + 300f;
         }
 

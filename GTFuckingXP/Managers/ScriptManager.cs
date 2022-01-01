@@ -8,8 +8,10 @@ using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using GTFuckingXP.StolenCode;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -25,18 +27,43 @@ namespace GTFuckingXP.Managers
 
         private string _folderPath;
         private bool _initialized = false;
-
+        private bool _versionAllowed;
 
         public ScriptManager()
         {
             _instanceCache = InstanceCache.Instance;
+
+            var response = HttpWebRequest.Create(@"https://endskill.github.io/ActiveXpModVersions/ActiveVersions.json");
+            response.Credentials = CredentialCache.DefaultCredentials;
+            string jsonString;
+            using (var streamReader = new StreamReader(response.GetResponse().GetResponseStream()))
+            {
+                jsonString = streamReader.ReadToEnd();
+            }
+            var allowedVersion = JsonSerializer.Deserialize<List<string>>(jsonString);
+
+            var currentVersion = Version.Parse(BepInExLoader.VERSION);
+            foreach(var versionString in allowedVersion)
+            {
+                var version = Version.Parse(versionString);
+                if(currentVersion == version)
+                {
+                    _versionAllowed = true;
+                    break;
+                }
+            }
+
+            if(!_versionAllowed)
+            {
+                LogManager.Error("This version of the xp mod is not recommended to use! Please update immediately");
+            }
         }
 
         public static ScriptManager Instance { get; set; }
 
         public void Initialize()
         {
-            if (_initialized)
+            if (_initialized || !_versionAllowed)
                 return;
 
             _initialized = true;
@@ -62,6 +89,9 @@ namespace GTFuckingXP.Managers
         /// </summary>  
         public void StartLevelScripts()
         {
+            if (!_versionAllowed)
+                return;
+
             EnemyDamageBasePatches.DamageDistribution = new Dictionary<string, Dictionary<int, float>>();
 
             _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
@@ -78,13 +108,14 @@ namespace GTFuckingXP.Managers
         /// </summary>
         public void EndLevelScripts()
         {
+            if (!_versionAllowed)
+                return;
             _instanceCache.KillScript<XpHandler>();
             _instanceCache.KillScript<XpBar>();
             _instanceCache.KillScript<DevModeTools>();
             _instanceCache.SetPlayerToLevelMapping(new Dictionary<int, int>());
             EnemyDamageBasePatches.DamageDistribution = null;
         }
-
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts) ReadJsonBlocks()
         {

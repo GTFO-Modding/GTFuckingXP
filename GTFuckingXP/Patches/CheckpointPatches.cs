@@ -1,15 +1,47 @@
-﻿using HarmonyLib;
+﻿using GTFuckingXP.Communication;
+using GTFuckingXP.Extensions;
+using GTFuckingXP.Managers;
+using GTFuckingXP.Scripts;
+using HarmonyLib;
 
 namespace GTFuckingXP.Patches
 {
-    //[HarmonyPatch(typeof(CheckpointManager))]
-    //public class CheckpointPatches
-    //{
-    //    [HarmonyPatch(nameof(CheckpointManager.StoreCheckpoint))]
-    //    [HarmonyPostfix]
-    //    public static void StoreCheckpointPostfix()
-    //    {
+    [HarmonyPatch(typeof(CheckpointManager))]
+    public class CheckpointPatches
+    {
+        [HarmonyPatch(nameof(CheckpointManager.StoreCheckpoint))]
+        [HarmonyPostfix]
+        private static void StoreCheckpointPostfix()
+        {
+            LogManager.Debug("Saving Checkpoint");
+            CreateCheckpointData();
+            NetworkApiXpManager.SendCheckpointReached();
+        }
 
-    //    }
-    //}
+        [HarmonyPatch(nameof(CheckpointManager.OnLevelCleanup))]
+        [HarmonyPostfix]
+        private static void ReloadCheckpointPostfix()
+        {
+            CheckpointsCleanup();
+            NetworkApiXpManager.SendCheckpointCleanups();
+        }
+
+        public static void CreateCheckpointData()
+        {
+            var instanceCache = InstanceCache.Instance;
+            if (instanceCache.TryGetInstance(out XpHandler xpHandler))
+            {
+                instanceCache.SetXpStorageData(xpHandler.CurrentTotalXp);
+            }
+            else
+            {
+                LogManager.Error("No XpHandler was found, while trying to store the Checkpoint!");
+            }
+        }
+
+        public static void CheckpointsCleanup()
+        {
+            InstanceCache.Instance.RemoveInformation(InstanceCacheExtensions.CheckpointData);
+        }
+    }
 }

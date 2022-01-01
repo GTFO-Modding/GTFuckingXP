@@ -3,6 +3,7 @@ using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Information.NetworkingInfo;
+using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
 using Player;
 using SNetwork;
@@ -19,6 +20,8 @@ namespace GTFuckingXP.Managers
         private const string _XpNetworkString = "ThisSeemsLikeItComesFromTheRandomXpMod...";
         private const string _xpNetworkString2 = "ThisSeemsLikeItComesFromTheXpMod";
         private const string _xpNetworkString3 = "ThisSeemsLikeItComesFromTheXpModAgain";
+        private const string _xpNetworkString4 = "YouShouldSaveYourXpStuff";
+        private const string _xpNetworkString5 = "YouShouldCleanupCheckpoints";
 
         private static readonly InstanceCache _instanceCache;
 
@@ -32,6 +35,8 @@ namespace GTFuckingXP.Managers
             NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_XpNetworkString, ReceiveXp);
             NetworkAPI.RegisterEvent<LevelReachedInfo>(_xpNetworkString2, ReceiveLevelReached);
             NetworkAPI.RegisterEvent<StaticXpInfo>(_xpNetworkString3, ReceiveStaticXp);
+            NetworkAPI.RegisterEvent<DummyStruct>(_xpNetworkString4, ReceiveCheckpointReached);
+            NetworkAPI.RegisterEvent<DummyStruct>(_xpNetworkString5, ReceiveCleanupXpCheckpoints);
         }
 
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)
@@ -69,6 +74,16 @@ namespace GTFuckingXP.Managers
                     }
                 }
             }
+        }
+
+        internal static void ReceiveCheckpointReached(ulong snetPlayer, DummyStruct _)
+        {
+            CheckpointPatches.CreateCheckpointData();
+        }
+
+        internal static void ReceiveCleanupXpCheckpoints(ulong snetPlayer, DummyStruct _)
+        {
+            CheckpointPatches.CheckpointsCleanup();
         }
 
         public static void SendReceiveXp(PlayerAgent receiver, EnemyXp xpData, Vector3 position, bool forceDebuffXp)
@@ -110,5 +125,51 @@ namespace GTFuckingXP.Managers
         {
             NetworkAPI.InvokeEvent(_xpNetworkString3, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease), receiver.Owner);
         }
+
+        public static void SendLevelReached()
+        {
+            List<SNet_Player> players = new List<SNet_Player>();
+            foreach (var snet in SNet.LobbyPlayers)
+            {
+                if (!snet.IsLocal)
+                {
+                    players.Add(snet);
+                }
+            }
+
+            NetworkAPI.InvokeEvent<DummyStruct>(_xpNetworkString4, default, players);
+        }
+
+        public static void SendCheckpointReached()
+        {
+            List<SNet_Player> players = new List<SNet_Player>();
+            foreach (var snet in SNet.LobbyPlayers)
+            {
+                if (!snet.IsLocal)
+                {
+                    players.Add(snet);
+                }
+            }
+
+            NetworkAPI.InvokeEvent(_xpNetworkString4, new DummyStruct(), players);
+        }
+
+        public static void SendCheckpointCleanups()
+        {
+            List<SNet_Player> players = new List<SNet_Player>();
+            foreach (var snet in SNet.LobbyPlayers)
+            {
+                if (!snet.IsLocal)
+                {
+                    players.Add(snet);
+                }
+            }
+
+            NetworkAPI.InvokeEvent(_xpNetworkString5, new DummyStruct(), players);
+
+        }
+
+        internal struct DummyStruct
+        { }
     }
 }

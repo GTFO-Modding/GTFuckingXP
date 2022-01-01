@@ -40,6 +40,7 @@
     <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
+    <Compile Include="Information\DummyXp.cs" />
     <Compile Include="Information\Enemies\EnemyScaling.cs" />
     <Compile Include="Information\Enemies\EnemyXp.cs" />
     <Compile Include="Communication\Info\GameState.cs" />

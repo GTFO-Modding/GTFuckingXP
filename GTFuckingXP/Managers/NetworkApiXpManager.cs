@@ -64,6 +64,8 @@ namespace GTFuckingXP.Managers
                         var newHealth = levelData.HealthMultiplier * InstanceCache.Instance.GetDefaultMaxHp();
                         LogManager.Debug($"Setting HP of {player.name} to {newHealth}");
                         player.Damage.HealthMax = newHealth;
+
+                        _instanceCache.GetPlayerToLevelMapping()[player.PlayerSlotIndex] = levelData.LevelNumber;
                     }
                 }
             }

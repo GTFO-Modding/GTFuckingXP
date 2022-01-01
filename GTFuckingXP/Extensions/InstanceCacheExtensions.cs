@@ -1,5 +1,6 @@
 ﻿using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
+using System.Collections.Generic;
 
 namespace GTFuckingXP.Extensions
 {
@@ -11,6 +12,7 @@ namespace GTFuckingXP.Extensions
         internal const string LevelLayoutKey = "LevelLayout";
         private const string ActiveLevelKey = "ActiveLevel";
         private const string DefaultDataBlockMaxHpKey = "MaxHpDefault";
+        private const string PlayerSlotToLevelIndexMappingKey = "PlayerLevelIndexMapping";
         //private const string WaterMarkPrefixKey = "WaterMark";
 
         public static void SetCurrentLevelLayout(this InstanceCache instanceCache, LevelLayout levelLayout)
@@ -48,21 +50,25 @@ namespace GTFuckingXP.Extensions
         }
 
         /// <summary>
-        /// Sets the default hp 
+        /// Sets the default HP.
         /// </summary>
         public static void SetDefaultMaxHp(this InstanceCache instanceCache, float defaultMaxHp)
         {
             instanceCache.SetInformation(DefaultDataBlockMaxHpKey, defaultMaxHp);
         }
 
-        //public static string GetWaterMarkPrefix(this InstanceCache instanceCache)
-        //{
-        //    return instanceCache.GetInformation<string>(WaterMarkPrefixKey);
-        //}
+        /// <summary>
+        /// Sets the player to index map dictionary in the <paramref name="instanceCache"/>.
+        /// </summary>
+        public static void SetPlayerToLevelMapping(this InstanceCache instanceCache, Dictionary<int, int> playerToLevelMap)
+        {
+            instanceCache.SetInformation(PlayerSlotToLevelIndexMappingKey, playerToLevelMap);
+        }
 
-        //public static void SetWaterMarkPrefix(this InstanceCache instanceCache, string watermarkPrefix)
-        //{
-        //    instanceCache.SetInformation(WaterMarkPrefixKey, watermarkPrefix);
-        //}
+        public static Dictionary<int, int> GetPlayerToLevelMapping(this InstanceCache instanceCache)
+        {
+            return instanceCache.GetInformation<Dictionary<int, int>>(PlayerSlotToLevelIndexMappingKey);
+        }
+
     }
 }

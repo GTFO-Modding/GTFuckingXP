@@ -1,5 +1,4 @@
-﻿using GTFuckingXP.Information.Enemies;
-using GTFuckingXP.Information.Level;
+﻿using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using System;
 using UnityEngine;
@@ -20,14 +19,12 @@ namespace GTFuckingXP.Scripts
     public class XpHandler : MonoBehaviour
     {
         private readonly InstanceCache _instanceCache = InstanceCache.Instance;
-        private readonly bool _devMode;
 
         private bool _hasDebuff;
+        private float _nextUpdate;
 
         public XpHandler(IntPtr intPtr) : base(intPtr)
-        {
-            _devMode = BepInExLoader.RundownDevMode.Value;
-        }
+        {  }
 
         /// <summary>
         /// Gets or sets the total xp you have to this point.
@@ -52,7 +49,18 @@ namespace GTFuckingXP.Scripts
             NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
             CurrentTotalXp = 0;
             ChangeCurrentLevel(newActiveLevel);
-            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp);
+            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
+            _nextUpdate = Time.time + 300f;
+        }
+
+        public void Update()
+        {
+            if(_nextUpdate < Time.time)
+            {
+                //TODO call my own webapi, for average xp data.
+
+                _nextUpdate = Time.time + 300f;
+            }
         }
 
         public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, bool floatingText = true)
@@ -71,13 +79,13 @@ namespace GTFuckingXP.Scripts
 
             CurrentTotalXp += xpValue;
             LogManager.Debug($"Giving xp Amount {xpValue}, new total Xp is {CurrentTotalXp}");
-            if(!CheckForLevelThresholdReached(xpTextPosition, floatingText) && floatingText)
+            if(!CheckForLevelThresholdReached(xpTextPosition, out var header, floatingText) && floatingText)
             {
                 LogManager.Debug("Creating Floating Text xp stuff.");
                 DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#F80>{xpValue}XP"));
             }
 
-            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp);
+            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
         }
         
         /// <summary>
@@ -86,29 +94,23 @@ namespace GTFuckingXP.Scripts
         /// <param name="xpTextPosition">The world position, where this floating level up position should spawn.</param>
         /// <param name="floatingLevelUpMessage">If a floating level up message should appear.</param>
         /// <returns>If a new level got reached when this method got called.</returns>
-        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, bool floatingLevelUpMessage = true)
+        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, out string currentClassName, bool floatingLevelUpMessage = true)
         {
-            if(IsMaxLevel)
+            var levels = _instanceCache.GetCurrentLevelLayout();
+            currentClassName = levels.Header;
+            if (IsMaxLevel)
             {
                 return false;
             }
 
-            var levels = _instanceCache.GetCurrentLevelLayout();
             var oldLevel = _instanceCache.GetActiveLevel();
 
             var availableLevels = levels.Levels.Where(it => it.LevelNumber > _instanceCache.GetActiveLevel().LevelNumber && it.TotalXpRequired <= CurrentTotalXp);
 
             if(availableLevels.Count() > 0)
             {
-                foreach(var level in availableLevels)
-                {
-                    LogManager.Debug($"Level with number {level.LevelNumber}, was available");
-                }
                 var newLevel = availableLevels.OrderByDescending(it => it.LevelNumber).First();
-                LogManager.Debug($"Choose, level with the number{newLevel.LevelNumber}");
-
                 ChangeCurrentLevel(newLevel);
-
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
 
                 if (floatingLevelUpMessage)

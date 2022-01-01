@@ -19,7 +19,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             }
             else
             {
-                if (instanceCache.TryGetInstance<SelectLevelPathHandler>(out var instance))
+                if (instanceCache.TryGetInstance<SelectLevelPathHandler>(out var instance, false))
                 {
                     instance.gameObject.SetActive(false);
                 }

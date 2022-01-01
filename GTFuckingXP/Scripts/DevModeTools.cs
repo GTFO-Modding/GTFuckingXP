@@ -1,12 +1,17 @@
 ﻿using GTFuckingXP.Communication;
 using GTFuckingXP.Extensions;
+using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using Player;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GTFuckingXP.Scripts
 {
+    /// <summary>
+    /// A menu that can be hidden to 
+    /// </summary>
     public class DevModeTools : MonoBehaviour
     {
         private static bool _guiInitialized = false;
@@ -54,6 +59,27 @@ namespace GTFuckingXP.Scripts
                 }
             }
 
+            if(Input.GetKeyDown(KeyCode.KeypadMultiply))
+            {
+                XpApi.ReloadData();
+            }
+
+            if(Input.GetKeyDown(KeyCode.KeypadDivide))
+            {
+                var levelLayouts = _instanceCache.GetInstance<List<LevelLayout>>();
+                var currentLayout = _instanceCache.GetCurrentLevelLayout();
+
+                var index = levelLayouts.IndexOf(currentLayout);
+                if(levelLayouts.Count <= index + 1)
+                {
+                    XpApi.ChangeCurrentLevelLayout(levelLayouts[0]);
+                }
+                else
+                {
+                    XpApi.ChangeCurrentLevelLayout(levelLayouts[index + 1]);
+                }
+            }
+
             if (Input.GetKeyDown(KeyCode.Keypad0))
                 AddCharToXpNumber("0");
             if (Input.GetKeyDown(KeyCode.Keypad1))
@@ -94,15 +120,17 @@ namespace GTFuckingXP.Scripts
 
             if (!_guiInitialized)
             {
-                _normalStyle = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 25 };
+                _normalStyle = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 22 };
                 _guiInitialized = true;
             }
 
             GUI.contentColor = Color.white;
             GUI.Label(new Rect(_xPos, _yPos, 400, 30), $"Xp dev tools:", _normalStyle);
-            GUI.Label(new Rect(_xPos, _yPos + 30f, 400, 30), $"Level up : Keypad+", _normalStyle);
-            GUI.Label(new Rect(_xPos, _yPos + 60f, 400, 30), $"Level down : Keypad-", _normalStyle);
-            GUI.Label(new Rect(_xPos, _yPos + 90f, 400, 30), $"AddXP \"{_addXpNumber}\" KeypadEnter to add XP", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 25f, 400, 30), $"Reload xp data : Keypad*", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 50f, 400, 30), $"Change class : Keypad/", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 75f, 400, 30), $"Level up : Keypad+", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 100f, 400, 30), $"Level down : Keypad-", _normalStyle);
+            GUI.Label(new Rect(_xPos, _yPos + 125f, 400, 30), $"AddXP \"{_addXpNumber}\" KeypadEnter to add XP", _normalStyle);
         }
 
         private void AddCharToXpNumber(string number)

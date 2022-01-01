@@ -28,7 +28,7 @@ namespace GTFuckingXP.Information
                 float maxHp;
                 if (balanceBlock is null)
                 {
-                    LogManager.Warn($"No balance datablock found for balance id {enemy.BalancingDataId}!");
+                    LogManager.Warn($"No balance datablock found for balance id {enemy.BalancingDataId} ({enemy.name})!");
                     maxHp = 20;
                 }
                 else
@@ -200,7 +200,7 @@ namespace GTFuckingXP.Information
                 var singleUseBuffs = new List<SingleUseBuff>();
                 singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.2f));
 
-                meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
+                meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
             }
 
             levelLayouts.Add(new LevelLayout("Melee Main", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));

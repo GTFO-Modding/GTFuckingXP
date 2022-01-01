@@ -53,6 +53,8 @@
     <Compile Include="Information\Level\LevelLayout.cs" />
     <Compile Include="Information\NetworkingInfo\LevelReachedInfo.cs" />
     <Compile Include="Information\NetworkingInfo\StaticXpInfo.cs" />
+    <Compile Include="Information\TermsOfUsage.cs" />
+    <Compile Include="Information\WebModels\XpWebModel.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\NamedPipeCommunicationManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
@@ -60,8 +62,10 @@
     <Compile Include="Managers\InstanceCache.cs" />
     <Compile Include="Managers\SelectLevelPathManager.cs" />
     <Compile Include="Patches\BulletWeaponPatches.cs" />
+    <Compile Include="Patches\CheckpointPatches.cs" />
     <Compile Include="Patches\EnemyDamageBasePatches.cs" />
     <Compile Include="Patches\Gs_Patches.cs" />
+    <Compile Include="Patches\PlaceNavMarkerOnGoPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\MainMenuGuiLayerPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\PlayerLobbyBarPatches.cs" />
     <Compile Include="Patches\PageRundownNewPatches.cs" />

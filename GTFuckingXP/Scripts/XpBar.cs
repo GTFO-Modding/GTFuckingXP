@@ -1,4 +1,5 @@
 ﻿using GTFuckingXP.Extensions;
+using GTFuckingXP.Information;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using System;
@@ -11,7 +12,7 @@ namespace GTFuckingXP.Scripts
     /// <summary>
     /// XPBar Ui Element.
     /// </summary>
-    public class XpBar : MonoBehaviour
+    public class XpBar : MonoBehaviour //needs to be a monobehaviour because "Components" caused some problems.
     {
         private readonly InstanceCache _instanceCache;
 
@@ -26,16 +27,41 @@ namespace GTFuckingXP.Scripts
             XpBarStuff();
         }
 
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Y) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.S))
+            {
+                if (Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.S) && BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
+                {
+                    BepInExLoader.TermsOfUsage.Value = TermsOfUsage.Accepted.ToString();
+                    var xpHandler = _instanceCache.GetInstance<XpHandler>();
+                    UpdateUiString(_instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, _instanceCache.GetCurrentLevelLayout().Header);
+                }
+            }
+        }
 
-        public void UpdateUiString(Level currentLevel, Level nextLevel, uint currentTotalXp)
+        /// <summary>
+        /// Updates the stats text on the bottom right of your screen.
+        /// </summary>
+        /// <param name="currentLevel">The current active stats.</param>
+        /// <param name="nextLevel">The stats to receive when reaching next level.</param>
+        /// <param name="currentTotalXp">The current total xp.</param>
+        public void UpdateUiString(Level currentLevel, Level nextLevel, uint currentTotalXp, string header)
         {
             var stringBuilder = new StringBuilder();
+
+            if (BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
+            {
+                stringBuilder.AppendLine($"Please accept or decline the terms of usage in the config file, to remove this message");
+                stringBuilder.AppendLine("You can press following keys all at once \"Y\"+\"E\"+\"S\", to accept it now.");
+            }
 
             if (nextLevel != null)
             {
                 var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
                 var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
 
+                stringBuilder.AppendLine($"Classname: {header}");
                 stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
                 stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
                 stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
@@ -46,6 +72,7 @@ namespace GTFuckingXP.Scripts
             }
             else
             {
+                stringBuilder.AppendLine($"Classname: {header}");
                 stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
                 stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier}");
                 stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier}");
@@ -57,13 +84,16 @@ namespace GTFuckingXP.Scripts
             _textUi.ForceMeshUpdate();
         }
 
+        /// <summary>
+        /// Creates the xpbar and registers it.
+        /// </summary>
         public void XpBarStuff()
         {
-            if(_instanceCache.TryGetInstance(out _xpBar))
+            if(_instanceCache.TryGetInstance(out _xpBar, false))
             {
-                if(_instanceCache.TryGetInstance(out _xpProgressBar))
+                if(_instanceCache.TryGetInstance(out _xpProgressBar, false))
                 {
-                    if (_instanceCache.TryGetInstance(out _textUi))
+                    if (_instanceCache.TryGetInstance(out _textUi, false))
                     {
                         return;
                     }

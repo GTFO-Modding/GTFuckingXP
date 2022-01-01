@@ -10,7 +10,6 @@ using GTFuckingXP.Scripts.SelectLevelPath;
 using GTFuckingXP.StolenCode;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -26,6 +25,7 @@ namespace GTFuckingXP.Managers
 
         private string _folderPath;
         private bool _initialized = false;
+
 
         public ScriptManager()
         {
@@ -64,7 +64,6 @@ namespace GTFuckingXP.Managers
         {
             EnemyDamageBasePatches.DamageDistribution = new Dictionary<string, Dictionary<int, float>>();
 
-            UpdateEverything();
             _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
             _ = _instanceCache.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
             InstanceCache.Instance.KillScript<SelectLevelPathHandler>();
@@ -82,8 +81,10 @@ namespace GTFuckingXP.Managers
             _instanceCache.KillScript<XpHandler>();
             _instanceCache.KillScript<XpBar>();
             _instanceCache.KillScript<DevModeTools>();
+            _instanceCache.SetPlayerToLevelMapping(new Dictionary<int, int>());
             EnemyDamageBasePatches.DamageDistribution = null;
         }
+
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts) ReadJsonBlocks()
         {

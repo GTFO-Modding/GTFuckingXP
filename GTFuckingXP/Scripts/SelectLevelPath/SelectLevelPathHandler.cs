@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace GTFuckingXP.Scripts.SelectLevelPath
 {
+    /// <summary>
+    /// Temporary solution for selecting a level in the loadout menu.
+    /// </summary>
     public class SelectLevelPathHandler : MonoBehaviour
     {
         private static readonly float _xPos = Screen.width / 3;
@@ -38,7 +41,7 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
                 }
                 if(value < 0)
                 {
-                    value = LevelLayoutsSelectable.Count();
+                    value = LevelLayoutsSelectable.Count() - 1;
                 }
 
                 _currentIndex = value;

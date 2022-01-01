@@ -82,9 +82,9 @@ namespace GTFuckingXP.Communication
                 cheatedXp = (int)newTotalXpAmount - (int)xpHandler.CurrentTotalXp;
 
                 xpHandler.CurrentTotalXp = newTotalXpAmount;
-                xpHandler.CheckForLevelThresholdReached(default, false);
+                xpHandler.CheckForLevelThresholdReached(default, out var header, false);
 
-                instance.GetInstance<XpBar>().UpdateUiString(instance.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp);
+                instance.GetInstance<XpBar>().UpdateUiString(instance.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, header);
                 return true;
             }
             catch (Exception e)
@@ -105,17 +105,17 @@ namespace GTFuckingXP.Communication
             {
                 var instanceCache = InstanceCache.Instance;
 
-                var levelLayout = instanceCache.GetCurrentLevelLayout().Levels;
+                var levelLayout = instanceCache.GetCurrentLevelLayout();
                 var xpHandler = instanceCache.GetInstance<XpHandler>();
 
-                var levelWithLevelNumber = levelLayout.First(it => it.LevelNumber == levelNumber);
+                var levelWithLevelNumber = levelLayout.Levels.First(it => it.LevelNumber == levelNumber);
                 xpHandler.ChangeCurrentLevel(levelWithLevelNumber);
 
                 cheatedXp = (int)levelWithLevelNumber.TotalXpRequired - (int)xpHandler.CurrentTotalXp;
 
                 xpHandler.CurrentTotalXp = levelWithLevelNumber.TotalXpRequired + 1;
-                xpHandler.NextLevel = levelLayout.FirstOrDefault(it => it.LevelNumber == levelNumber + 1);
-                instanceCache.GetInstance<XpBar>().UpdateUiString(instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp);
+                xpHandler.NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == levelNumber + 1);
+                instanceCache.GetInstance<XpBar>().UpdateUiString(instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, levelLayout.Header);
             }
             catch(Exception e)
             {
@@ -125,6 +125,56 @@ namespace GTFuckingXP.Communication
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Changes the level class of the player to the <see cref="LevelLayout"/> where <see cref="LevelLayout.Header"/> is the same as <paramref name="header"/>.
+        /// </summary>
+        /// <param name="header">The header of the new levelLayout.</param>
+        /// <returns>If the api call was successful.</returns>
+        public static bool ChangeCurrentLevelLayout(string header)
+        {
+            try
+            {
+                var instanceCache = InstanceCache.Instance;
+                var newLevelLayout = instanceCache.GetInstance<List<LevelLayout>>().First(it => it.Header == header);
+                return ChangeCurrentLevelLayout(newLevelLayout);
+            }
+            catch (Exception e)
+            {
+                LogManager.Error(e);
+                return false;
+            }
+
+        }
+
+        /// <summary>
+        /// Changes the level class of the player to the <paramref name="newActiveLevelLayout"/>. <br/>
+        /// This call may give yourself some xp depending on if the level 1 in the other levellayout only needs 150XP but now needs 400XP which will just 
+        /// </summary>
+        /// <param name="newActiveLevelLayout">The new <see cref="LevelLayout"/> that should be applied.</param>
+        /// <returns>If the api call was successful.</returns>
+        public static bool ChangeCurrentLevelLayout(LevelLayout newActiveLevelLayout)
+        {
+            try
+            {
+                bool returnBool = true;
+                var instanceCache = InstanceCache.Instance;
+
+                instanceCache.SetCurrentLevelLayout(newActiveLevelLayout);
+                if (instanceCache.TryGetInstance<XpHandler>(out var xpHandler))
+                {
+                    var oldTotalXp = xpHandler.CurrentTotalXp;
+                    returnBool = SetCurrentLevel(0, out _) && SetCurrentTotalXp(oldTotalXp, out _);
+                }
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                LogManager.Error(e);
+                return false;
+            }
         }
     }
 }

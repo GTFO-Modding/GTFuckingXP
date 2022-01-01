@@ -233,7 +233,7 @@ namespace GTFuckingXP.Patches
                                     $"\n xpGain is {(uint)(enemyXpData.XpGain * percentageDealt)}");
 
                                 NetworkApiXpManager.SendStaticXpInfo(player, (uint)(enemyXpData.XpGain * percentageDealt),
-                                    (uint)(enemyXpData.DebuffXp * percentageDealt), enemyXpData.LevelScalingXpDecrese);
+                                    (uint)(enemyXpData.DebuffXp * percentageDealt), (int)(enemyXpData.LevelScalingXpDecrese * percentageDealt));
                             }
                         }
                     }

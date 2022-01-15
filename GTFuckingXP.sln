@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFuckingXP", "GTFuckingXP\GTFuckingXP.csproj", "{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpDevTool", "XpDevTool\XpDevTool.csproj", "{0CAB7061-141C-453D-995C-DE130937E7B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpApi", "XpApi\XpApi.csproj", "{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CAB7061-141C-453D-995C-DE130937E7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CAB7061-141C-453D-995C-DE130937E7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CAB7061-141C-453D-995C-DE130937E7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CAB7061-141C-453D-995C-DE130937E7B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

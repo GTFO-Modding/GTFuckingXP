@@ -20,7 +20,7 @@ namespace GTFuckingXP
         MODNAME = "GTFuckingXP",
         AUTHOR = "Endskill",
         GUID = AUTHOR + "." + MODNAME,
-        VERSION = "1.0.0";
+        VERSION = "1.1.0";
 
         public static ConfigEntry<bool> RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }

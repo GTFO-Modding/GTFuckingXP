@@ -146,7 +146,6 @@ namespace GTFuckingXP.Communication
                 LogManager.Error(e);
                 return false;
             }
-
         }
 
         /// <summary>

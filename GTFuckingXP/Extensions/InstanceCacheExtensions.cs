@@ -14,6 +14,7 @@ namespace GTFuckingXP.Extensions
         private const string ActiveLevelKey = "ActiveLevel";
         private const string DefaultDataBlockMaxHpKey = "MaxHpDefault";
         private const string PlayerSlotToLevelIndexMappingKey = "PlayerLevelIndexMapping";
+        private const string BoosterBuffKey = "BoosterBuffKey";
         //private const string WaterMarkPrefixKey = "WaterMark";
 
         public static void SetCurrentLevelLayout(this InstanceCache instanceCache, LevelLayout levelLayout)
@@ -82,6 +83,17 @@ namespace GTFuckingXP.Extensions
         public static bool TryGetXpStorageData(this InstanceCache instanceCache, out (LevelLayout levelLayout, uint totalXp) checkpointData)
         {
             return instanceCache.TryGetInformation(CheckpointData, out checkpointData, false);
+        }
+
+        public static BoosterBuffs GetCurrentBoosterBuffs(this InstanceCache instanceCache)
+        {
+            return instanceCache.GetInformation<BoosterBuffs>(BoosterBuffKey);
+        }
+
+        public static void SetCurrentBoosterBuff(this InstanceCache instanceCache, BoosterBuffs boosterBuff)
+        {
+            instanceCache.SetInformation(BoosterBuffKey, boosterBuff);
+            //TODO NetworkAPI new BoosterBuff 
         }
     }
 }

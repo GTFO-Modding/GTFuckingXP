@@ -59,6 +59,7 @@ namespace GTFuckingXP
 
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();
+            BoosterBuffManager.Instance = new BoosterBuffManager();
             InstanceCache.Instance.SetInstance(new SelectLevelPathManager());
             NetworkApiXpManager.Setup();
 

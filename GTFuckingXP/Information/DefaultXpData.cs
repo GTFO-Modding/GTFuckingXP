@@ -1,6 +1,7 @@
 ﻿using GameData;
 using GTFuckingXP.Enums;
 using GTFuckingXP.Information.Enemies;
+using GTFuckingXP.Information.Enemies.Scaling;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using System;
@@ -105,7 +106,7 @@ namespace GTFuckingXP.Information
             #region AllRounder
             var levels = new List<Level.Level>();
 
-            for(int i = 0; i < 60; i++)
+            for(int i = 0; i <= 60; i++)
             {
                 var defaultMultiplier = (float)(1 + (0.25f * i));
                 //Random calculation so later levels actually take longer in the default levellayout
@@ -124,13 +125,13 @@ namespace GTFuckingXP.Information
                 levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout("All Rounder", "Scales equally acceptable with everything.", levels));
+            levelLayouts.Add(new LevelLayout(1, "All Rounder", "Scales equally acceptable with everything.", levels));
             #endregion
 
             #region GlassCannon
             var glassLevels = new List<Level.Level>();
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i <= 12; i++)
             {
                 var defaultMultiplier = (float)(1 + (0.5f * i));
                 //Random calculation so later levels actually take longer in the default levellayout
@@ -143,13 +144,13 @@ namespace GTFuckingXP.Information
                 glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout("Glass cannon", "Great scaling, but only 12 levels with no HP.", glassLevels));
+            levelLayouts.Add(new LevelLayout(2, "Glass cannon", "Great scaling, but only 12 levels with no HP.", glassLevels));
             #endregion
 
             #region Tank
             var tankLevels = new List<Level.Level>();
 
-            for (int i = 0; i < 80; i++)
+            for (int i = 0; i <= 80; i++)
             {
                 var defaultMultiplier = (float)(1 + (0.1f * i));
                 //Random calculation so later levels actually take longer in the default levellayout
@@ -165,13 +166,13 @@ namespace GTFuckingXP.Information
                 tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout("Tank", "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
+            levelLayouts.Add(new LevelLayout(3, "Tank", "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
             #endregion
 
             #region Kamikaze
             var kamikazeLevels = new List<Level.Level>();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i <= 20; i++)
             {
                 var defaultMultiplier = (float)(1 + (0.5f * i));
                 //Random calculation so later levels actually take longer in the default levellayout
@@ -185,13 +186,13 @@ namespace GTFuckingXP.Information
                 kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout("Kamikaze", "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
+            levelLayouts.Add(new LevelLayout(4, "Kamikaze", "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
             #endregion
 
             #region MeleeMain
             var meleeMainLevels = new List<Level.Level>();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i <= 20; i++)
             {
                 var defaultMultiplier = (float)(1 + (0.25f * i));
                 //Random calculation so later levels actually take longer in the default levellayout
@@ -203,10 +204,69 @@ namespace GTFuckingXP.Information
                 meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout("Melee Main", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
+            levelLayouts.Add(new LevelLayout(5, "Melee Main", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
+            #endregion
+
+            #region Boxer
+
+            var boxer = new List<Level.Level>();
+
+            for (int i = 0; i <= 20; i++)
+            {
+                var defaultMultiplier = (float)(1 + (0.5f * i));
+                //Random calculation so later levels actually take longer in the default levellayout
+                var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
+
+                var singleUseBuffs = new List<SingleUseBuff>();
+
+                boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs));
+            }
+
+            levelLayouts.Add(new LevelLayout(6, "Boxer", "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
             #endregion
 
             return levelLayouts;
+        }
+
+        public static List<BoosterBuffs> GetDefaultBoosterBuffs()
+        {
+            var boosters = new List<BoosterBuffs>();
+
+            boosters.Add(new BoosterBuffs(6, new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 },
+                new Dictionary<AgentModifier, float>() { { AgentModifier.MeleeResistance, 1000f }, {AgentModifier.ProjectileResistance, -500f} }));
+
+            return boosters;
+        }
+
+        public static List<EnemyScaling> GetDefaultEnemyScaling()
+        {
+            var enemyScaling = new List<EnemyScaling>();
+
+            var rundown = RundownDataBlock.GetAllBlocks();
+            var levels = LevelLayoutDataBlock.GetAllBlocks();
+            var enemies = EnemyDataBlock.GetAllBlocks();
+
+            var tierA = rundown.FirstOrDefault().TierA;
+            foreach(var expedition in tierA)
+            {
+                var level = levels.FirstOrDefault(it => it.persistentID == expedition.LevelLayoutData);
+                if (level != null)
+                {
+                    var lastZoneNumber = (int)level.Zones[level.Zones.Count - 1].LocalIndex + level.ZoneAliasStart;
+                    var defaultScaling = new EnemyDefaultZoneLevel(lastZoneNumber, "<size=50>Default</size><#f80>Lvl.1",
+                        1.1f, 1.1f, 1.1f, 1.1f);
+
+
+
+                    var scalingA = new EnemyScaling(eRundownTier.TierA, 0,
+                   new List<EnemyDefaultZoneLevel>() { defaultScaling }, 
+                   new List<EnemyLevel>() { new EnemyLevel(enemies[1].persistentID, (int)level.Zones[0].LocalIndex, 
+                   "<size=50>Strong</size><#f80>Lvl.2", 1.2f, 1.2f, 1.2f, 1.2f)});
+                    enemyScaling.Add(scalingA);
+                }
+            }
+
+            return enemyScaling;
         }
     }
 }

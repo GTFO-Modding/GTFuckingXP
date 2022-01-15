@@ -41,12 +41,19 @@
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\DummyXp.cs" />
-    <Compile Include="Information\Enemies\EnemyScaling.cs" />
+    <Compile Include="Information\Enemies\Scale\EnemyLevels.cs" />
+    <Compile Include="Information\Enemies\Scale\LevelEnemyScaler.cs" />
+    <Compile Include="Information\Enemies\Scale\ZoneToEnemyId.cs" />
+    <Compile Include="Information\Enemies\Scaling\EnemyDefaultZoneLevel.cs" />
+    <Compile Include="Information\Enemies\Scaling\EnemyLevel.cs" />
+    <Compile Include="Information\Enemies\Scaling\EnemyScaling.cs" />
     <Compile Include="Information\Enemies\EnemyXp.cs" />
     <Compile Include="Communication\Info\GameState.cs" />
     <Compile Include="Information\FloatingXpTextInfo.cs" />
+    <Compile Include="Information\Level\BoosterBuffs.cs" />
     <Compile Include="Information\Level\ConstantMultipliers.cs" />
     <Compile Include="Information\Level\SingleUseBuffs.cs" />
+    <Compile Include="Information\NetworkingInfo\BoosterInfo.cs" />
     <Compile Include="Information\NetworkingInfo\GtfoApiXpInfo.cs" />
     <Compile Include="Information\IXpData.cs" />
     <Compile Include="Information\Level\Level.cs" />
@@ -56,6 +63,7 @@
     <Compile Include="Information\NetworkingInfo\StaticXpInfo.cs" />
     <Compile Include="Information\TermsOfUsage.cs" />
     <Compile Include="Information\WebModels\XpWebModel.cs" />
+    <Compile Include="Managers\BoosterBuffManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\NamedPipeCommunicationManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
@@ -65,6 +73,7 @@
     <Compile Include="Patches\BulletWeaponPatches.cs" />
     <Compile Include="Patches\CheckpointPatches.cs" />
     <Compile Include="Patches\EnemyDamageBasePatches.cs" />
+    <Compile Include="Patches\EnemyScaling\EnemyAgentPatches.cs" />
     <Compile Include="Patches\Gs_Patches.cs" />
     <Compile Include="Patches\PlaceNavMarkerOnGoPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\MainMenuGuiLayerPatches.cs" />
@@ -495,10 +504,7 @@
       <HintPath>LiB\Wwise-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LiB\" />
-    <Folder Include="Patches\EnemyScaling\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

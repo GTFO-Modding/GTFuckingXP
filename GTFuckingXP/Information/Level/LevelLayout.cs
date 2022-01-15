@@ -7,8 +7,9 @@ namespace GTFuckingXP.Information.Level
     /// </summary>
     public class LevelLayout
     {
-        public LevelLayout(string header, string infoText, List<Level> levels)
+        public LevelLayout(int persistentId, string header, string infoText, List<Level> levels)
         {
+            PersistentId = persistentId;
             Header = header;
             InfoText = infoText;
             Levels = levels;
@@ -18,6 +19,11 @@ namespace GTFuckingXP.Information.Level
         /// Gets or sets the id leading to that 
         /// </summary>
         public string Header { get; set; }
+
+        /// <summary>
+        /// Gets or sets an unique id alongst all <see cref="LevelLayout"/>.
+        /// </summary>
+        public int PersistentId { get; set; }
 
         /// <summary>
         /// Gets or sets the info text for this class.

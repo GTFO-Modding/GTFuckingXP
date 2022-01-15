@@ -14,7 +14,7 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
     public class SelectLevelPathHandler : MonoBehaviour
     {
         private static readonly float _xPos = Screen.width / 3;
-        private static readonly float _yPos = Screen.height / 6;
+        private static readonly float _yPos = Screen.height / 7;
 
         private static bool _guiInitialized = false;
         private static GUIStyle _normalStyle;
@@ -92,7 +92,7 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
             }
 
             GUI.contentColor = Color.white;
-            GUI.Label(new Rect(_xPos + 200f, _yPos, 600, 24 * LevelLayoutsSelectable.Count()), 
+            GUI.Label(new Rect(_xPos + 200f, _yPos, 600, 24 * 10), 
                 LevelLayoutsSelectable[CurrentIndex].InfoText, _normalStyle);
         }
     }

@@ -108,12 +108,13 @@ namespace GTFuckingXP.Communication
                 var levelLayout = instanceCache.GetCurrentLevelLayout();
                 var xpHandler = instanceCache.GetInstance<XpHandler>();
 
-                var levelWithLevelNumber = levelLayout.Levels.First(it => it.LevelNumber == levelNumber);
-                xpHandler.ChangeCurrentLevel(levelWithLevelNumber);
+                var newLevel = levelLayout.Levels.First(it => it.LevelNumber == levelNumber);
 
-                cheatedXp = (int)levelWithLevelNumber.TotalXpRequired - (int)xpHandler.CurrentTotalXp;
+                xpHandler.ChangeCurrentLevel(newLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levelLayout.PersistentId, newLevel.LevelNumber));
 
-                xpHandler.CurrentTotalXp = levelWithLevelNumber.TotalXpRequired + 1;
+                cheatedXp = (int)newLevel.TotalXpRequired - (int)xpHandler.CurrentTotalXp;
+
+                xpHandler.CurrentTotalXp = newLevel.TotalXpRequired + 1;
                 xpHandler.NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == levelNumber + 1);
                 instanceCache.GetInstance<XpBar>().UpdateUiString(instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, levelLayout.Header);
             }

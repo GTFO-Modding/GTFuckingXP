@@ -9,7 +9,6 @@ using Player;
 using DamageNumbers;
 using DamageNumbers.API;
 using GTFuckingXP.Enums;
-using System.Collections.Generic;
 
 namespace GTFuckingXP.Scripts
 {
@@ -61,7 +60,7 @@ namespace GTFuckingXP.Scripts
                 var newActiveLevel = levelLayout.Levels.First(it => it.LevelNumber == 0);
                 NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
                 CurrentTotalXp = 0;
-                ChangeCurrentLevel(newActiveLevel);
+                ChangeCurrentLevel(newActiveLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levelLayout.PersistentId, newActiveLevel.LevelNumber));
                 _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
             }
             _nextUpdate = Time.time + 300f;
@@ -118,22 +117,31 @@ namespace GTFuckingXP.Scripts
             }
 
             var oldLevel = _instanceCache.GetActiveLevel();
-
             var availableLevels = levels.Levels.Where(it => it.LevelNumber > _instanceCache.GetActiveLevel().LevelNumber && it.TotalXpRequired <= CurrentTotalXp);
 
             if(availableLevels.Count() > 0)
             {
                 var newLevel = availableLevels.OrderByDescending(it => it.LevelNumber).First();
-                ChangeCurrentLevel(newLevel);
+                
+                //TODO NewBoosters check.
+                ChangeCurrentLevel(newLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levels.PersistentId, newLevel.LevelNumber));
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
 
                 if (floatingLevelUpMessage)
                 {
-                    DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition,
-                        $"<#f00>LV {newLevel.LevelNumber}\n" +
-                        $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()), 1)}\n" +
-                        $"<#f00>MD: <#f80>{Math.Round(newLevel.MeleeDamageMultiplier - oldLevel.MeleeDamageMultiplier, 2)}x \n" +
-                        $"<#f00>WD: <#f80>{Math.Round(newLevel.WeaponDamageMultiplier - oldLevel.WeaponDamageMultiplier, 2)}x", 4f));
+                    if (string.IsNullOrEmpty(newLevel.CustomLevelUpPopupText))
+                    {
+                        DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition,
+                       $"<#f00>LV {newLevel.LevelNumber}\n" +
+                       $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()), 1)}\n" +
+                       $"<#f00>MD: <#f80>{Math.Round(newLevel.MeleeDamageMultiplier - oldLevel.MeleeDamageMultiplier, 2)}x \n" +
+                       $"<#f00>WD: <#f80>{Math.Round(newLevel.WeaponDamageMultiplier - oldLevel.WeaponDamageMultiplier, 2)}x", 4f));
+                    }
+                    else
+                    {
+                        DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition,
+                            newLevel.CustomLevelUpPopupText, 4f));
+                    }
                 }
 
                 return true;
@@ -142,9 +150,14 @@ namespace GTFuckingXP.Scripts
             return false;
         }
 
-        internal void ChangeCurrentLevel(Level newLevel)
+        internal void ChangeCurrentLevel(Level newLevel, BoosterBuffs newBoosterBuff = null)
         {
             _instanceCache.SetActiveLevel(newLevel);
+            _instanceCache.SetCurrentBoosterBuff(newBoosterBuff);
+
+            BoosterBuffManager.Instance.ApplyBoosterEffects(PlayerManager.GetLocalPlayerAgent(), newBoosterBuff);
+            NetworkApiXpManager.SendBoosterStatsReached(newBoosterBuff);
+
             var localDamage = PlayerManager.GetLocalPlayerAgent().Damage;
             var oldMaxHealth = localDamage.HealthMax;
             var newMaxHealth = _instanceCache.GetDefaultMaxHp() * newLevel.HealthMultiplier;
@@ -179,22 +192,6 @@ namespace GTFuckingXP.Scripts
                         player.GiveAmmoRel(0f, 0f, singleUseBuff.Value);
                         break;
                 }
-            }
-        }
-
-        private void AddBoosterEffects(Dictionary<AgentModifier, float> modifiers)
-        {
-            ModifierInstance modifierInstance;
-            if (!AgentModifierManager.TryGetModifierInstance(PlayerManager.GetLocalPlayerAgent(), out modifierInstance))
-            {
-                modifierInstance = new ModifierInstance();
-                AgentModifierManager.Current.m_agentToModifiers[PlayerManager.GetLocalPlayerAgent()] = modifierInstance;
-            }
-
-            foreach(var modification in modifiers)
-            {
-                var oldValue = modifierInstance.GetModifierValue(modification.Key);
-                modifierInstance.m_modifierValues[modification.Key] = oldValue + modification.Value;
             }
         }
     }

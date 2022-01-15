@@ -46,6 +46,5 @@
         /// which results into 4XP
         /// </summary>
         public int LevelScalingXpDecrese { get; set; }
-        
     }
 }

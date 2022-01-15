@@ -56,28 +56,46 @@ namespace GTFuckingXP.Scripts
                 stringBuilder.AppendLine("You can press following keys all at once \"Y\"+\"E\"+\"S\", to accept it now.");
             }
 
-            if (nextLevel != null)
+            if (string.IsNullOrEmpty(currentLevel.CustomLevelStatsText))
             {
-                var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
-                var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
+                if (nextLevel != null)
+                {
+                    var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
+                    var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
 
-                stringBuilder.AppendLine($"Classname: {header}");
-                stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
-                stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
-                stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
-                stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
+                    stringBuilder.AppendLine($"Classname: {header}");
+                    stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+                    stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
+                    stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
+                    stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
 
-                var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
-                _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
+                    var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
+                    _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"Classname: {header}");
+                    stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+                    stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier}");
+                    stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier}");
+                    stringBuilder.AppendLine($"Level {currentLevel.LevelNumber}");
+                    _xpProgressBar.gameObject.SetActive(false);
+                }
             }
             else
             {
-                stringBuilder.AppendLine($"Classname: {header}");
-                stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
-                stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier}");
-                stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier}");
-                stringBuilder.AppendLine($"Level {currentLevel.LevelNumber}");
-                _xpProgressBar.gameObject.SetActive(false);
+                stringBuilder.Append(currentLevel.CustomLevelStatsText);
+                if(nextLevel is null)
+                {
+                    _xpProgressBar.gameObject.SetActive(false);
+                }
+                else
+                {
+                    var currentLevelProgression = currentTotalXp - currentLevel.TotalXpRequired;
+                    var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
+                    var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
+                    _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
+                }
             }
 
             _textUi.text = stringBuilder.ToString();

@@ -3,6 +3,8 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using GTFuckingXP.Information;
 using GTFuckingXP.Managers;
+using GTFuckingXP.Patches;
+using GTFuckingXP.Patches.SelectLevelPatches;
 using GTFuckingXP.Scripts;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
@@ -24,6 +26,9 @@ namespace GTFuckingXP
 
         public static ConfigEntry<bool> RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
+        public static ConfigEntry<bool> DamagePopups { get; private set; }
+        public static ConfigEntry<bool> LvlUpPopups { get; private set; }
+        public static ConfigEntry<bool> XpPopups { get; private set; }
         public static ConfigEntry<string> TermsOfUsage { get; internal set; }
         public static TermsOfUsage TermsOfUsageState { get; private set; }
         public static Harmony Harmony { get; private set; }
@@ -32,6 +37,12 @@ namespace GTFuckingXP
         {
             RundownDevMode = Config.Bind("Dev Settings", "RundownDev Mode", false, "This will activate the xp dev tool while in an expedition \nPress \"Delete\" to hide/show it");
             DebugMessages = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.");
+            
+            DamagePopups = Config.Bind("Popups", "Damanage popup", true, "If damage numbers should be shown.");
+            LvlUpPopups = Config.Bind("Popups", "Lvl up popups", true, "If Lvl UP popups should be shown.");
+            XpPopups = Config.Bind("Popups", "XP gain popups", true, "If XP gain popups should be shown");
+
+
             //TODO remove
             TermsOfUsageState = Information.TermsOfUsage.Declined;
 
@@ -64,7 +75,30 @@ namespace GTFuckingXP
             NetworkApiXpManager.Setup();
 
             Harmony = new Harmony(GUID);
-            Harmony.PatchAll();
+            FasterPatching();
+        }
+
+        private void FasterPatching()
+        {
+            //LevelSelectorPatches
+            Harmony.PatchAll(typeof(MainMenuGuiLayerPatches));
+            Harmony.PatchAll(typeof(PageLoadoutPatches));
+            Harmony.PatchAll(typeof(PlayerLobbyBarPatches));
+
+            //General xp mod usage
+            Harmony.PatchAll(typeof(CheckpointPatches));
+            Harmony.PatchAll(typeof(EnemyDamageBasePatches));
+            Harmony.PatchAll(typeof(GS_InLevelPatches));
+            Harmony.PatchAll(typeof(GS_AfterLevelPatches));
+            Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
+
+            Harmony.PatchAll(typeof(PageRundownNewPatches));
+            Harmony.PatchAll(typeof(GUIManagerPatches));
+
+            if (!DamagePopups.Value)
+            {
+                Harmony.UnpatchAll(DamageNumbers.Main.GUID);
+            }
         }
 
         private void TermsOfUsageChanged(object sender, EventArgs e)

@@ -7,9 +7,10 @@ namespace GTFuckingXP.Information.Level
     /// </summary>
     public class LevelLayout
     {
-        public LevelLayout(int persistentId, string header, string infoText, List<Level> levels)
+        public LevelLayout(int persistentId, string header, string groupName, string infoText, List<Level> levels)
         {
             PersistentId = persistentId;
+            GroupName = groupName;
             Header = header;
             InfoText = infoText;
             Levels = levels;
@@ -19,6 +20,11 @@ namespace GTFuckingXP.Information.Level
         /// Gets or sets the id leading to that 
         /// </summary>
         public string Header { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the header, that is used in the scrollwindow of the loadoutpage.
+        /// </summary>
+        public string GroupName { get; set; }
 
         /// <summary>
         /// Gets or sets an unique id alongst all <see cref="LevelLayout"/>.

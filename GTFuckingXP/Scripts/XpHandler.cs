@@ -76,7 +76,7 @@ namespace GTFuckingXP.Scripts
             }
         }
 
-        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, bool floatingText = true)
+        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, bool nerfedXpText = true)
         {
             uint xpValue = forceDebuffXp || _hasDebuff ? xpData.DebuffXp : xpData.XpGain;
 
@@ -92,22 +92,28 @@ namespace GTFuckingXP.Scripts
 
             CurrentTotalXp += xpValue;
             LogManager.Debug($"Giving xp Amount {xpValue}, new total Xp is {CurrentTotalXp}");
-            if(!CheckForLevelThresholdReached(xpTextPosition, out var header, floatingText) && floatingText)
+            if(!CheckForLevelThresholdReached(xpTextPosition, out var header) && BepInExLoader.XpPopups.Value)
             {
-                LogManager.Debug("Creating Floating Text xp stuff.");
-                DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#F80>{xpValue}XP"));
+                if (nerfedXpText)
+                {
+                    DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#F80>{xpValue}XP"));
+                }
+                else
+                {
+                    DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#08F>{xpValue}XP"));
+                }
             }
 
             _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
         }
-        
+
         /// <summary>
         /// Looks if the next level is reached and sets it, if it was reached.
         /// </summary>
         /// <param name="xpTextPosition">The world position, where this floating level up position should spawn.</param>
         /// <param name="floatingLevelUpMessage">If a floating level up message should appear.</param>
         /// <returns>If a new level got reached when this method got called.</returns>
-        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, out string currentClassName, bool floatingLevelUpMessage = true)
+        public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, out string currentClassName)
         {
             var levels = _instanceCache.GetCurrentLevelLayout();
             currentClassName = levels.Header;
@@ -119,15 +125,15 @@ namespace GTFuckingXP.Scripts
             var oldLevel = _instanceCache.GetActiveLevel();
             var availableLevels = levels.Levels.Where(it => it.LevelNumber > _instanceCache.GetActiveLevel().LevelNumber && it.TotalXpRequired <= CurrentTotalXp);
 
-            if(availableLevels.Count() > 0)
+            if (availableLevels.Count() > 0)
             {
                 var newLevel = availableLevels.OrderByDescending(it => it.LevelNumber).First();
-                
+
                 //TODO NewBoosters check.
                 ChangeCurrentLevel(newLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levels.PersistentId, newLevel.LevelNumber));
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
 
-                if (floatingLevelUpMessage)
+                if (BepInExLoader.LvlUpPopups.Value)
                 {
                     if (string.IsNullOrEmpty(newLevel.CustomLevelUpPopupText))
                     {
@@ -173,7 +179,7 @@ namespace GTFuckingXP.Scripts
         private void ApplySingleUseBuffs(Level reachedLevel)
         {
             var player = PlayerManager.GetLocalPlayerAgent();
-            foreach(var singleUseBuff in reachedLevel.SingleUseBuffs)
+            foreach(var singleUseBuff in reachedLevel.LevelUpBonus)
             {
                 switch(singleUseBuff.SingleBuff)
                 {
@@ -181,6 +187,7 @@ namespace GTFuckingXP.Scripts
                         player.GiveHealth(singleUseBuff.Value);
                         break;
                     case SingleBuff.Desinfect:
+                        player.GiveDisinfection(singleUseBuff.Value);
                         break;
                     case SingleBuff.AmmunitionMain:
                         player.GiveAmmoRel(singleUseBuff.Value, 0f, 0f);

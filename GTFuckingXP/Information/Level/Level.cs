@@ -19,7 +19,7 @@ namespace GTFuckingXP.Information.Level
             HealthMultiplier = healthMultiplier;
             MeleeDamageMultiplier = meleeMultiplier;
             WeaponDamageMultiplier = weaponMultiplier;
-            SingleUseBuffs = singleUseBuffs;
+            LevelUpBonus = singleUseBuffs;
         }
 
         /// <summary>
@@ -62,6 +62,6 @@ namespace GTFuckingXP.Information.Level
         /// <summary>
         /// Gets or sets the single use buffs that gets applied when reaching this level.
         /// </summary>
-        public List<SingleUseBuff> SingleUseBuffs { get; set; }
+        public List<SingleUseBuff> LevelUpBonus { get; set; }
     }
 }

@@ -230,7 +230,7 @@ namespace GTFuckingXP.Managers
             }
 
             #region EnumValues
-            var SingleUseBuffPath = Path.Combine(_folderPath, "SingleUseBuff_EnumNames.txt");
+            var SingleUseBuffPath = Path.Combine(_folderPath, "LevelUpBonus_EnumNames.txt");
             if (!File.Exists(SingleUseBuffPath))
             {
                 File.WriteAllText(SingleUseBuffPath, $"--This file is auto-generated. It's not for editing!--\n\n{string.Join("\n", Enum.GetValues(typeof(SingleBuff)))}");

@@ -55,7 +55,7 @@ namespace GTFuckingXP.Managers
             LogManager.Debug("Received static xp networking package");
             if (_instanceCache.TryGetInstance(out XpHandler xpHandler))
             {
-                xpHandler.AddXp(xpInfo, default, false, false);
+                xpHandler.AddXp(xpInfo, xpInfo.Position, false, false);
             }
         }
 
@@ -134,9 +134,9 @@ namespace GTFuckingXP.Managers
             NetworkAPI.InvokeEvent(_sendBoosterNetworkString, boosterInfo);
         }
 
-        public static void SendStaticXpInfo(PlayerAgent receiver, uint xpGain, uint debuffXp, int levelScalingDecrease)
+        public static void SendStaticXpInfo(PlayerAgent receiver, uint xpGain, uint debuffXp, int levelScalingDecrease, Vector3 position)
         {
-            NetworkAPI.InvokeEvent(_xpNetworkString3, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease), receiver.Owner);
+            NetworkAPI.InvokeEvent(_xpNetworkString3, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
         }
 
         public static void SendLevelReached()

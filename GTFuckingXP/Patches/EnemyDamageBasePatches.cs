@@ -65,7 +65,6 @@ namespace GTFuckingXP.Patches
                     
                     if (source.IsLocallyOwned)
                     {
-
                         GiveXp(__instance.Owner, enemyXpData: enemyXpData);
                     }
                     else
@@ -89,7 +88,7 @@ namespace GTFuckingXP.Patches
             if (sourceAgent.IsLocallyOwned)
             {
                 var damage = dam;
-                LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled up to:");
+                LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled to:");
                 damage *= _instanceCache.GetActiveLevel().WeaponDamageMultiplier;
                 LogManager.Debug($"{damage}");
                 dam = damage;
@@ -189,7 +188,7 @@ namespace GTFuckingXP.Patches
             {
                 //No data found, creating a new instance and 
                 LogManager.Warn($"There was no enemy XP data found for {killedEnemy.EnemyDataID}!");
-                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 400);
+                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 0);
                 enemyData.Add(enemyXpData);
                 _instanceCache.SetInstance(enemyData);
             }
@@ -237,8 +236,11 @@ namespace GTFuckingXP.Patches
                                 LogManager.Debug($"Found damage distribution of {player.name} having done {playerToDamageDealt.Value} damage ({percentageDealt}%)" +
                                     $"\n xpGain is {(uint)(enemyXpData.XpGain * percentageDealt)}");
 
+                                var position = killedEnemy.Owner.Position;
+                                position.y += 1f;
+
                                 NetworkApiXpManager.SendStaticXpInfo(player, (uint)(enemyXpData.XpGain * percentageDealt),
-                                    (uint)(enemyXpData.DebuffXp * percentageDealt), (int)(enemyXpData.LevelScalingXpDecrese * percentageDealt));
+                                    (uint)(enemyXpData.DebuffXp * percentageDealt), (int)(enemyXpData.LevelScalingXpDecrese * percentageDealt), position);
                             }
                         }
                     }

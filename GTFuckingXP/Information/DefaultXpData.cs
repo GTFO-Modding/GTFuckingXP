@@ -125,7 +125,7 @@ namespace GTFuckingXP.Information
                 levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(1, "All Rounder", "Scales equally acceptable with everything.", levels));
+            levelLayouts.Add(new LevelLayout(1, "All Rounder", "ExampleClasses", "Scales equally acceptable with everything.", levels));
             #endregion
 
             #region GlassCannon
@@ -144,7 +144,7 @@ namespace GTFuckingXP.Information
                 glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(2, "Glass cannon", "Great scaling, but only 12 levels with no HP.", glassLevels));
+            levelLayouts.Add(new LevelLayout(2, "Glass cannon", "ExampleClasses", "Great scaling, but only 12 levels with no HP.", glassLevels));
             #endregion
 
             #region Tank
@@ -166,7 +166,7 @@ namespace GTFuckingXP.Information
                 tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(3, "Tank", "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
+            levelLayouts.Add(new LevelLayout(3, "Tank", "ExampleClasses", "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
             #endregion
 
             #region Kamikaze
@@ -186,7 +186,7 @@ namespace GTFuckingXP.Information
                 kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(4, "Kamikaze", "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
+            levelLayouts.Add(new LevelLayout(4, "Kamikaze", "ExampleClasses", "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
             #endregion
 
             #region MeleeMain
@@ -204,7 +204,7 @@ namespace GTFuckingXP.Information
                 meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(5, "Melee Main", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
+            levelLayouts.Add(new LevelLayout(5, "Melee Main", "ExampleClasses", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
             #endregion
 
             #region Boxer
@@ -222,7 +222,7 @@ namespace GTFuckingXP.Information
                 boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(6, "Boxer", "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
+            levelLayouts.Add(new LevelLayout(6, "Boxer", "For gods sake dont use it", "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
             #endregion
 
             return levelLayouts;

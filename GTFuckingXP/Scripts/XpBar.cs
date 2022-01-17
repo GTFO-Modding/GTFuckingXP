@@ -49,6 +49,7 @@ namespace GTFuckingXP.Scripts
         public void UpdateUiString(Level currentLevel, Level nextLevel, uint currentTotalXp, string header)
         {
             var stringBuilder = new StringBuilder();
+            string statsString;
 
             if (BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
             {
@@ -81,13 +82,18 @@ namespace GTFuckingXP.Scripts
                     stringBuilder.AppendLine($"Level {currentLevel.LevelNumber}");
                     _xpProgressBar.gameObject.SetActive(false);
                 }
+
+                statsString = stringBuilder.ToString();
             }
             else
             {
                 stringBuilder.Append(currentLevel.CustomLevelStatsText);
+                statsString = stringBuilder.ToString();
+
                 if(nextLevel is null)
                 {
                     _xpProgressBar.gameObject.SetActive(false);
+                    statsString = string.Format(statsString, $"Level {currentLevel.LevelNumber}");
                 }
                 else
                 {
@@ -95,10 +101,13 @@ namespace GTFuckingXP.Scripts
                     var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
                     var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
                     _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
+
+                    statsString = string.Format(statsString, 
+                        $"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
                 }
             }
 
-            _textUi.text = stringBuilder.ToString();
+            _textUi.text = statsString;
             _textUi.ForceMeshUpdate();
         }
 

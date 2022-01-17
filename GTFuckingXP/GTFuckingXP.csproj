@@ -32,13 +32,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BepInExLoader.cs" />
-    <Compile Include="Communication\Info\Commands.cs" />
-    <Compile Include="Communication\Info\CommunicationCommand.cs" />
     <Compile Include="Communication\XpApi.cs" />
     <Compile Include="Enums\PlayerBuff.cs" />
     <Compile Include="Enums\SingleBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
+    <Compile Include="GS_Patches.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\DummyXp.cs" />
     <Compile Include="Information\Enemies\Scale\EnemyLevels.cs" />
@@ -48,7 +47,6 @@
     <Compile Include="Information\Enemies\Scaling\EnemyLevel.cs" />
     <Compile Include="Information\Enemies\Scaling\EnemyScaling.cs" />
     <Compile Include="Information\Enemies\EnemyXp.cs" />
-    <Compile Include="Communication\Info\GameState.cs" />
     <Compile Include="Information\FloatingXpTextInfo.cs" />
     <Compile Include="Information\Level\BoosterBuffs.cs" />
     <Compile Include="Information\Level\ConstantMultipliers.cs" />
@@ -65,18 +63,16 @@
     <Compile Include="Information\WebModels\XpWebModel.cs" />
     <Compile Include="Managers\BoosterBuffManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
-    <Compile Include="Managers\NamedPipeCommunicationManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
     <Compile Include="Managers\InstanceCache.cs" />
     <Compile Include="Managers\SelectLevelPathManager.cs" />
-    <Compile Include="Patches\BulletWeaponPatches.cs" />
     <Compile Include="Patches\CheckpointPatches.cs" />
     <Compile Include="Patches\EnemyDamageBasePatches.cs" />
-    <Compile Include="Patches\EnemyScaling\EnemyAgentPatches.cs" />
     <Compile Include="Patches\Gs_Patches.cs" />
     <Compile Include="Patches\PlaceNavMarkerOnGoPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\MainMenuGuiLayerPatches.cs" />
+    <Compile Include="Patches\SelectLevelPatches\PageLoadoutPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\PlayerLobbyBarPatches.cs" />
     <Compile Include="Patches\PageRundownNewPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

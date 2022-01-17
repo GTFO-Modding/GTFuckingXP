@@ -82,7 +82,7 @@ namespace GTFuckingXP.Communication
                 cheatedXp = (int)newTotalXpAmount - (int)xpHandler.CurrentTotalXp;
 
                 xpHandler.CurrentTotalXp = newTotalXpAmount;
-                xpHandler.CheckForLevelThresholdReached(default, out var header, false);
+                xpHandler.CheckForLevelThresholdReached(default, out var header);
 
                 instance.GetInstance<XpBar>().UpdateUiString(instance.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, header);
                 return true;

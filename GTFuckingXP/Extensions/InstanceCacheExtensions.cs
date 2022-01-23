@@ -15,6 +15,7 @@ namespace GTFuckingXP.Extensions
         private const string DefaultDataBlockMaxHpKey = "MaxHpDefault";
         private const string PlayerSlotToLevelIndexMappingKey = "PlayerLevelIndexMapping";
         private const string BoosterBuffKey = "BoosterBuffKey";
+        private const string AnchorDifferenceKey = "AnchorDifferenceKey";
         //private const string WaterMarkPrefixKey = "WaterMark";
 
         public static void SetCurrentLevelLayout(this InstanceCache instanceCache, LevelLayout levelLayout)
@@ -94,6 +95,16 @@ namespace GTFuckingXP.Extensions
         {
             instanceCache.SetInformation(BoosterBuffKey, boosterBuff);
             //TODO NetworkAPI new BoosterBuff 
+        }
+
+        public static void SetAnchorDifference(this InstanceCache instanceCache, float anchorDifference)
+        {
+            instanceCache.SetInformation(AnchorDifferenceKey, anchorDifference);
+        }
+
+        public static bool TryGetAnchorDifference(this InstanceCache instanceCache, out float anchorDifference)
+        {
+            return instanceCache.TryGetInformation(AnchorDifferenceKey, out anchorDifference);
         }
     }
 }

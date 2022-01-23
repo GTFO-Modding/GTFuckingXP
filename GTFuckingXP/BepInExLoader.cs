@@ -22,7 +22,7 @@ namespace GTFuckingXP
         MODNAME = "GTFuckingXP",
         AUTHOR = "Endskill",
         GUID = AUTHOR + "." + MODNAME,
-        VERSION = "1.1.0";
+        VERSION = "1.2.2";
 
         public static ConfigEntry<bool> RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
@@ -71,7 +71,6 @@ namespace GTFuckingXP
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();
-            InstanceCache.Instance.SetInstance(new SelectLevelPathManager());
             NetworkApiXpManager.Setup();
 
             Harmony = new Harmony(GUID);
@@ -82,7 +81,6 @@ namespace GTFuckingXP
         {
             //LevelSelectorPatches
             Harmony.PatchAll(typeof(MainMenuGuiLayerPatches));
-            Harmony.PatchAll(typeof(PageLoadoutPatches));
             Harmony.PatchAll(typeof(PlayerLobbyBarPatches));
 
             //General xp mod usage

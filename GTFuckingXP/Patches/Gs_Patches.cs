@@ -13,6 +13,7 @@ namespace GTFuckingXP.Patches
         {
             LogManager.Debug("Level Enter");
             ScriptManager.Instance.StartLevelScripts();
+            UI_Apply.SetSkewing(0f);
         }
     }
 

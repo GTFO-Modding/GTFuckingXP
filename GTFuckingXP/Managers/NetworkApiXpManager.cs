@@ -17,11 +17,11 @@ namespace GTFuckingXP.Managers
     /// </summary>
     public static class NetworkApiXpManager
     {
-        private const string _XpNetworkString = "ThisSeemsLikeItComesFromTheRandomXpMod...";
-        private const string _xpNetworkString2 = "ThisSeemsLikeItComesFromTheXpMod";
-        private const string _xpNetworkString3 = "ThisSeemsLikeItComesFromTheXpModAgain";
-        private const string _xpNetworkString4 = "YouShouldSaveYourXpStuff";
-        private const string _xpNetworkString5 = "YouShouldCleanupCheckpoints";
+        private const string _sendXpString = "ThisSeemsLikeItComesFromTheRandomXpMod...";
+        private const string _levelStatsDistribution = "ThisSeemsLikeItComesFromTheXpMod";
+        private const string _receiveHalfAssedXp = "ThisSeemsLikeItComesFromTheXpModAgain";
+        private const string _checkpointReachedString = "YouShouldSaveYourXpStuff";
+        private const string _cleanUpCheckpointsString = "YouShouldCleanupCheckpoints";
         private const string _sendBoosterNetworkString = "IHaveReachedBoosterBuffStatus";
 
         private static readonly InstanceCache _instanceCache;
@@ -33,11 +33,11 @@ namespace GTFuckingXP.Managers
 
         public static void Setup()
         {
-            NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_XpNetworkString, ReceiveXp);
-            NetworkAPI.RegisterEvent<LevelReachedInfo>(_xpNetworkString2, ReceiveLevelReached);
-            NetworkAPI.RegisterEvent<StaticXpInfo>(_xpNetworkString3, ReceiveStaticXp);
-            NetworkAPI.RegisterEvent<DummyStruct>(_xpNetworkString4, ReceiveCheckpointReached);
-            NetworkAPI.RegisterEvent<DummyStruct>(_xpNetworkString5, ReceiveCleanupXpCheckpoints);
+            NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_sendXpString, ReceiveXp);
+            NetworkAPI.RegisterEvent<LevelReachedInfo>(_levelStatsDistribution, ReceiveLevelReached);
+            NetworkAPI.RegisterEvent<StaticXpInfo>(_receiveHalfAssedXp, ReceiveStaticXp);
+            NetworkAPI.RegisterEvent<DummyStruct>(_checkpointReachedString, ReceiveCheckpointReached);
+            NetworkAPI.RegisterEvent<DummyStruct>(_cleanUpCheckpointsString, ReceiveCleanupXpCheckpoints);
             NetworkAPI.RegisterEvent<BoosterInfo>(_sendBoosterNetworkString, ReceiveBoosterBuffs);
         }
 
@@ -105,7 +105,7 @@ namespace GTFuckingXP.Managers
 
         public static void SendReceiveXp(PlayerAgent receiver, EnemyXp xpData, Vector3 position, bool forceDebuffXp)
         {
-            NetworkAPI.InvokeEvent(_XpNetworkString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
+            NetworkAPI.InvokeEvent(_sendXpString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
                 receiver.Owner);
         }
 
@@ -120,13 +120,13 @@ namespace GTFuckingXP.Managers
                 }
             }
 
-            NetworkAPI.InvokeEvent(_XpNetworkString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
+            NetworkAPI.InvokeEvent(_sendXpString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
                 players);
         }
 
         public static void SendNewLevelActive(Level newLevel)
         {
-            NetworkAPI.InvokeEvent(_xpNetworkString2, new LevelReachedInfo(newLevel));
+            NetworkAPI.InvokeEvent(_levelStatsDistribution, new LevelReachedInfo(newLevel));
         }
 
         public static void SendBoosterStatsReached(BoosterInfo boosterInfo)
@@ -136,7 +136,7 @@ namespace GTFuckingXP.Managers
 
         public static void SendStaticXpInfo(PlayerAgent receiver, uint xpGain, uint debuffXp, int levelScalingDecrease, Vector3 position)
         {
-            NetworkAPI.InvokeEvent(_xpNetworkString3, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
+            NetworkAPI.InvokeEvent(_receiveHalfAssedXp, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
         }
 
         public static void SendLevelReached()
@@ -150,17 +150,17 @@ namespace GTFuckingXP.Managers
                 }
             }
 
-            NetworkAPI.InvokeEvent<DummyStruct>(_xpNetworkString4, default, players);
+            NetworkAPI.InvokeEvent<DummyStruct>(_checkpointReachedString, default, players);
         }
 
         public static void SendCheckpointReached()
         {
-            NetworkAPI.InvokeEvent(_xpNetworkString4, new DummyStruct());
+            NetworkAPI.InvokeEvent(_checkpointReachedString, new DummyStruct());
         }
 
         public static void SendCheckpointCleanups()
         {
-            NetworkAPI.InvokeEvent(_xpNetworkString5, new DummyStruct());
+            NetworkAPI.InvokeEvent(_cleanUpCheckpointsString, new DummyStruct());
 
         }
 

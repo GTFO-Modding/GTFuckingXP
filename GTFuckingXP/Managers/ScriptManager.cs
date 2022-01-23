@@ -3,6 +3,7 @@ using GameData;
 using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
+using GTFuckingXP.Information.ClassSelector;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Patches;
@@ -24,6 +25,7 @@ namespace GTFuckingXP.Managers
         public const string ExpeditionLvlLayoutMappingFileName = "ExpeditionLvlLayouts.json";
         public const string LevelLayoutFileName = "ClassLayouts.json";
         public const string BoosterLayoutFileName = "BoosterEffects.json";
+        public const string GroupFileName = "Groups.json";
 
         private readonly InstanceCache _instanceCache;
 
@@ -58,6 +60,7 @@ namespace GTFuckingXP.Managers
             if(!_versionAllowed)
             {
                 LogManager.Error("This version of the xp mod is not recommended to use! Please update immediately");
+                BepInExLoader.Harmony.UnpatchSelf();
             }
         }
 
@@ -119,7 +122,7 @@ namespace GTFuckingXP.Managers
             EnemyDamageBasePatches.DamageDistribution = null;
         }
 
-        public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs) ReadJsonBlocks()
+        public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs, List<Group> groups) ReadJsonBlocks()
         {
             var serializerSettings = new JsonSerializerOptions
             {
@@ -151,7 +154,7 @@ namespace GTFuckingXP.Managers
 
             if (levelLayouts is null || levelLayouts.Count == 0)
             {
-                LogManager.Warn("No Data received for XpLayouts/LevelLayouts!");
+                LogManager.Warn("No Data found for XpLayouts/LevelLayouts!");
             }
 
             var boosterEffects = JsonSerializer.Deserialize<List<BoosterBuffs>>(
@@ -159,33 +162,31 @@ namespace GTFuckingXP.Managers
 
             if (boosterEffects is null || boosterEffects.Count == 0)
             {
-                LogManager.Warn("No Data received for BoosterEffectLayouts!");
+                LogManager.Warn("No Data found for BoosterEffectLayouts!");
             }
 
-            return (enemyXpList, levelLayouts, boosterEffects);
+            var groups = JsonSerializer.Deserialize<List<Group>>(
+                File.ReadAllText(Path.Combine(_folderPath, GroupFileName)), serializerSettings);
+            
+            if(groups is null || groups.Count == 0)
+            {
+                LogManager.Warn("Not data found for Groups!");
+            }
+
+            return (enemyXpList, levelLayouts, boosterEffects, groups);
         }
 
         public void UpdateEverything()
         {
             var newData = ReadJsonBlocks();
             
-            LogManager.Debug($"Received: {newData.enemyXpList.Count} enemies, {newData.levelLayouts.Count} levelLayouts, {newData.boosterBuffs.Count} BoosterLayouts");
+            LogManager.Debug($"Received: {newData.enemyXpList.Count} enemies, {newData.levelLayouts.Count} levelLayouts, {newData.boosterBuffs.Count} BoosterLayouts, {newData.groups.Count} Groups");
 
             _instanceCache.SetInstance(newData.enemyXpList);
             //_instanceCache.SetInstance(newData.expeditionLevelLayoutMapping);
             _instanceCache.SetInstance(newData.levelLayouts);
             _instanceCache.SetInstance(newData.boosterBuffs);
-
-            //var currentMission = RundownManager.GetActiveExpeditionData();
-            //LogManager.Debug($"current mission data is: Tier={currentMission.tier}, ExpeditionIndex={currentMission.expeditionIndex}");
-
-            //foreach(var mapObj in newData.expeditionLevelLayoutMapping)
-            //{
-            //    LogManager.Debug($"ReadData contains file with: Tier={mapObj.Tier}, ExpeditionsIndex={mapObj.ExpeditionIndex}");
-            //}
-
-            //_instanceCache.SetCurrentLevelLayout(newData.levelLayouts.FirstOrDefault(it => it.Id == newData.expeditionLevelLayoutMapping.First(x =>
-            //  x.Tier == currentMission.tier && x.ExpeditionIndex == currentMission.expeditionIndex).LevelLayoutId));
+            _instanceCache.SetInstance(newData.groups);
         }
 
         private void WriteDefaultJsonBlocks()
@@ -227,6 +228,12 @@ namespace GTFuckingXP.Managers
             if(!File.Exists(boosterLayoutsPath))
             {
                 File.WriteAllText(boosterLayoutsPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultBoosterBuffs(), serializerOptions));
+            }
+
+            var groupsPath = Path.Combine(_folderPath, GroupFileName);
+            if(!File.Exists(groupsPath))
+            {
+                File.WriteAllText(groupsPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultGroups(), serializerOptions));
             }
 
             #region EnumValues

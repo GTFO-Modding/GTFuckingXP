@@ -37,7 +37,7 @@
     <Compile Include="Enums\SingleBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
     <Compile Include="Extensions\InstanceCacheExtensions.cs" />
-    <Compile Include="GS_Patches.cs" />
+    <Compile Include="Information\ClassSelector\Group.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\DummyXp.cs" />
     <Compile Include="Information\Enemies\Scale\EnemyLevels.cs" />
@@ -66,13 +66,11 @@
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
     <Compile Include="Managers\InstanceCache.cs" />
-    <Compile Include="Managers\SelectLevelPathManager.cs" />
     <Compile Include="Patches\CheckpointPatches.cs" />
     <Compile Include="Patches\EnemyDamageBasePatches.cs" />
     <Compile Include="Patches\Gs_Patches.cs" />
     <Compile Include="Patches\PlaceNavMarkerOnGoPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\MainMenuGuiLayerPatches.cs" />
-    <Compile Include="Patches\SelectLevelPatches\PageLoadoutPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\PlayerLobbyBarPatches.cs" />
     <Compile Include="Patches\PageRundownNewPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using GameData;
 using GTFuckingXP.Enums;
+using GTFuckingXP.Information.ClassSelector;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Enemies.Scaling;
 using GTFuckingXP.Information.Level;
@@ -125,7 +126,7 @@ namespace GTFuckingXP.Information
                 levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(1, "All Rounder", "ExampleClasses", "Scales equally acceptable with everything.", levels));
+            levelLayouts.Add(new LevelLayout(1, "All Rounder", 0, "Scales equally acceptable with everything.", levels));
             #endregion
 
             #region GlassCannon
@@ -144,7 +145,7 @@ namespace GTFuckingXP.Information
                 glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(2, "Glass cannon", "ExampleClasses", "Great scaling, but only 12 levels with no HP.", glassLevels));
+            levelLayouts.Add(new LevelLayout(2, "Glass cannon", 0, "Great scaling, but only 12 levels with no HP.", glassLevels));
             #endregion
 
             #region Tank
@@ -166,7 +167,7 @@ namespace GTFuckingXP.Information
                 tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(3, "Tank", "ExampleClasses", "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
+            levelLayouts.Add(new LevelLayout(3, "Tank", 0, "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
             #endregion
 
             #region Kamikaze
@@ -186,7 +187,7 @@ namespace GTFuckingXP.Information
                 kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(4, "Kamikaze", "ExampleClasses", "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
+            levelLayouts.Add(new LevelLayout(4, "Kamikaze", 0, "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
             #endregion
 
             #region MeleeMain
@@ -204,7 +205,7 @@ namespace GTFuckingXP.Information
                 meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(5, "Melee Main", "ExampleClasses", "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
+            levelLayouts.Add(new LevelLayout(5, "Melee Main", 0, "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
             #endregion
 
             #region Boxer
@@ -222,7 +223,7 @@ namespace GTFuckingXP.Information
                 boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs));
             }
 
-            levelLayouts.Add(new LevelLayout(6, "Boxer", "For gods sake dont use it", "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
+            levelLayouts.Add(new LevelLayout(6, "Boxer", 1, "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
             #endregion
 
             return levelLayouts;
@@ -238,35 +239,45 @@ namespace GTFuckingXP.Information
             return boosters;
         }
 
-        public static List<EnemyScaling> GetDefaultEnemyScaling()
+        public static List<Group> GetDefaultGroups()
         {
-            var enemyScaling = new List<EnemyScaling>();
+            var groups = new List<Group>();
 
-            var rundown = RundownDataBlock.GetAllBlocks();
-            var levels = LevelLayoutDataBlock.GetAllBlocks();
-            var enemies = EnemyDataBlock.GetAllBlocks();
+            groups.Add(new Group(0, "Example Classes"));
+            groups.Add(new Group(1, "For gods sake, don't use it"));
 
-            var tierA = rundown.FirstOrDefault().TierA;
-            foreach(var expedition in tierA)
-            {
-                var level = levels.FirstOrDefault(it => it.persistentID == expedition.LevelLayoutData);
-                if (level != null)
-                {
-                    var lastZoneNumber = (int)level.Zones[level.Zones.Count - 1].LocalIndex + level.ZoneAliasStart;
-                    var defaultScaling = new EnemyDefaultZoneLevel(lastZoneNumber, "<size=50>Default</size><#f80>Lvl.1",
-                        1.1f, 1.1f, 1.1f, 1.1f);
-
-
-
-                    var scalingA = new EnemyScaling(eRundownTier.TierA, 0,
-                   new List<EnemyDefaultZoneLevel>() { defaultScaling }, 
-                   new List<EnemyLevel>() { new EnemyLevel(enemies[1].persistentID, (int)level.Zones[0].LocalIndex, 
-                   "<size=50>Strong</size><#f80>Lvl.2", 1.2f, 1.2f, 1.2f, 1.2f)});
-                    enemyScaling.Add(scalingA);
-                }
-            }
-
-            return enemyScaling;
+            return groups;
         }
+
+        //public static List<EnemyScaling> GetDefaultEnemyScaling()
+        //{
+        //    var enemyScaling = new List<EnemyScaling>();
+
+        //    var rundown = RundownDataBlock.GetAllBlocks();
+        //    var levels = LevelLayoutDataBlock.GetAllBlocks();
+        //    var enemies = EnemyDataBlock.GetAllBlocks();
+
+        //    var tierA = rundown.FirstOrDefault().TierA;
+        //    foreach(var expedition in tierA)
+        //    {
+        //        var level = levels.FirstOrDefault(it => it.persistentID == expedition.LevelLayoutData);
+        //        if (level != null)
+        //        {
+        //            var lastZoneNumber = (int)level.Zones[level.Zones.Count - 1].LocalIndex + level.ZoneAliasStart;
+        //            var defaultScaling = new EnemyDefaultZoneLevel(lastZoneNumber, "<size=50>Default</size><#f80>Lvl.1",
+        //                1.1f, 1.1f, 1.1f, 1.1f);
+
+
+
+        //            var scalingA = new EnemyScaling(eRundownTier.TierA, 0,
+        //           new List<EnemyDefaultZoneLevel>() { defaultScaling }, 
+        //           new List<EnemyLevel>() { new EnemyLevel(enemies[1].persistentID, (int)level.Zones[0].LocalIndex, 
+        //           "<size=50>Strong</size><#f80>Lvl.2", 1.2f, 1.2f, 1.2f, 1.2f)});
+        //            enemyScaling.Add(scalingA);
+        //        }
+        //    }
+
+        //    return enemyScaling;
+        //}
     }
 }

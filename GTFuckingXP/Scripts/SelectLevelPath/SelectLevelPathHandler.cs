@@ -23,7 +23,7 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
         protected static GUIStyle _windowHeaderStyle;
 
         private int _currentIndex = 0;
-        private bool _uiVisible = true;
+        private bool _active = false;
         public SelectLevelPathHandler(IntPtr intPtr) : base(intPtr)
         {
             _instanceCache = InstanceCache.Instance;
@@ -56,7 +56,17 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
 
         public void Update()
         {
-            if(Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                _active = !_active;
+            }
+
+            if(!_active)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 CurrentIndex++;
             }
@@ -65,26 +75,21 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
             {
                 CurrentIndex--;
             }
-
-            if(Input.GetKeyDown(KeyCode.Delete))
-            {
-                _uiVisible = !_uiVisible;
-            }
         }
 
         public void OnGUI()
         {
-            if(!_guiInitialized)
-            {
-                _normalStyle = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 25 };
-                _guiInitialized = true;
-            }
-
-            if(!_uiVisible)
+            if (!_active)
             {
                 return;
             }
 
+            if (!_guiInitialized)
+            {
+                _normalStyle = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 25 };
+                _guiInitialized = true;
+            }
+          
             for(int index = 0; index < LevelLayoutsSelectable.Count(); index++)
             {
                 if(index == CurrentIndex)

@@ -1,4 +1,6 @@
-﻿using GTFuckingXP.Managers;
+﻿using CustomBoostersXp.Extensions;
+using CustomBoostersXp.Information.BoosterInfo;
+using GTFuckingXP.Managers;
 
 namespace CustomBoostersXp.Script
 {
@@ -11,6 +13,11 @@ namespace CustomBoostersXp.Script
             _instanceCache = InstanceCache.Instance;
         }
 
+        public int AddBooster(Booster booster)
+        {
+            _instanceCache.SetBooster(booster);
+        }
 
+        public void 
     }
 }

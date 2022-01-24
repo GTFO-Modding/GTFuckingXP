@@ -170,6 +170,8 @@ namespace GTFuckingXP.Managers
             return false;
         }
 
+        public bool InformationContainsKey(object key) => _informationCache.ContainsKey(key);
+
         /// <summary>
         /// removes <paramref name="key"/> of the information cache.
         /// </summary>

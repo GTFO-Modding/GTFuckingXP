@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("XpApi")]
+[assembly: AssemblyTitle("EndskApi")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("XpApi")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCompany("HP")]
+[assembly: AssemblyProduct("EndskApi")]
+[assembly: AssemblyCopyright("Copyright © HP 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7217e196-8c1f-45d8-9ad8-0f37b44b1f72")]
+[assembly: Guid("e95d147e-b86f-4a34-8b58-62447fdf42c3")]
 
 // Version information for an assembly consists of the following four values:
 //

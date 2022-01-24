@@ -36,7 +36,7 @@ namespace GTFuckingXP.Communication
 
                     SetCurrentLevel(oldActiveLevel.LevelNumber, out _);
                 }
-             
+
                 return true;
             }
             catch (Exception e)
@@ -118,7 +118,7 @@ namespace GTFuckingXP.Communication
                 xpHandler.NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == levelNumber + 1);
                 instanceCache.GetInstance<XpBar>().UpdateUiString(instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, levelLayout.Header);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LogManager.Error(e);
                 cheatedXp = 0;
@@ -170,11 +170,21 @@ namespace GTFuckingXP.Communication
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LogManager.Error(e);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Adds <paramref name="lvlUpCallback"/> to the lvl up callback list, invoked whenever the local players achieves another level.
+        /// </summary>
+        /// <param name="lvlUpCallback">The event that should be called, </param>
+        public static void AddOnLevelUpCallback(Action<int> lvlUpCallback)
+        {
+            var lvlUpCallbackList = InstanceCache.Instance.GetInstance<List<Action<int>>>();
+            lvlUpCallbackList.Add(lvlUpCallback);
         }
     }
 }

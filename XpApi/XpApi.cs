@@ -1,4 +1,5 @@
 ﻿using GTFuckingXP.Information.Level;
+using System;
 
 namespace XpApi
 {
@@ -65,6 +66,11 @@ namespace XpApi
         {
             return GTFuckingXP.Communication.XpApi.ChangeCurrentLevelLayout(newActiveLevelLayout);
         }
+
+        //public static void AddLvlUpCallback(Action<int>callback)
+        //{
+
+        //}
 
         //TODO Callback Handler unter einem level up/down aufrufen.
         ///// <summary>

@@ -9,6 +9,7 @@ using GTFuckingXP.Scripts;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using UnhollowerRuntimeLib;
 
 namespace GTFuckingXP
@@ -71,6 +72,7 @@ namespace GTFuckingXP
             InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();
+            InstanceCache.Instance.SetInstance(new List<Action<int>>());
             NetworkApiXpManager.Setup();
 
             Harmony = new Harmony(GUID);

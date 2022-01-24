@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFuckingXP", "GTFuckingXP\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpApi", "XpApi\XpApi.csproj", "{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBoostersXp", "CustomBoostersXp\CustomBoostersXp.csproj", "{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7217E196-8C1F-45D8-9AD8-0F37B44B1F72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

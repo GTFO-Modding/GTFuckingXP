@@ -1,4 +1,5 @@
-﻿using GTFuckingXP.Extensions;
+﻿using EndskApi.Api;
+using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
@@ -14,16 +15,12 @@ namespace GTFuckingXP.Scripts
     /// </summary>
     public class XpBar : MonoBehaviour //needs to be a monobehaviour because "Components" caused some problems.
     {
-        private readonly InstanceCache _instanceCache;
-
         private RectTransform _xpBar;
         private SpriteRenderer _xpProgressBar;
         private TextMeshPro _textUi;
         
         public XpBar(IntPtr intPtr) : base(intPtr)
         {
-            _instanceCache = InstanceCache.Instance;
-
             XpBarStuff();
         }
 
@@ -34,8 +31,8 @@ namespace GTFuckingXP.Scripts
                 if (Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.S) && BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
                 {
                     BepInExLoader.TermsOfUsage.Value = TermsOfUsage.Accepted.ToString();
-                    var xpHandler = _instanceCache.GetInstance<XpHandler>();
-                    UpdateUiString(_instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, _instanceCache.GetCurrentLevelLayout().Header);
+                    var xpHandler = CacheApi.GetInstance<XpHandler>();
+                    UpdateUiString(CacheApiWrapper.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, CacheApiWrapper.GetCurrentLevelLayout().Header);
                 }
             }
         }
@@ -65,7 +62,7 @@ namespace GTFuckingXP.Scripts
                     var currentLevelFinish = nextLevel.TotalXpRequired - currentLevel.TotalXpRequired;
 
                     stringBuilder.AppendLine($"Classname: {header}");
-                    stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+                    stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp()} => {nextLevel.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp()}");
                     stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier} => {nextLevel.MeleeDamageMultiplier}");
                     stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
                     stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
@@ -76,7 +73,7 @@ namespace GTFuckingXP.Scripts
                 else
                 {
                     stringBuilder.AppendLine($"Classname: {header}");
-                    stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()}");
+                    stringBuilder.AppendLine($"MaxHP {currentLevel.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp()}");
                     stringBuilder.AppendLine($"MD {currentLevel.MeleeDamageMultiplier}");
                     stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier}");
                     stringBuilder.AppendLine($"Level {currentLevel.LevelNumber}");
@@ -116,11 +113,11 @@ namespace GTFuckingXP.Scripts
         /// </summary>
         public void XpBarStuff()
         {
-            if(_instanceCache.TryGetInstance(out _xpBar, false))
+            if(CacheApi.TryGetInstance(out _xpBar))
             {
-                if(_instanceCache.TryGetInstance(out _xpProgressBar, false))
+                if(CacheApi.TryGetInstance(out _xpProgressBar))
                 {
-                    if (_instanceCache.TryGetInstance(out _textUi, false))
+                    if (CacheApi.TryGetInstance(out _textUi))
                     {
                         return;
                     }
@@ -148,9 +145,9 @@ namespace GTFuckingXP.Scripts
             _textUi = GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.gameObject.Instantiate<TextMeshPro>("XpText");
             _textUi.transform.Translate(new Vector3(-120f, 0f, 0f));
 
-            _instanceCache.SetInstance(_textUi);
-            _instanceCache.SetInstance(_xpBar);
-            _instanceCache.SetInstance(_xpProgressBar);
+            CacheApi.SaveInstance(_textUi);
+            CacheApi.SaveInstance(_xpBar);
+            CacheApi.SaveInstance(_xpProgressBar);
         }
     }
 }

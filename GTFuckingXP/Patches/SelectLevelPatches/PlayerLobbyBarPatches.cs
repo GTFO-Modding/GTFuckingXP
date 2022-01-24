@@ -8,26 +8,13 @@ using GTFuckingXP.Information.Level;
 using Localization;
 using GTFuckingXP.Information.ClassSelector;
 using System.Linq;
+using EndskApi.Api;
 
 namespace GTFuckingXP.Patches.SelectLevelPatches
 {
     [HarmonyPatch(typeof(CM_PlayerLobbyBar))]
     public class PlayerLobbyBarPatches
     {
-        private static InstanceCache _instanceCache;
-
-        internal static InstanceCache InstanceCache
-        {
-            get
-            {
-                if (_instanceCache == null)
-                {
-                    _instanceCache = InstanceCache.Instance;
-                }
-                return _instanceCache;
-            }
-        }
-
         ///// <summary>
         ///// When any button got pressed, set the classbutton dimmed.
         ///// </summary>
@@ -36,7 +23,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
         //public static void SelectPostfix(CM_PlayerLobbyBar __instance)
         //{
         //    LogManager.Debug("Select Postfix");
-        //    if (InstanceCache.Instance.TryGetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID(), out var classButton))
+        //    if (CacheApi.Instance.TryGetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID(), out var classButton))
         //    {
         //        //classButton.IsSelected = false;
         //        //classButton.IsDimmed = true;
@@ -51,7 +38,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
         //public static void UnSelectPostfix(CM_PlayerLobbyBar __instance)
         //{
         //    LogManager.Debug("Unselect Postfix");
-        //    if (InstanceCache.TryGetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID(), out var classButton))
+        //    if (CacheApi.TryGetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID(), out var classButton))
         //    {
         //        //classButton.IsSelected = false;
         //        //classButton.IsDimmed = false;
@@ -65,7 +52,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             LogManager.Debug($"SetupFromPage Postfix on {__instance.GetInstanceID()}");
             var classButton = __instance.m_clothesButton.gameObject.Instantiate<CM_LobbyScrollItem>("ClassSelectorButton");
 
-            InstanceCache.SetInformation(__instance.GetInstanceID(), classButton);
+            CacheApi.SaveInformation(__instance.GetInstanceID(), classButton);
 
             classButton.transform.Translate(new UnityEngine.Vector3(0f, -70f, 0f));
             classButton.SetOnBtnPressCallback((Action<int>)((int test) =>
@@ -91,7 +78,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
                 return;
             }
 
-            var scrollItem = InstanceCache.Instance.GetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID());
+            var scrollItem = CacheApi.GetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID());
             if (__instance.m_player.IsLocal)
             {
                 scrollItem.gameObject.SetActive(!hide);
@@ -119,7 +106,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             lobbyBar.m_popupScrollWindow.SetSize(new UnityEngine.Vector2(1600f, 700f));
             lobbyBar.m_popupScrollWindow.ResetHeaders();
 
-            var groups = InstanceCache.GetInstance<List<Group>>();
+            var groups = CacheApi.GetInstance<List<Group>>();
 
             AddHeaders(lobbyBar, groups);
 
@@ -135,10 +122,10 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
 
             var infoBox = lobbyBar.m_popupScrollWindow.InfoBox;
             float anchorDifference;
-            if (!InstanceCache.TryGetAnchorDifference(out anchorDifference))
+            if (!CacheApiWrapper.TryGetAnchorDifference(out anchorDifference))
             {
                 anchorDifference = (infoBox.m_infoMainTitleText.rectTransform.anchoredPosition.y * -1) - 40f;
-                InstanceCache.SetAnchorDifference(anchorDifference);
+                CacheApiWrapper.SetAnchorDifference(anchorDifference);
             }
 
             infoBox.m_infoMainTitleText.rectTransform.anchoredPosition = new UnityEngine.Vector2(0f, infoBox.m_infoMainTitleText.rectTransform.anchoredPosition.y + anchorDifference);
@@ -152,8 +139,8 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             LogManager.Debug($"Showing groupname {groupName}");
 
             var contentItems = new Il2CppSystem.Collections.Generic.List<iScrollWindowContent>();
-            var levelLayouts = InstanceCache.GetInstance<List<LevelLayout>>();
-            var activeLayout = InstanceCache.GetCurrentLevelLayout();
+            var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>();
+            var activeLayout = CacheApiWrapper.GetCurrentLevelLayout();
 
             var infoBox = lobbyBar.m_popupScrollWindow.InfoBox;
             var unusedIconSpaceY = infoBox.m_infoMainIcon.size.y;
@@ -197,7 +184,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
                         CoroutineManager.BlinkIn(content.gameObject);
 
                         infoBox.SetInfoBox(layout.Header, "", layout.InfoText, "", "", new UnityEngine.Sprite());
-                        InstanceCache.SetCurrentLevelLayout(layout);
+                        CacheApiWrapper.SetCurrentLevelLayout(layout);
                     }));
 
                     content.m_alphaSpriteOnHover = true;
@@ -227,13 +214,13 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             if(oldSelectItem != null)
             {
                 oldSelectItem.m_subTitleText.text = "";
-                InstanceCache.SetInstance<CM_LobbyScrollItem>(null);
+                CacheApi.SaveInstance<CM_LobbyScrollItem>(null);
             }
 
             if(newSelectItem != null)
             {
                 newSelectItem.m_subTitleText.text = "<color=orange>" + Text.Get(492U) + "</color>";
-                InstanceCache.SetInstance(newSelectItem);
+                CacheApi.SaveInstance(newSelectItem);
             }
         }
 

@@ -36,7 +36,7 @@
     <Compile Include="Enums\PlayerBuff.cs" />
     <Compile Include="Enums\SingleBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
-    <Compile Include="Extensions\InstanceCacheExtensions.cs" />
+    <Compile Include="Extensions\CacheApiWrapper.cs" />
     <Compile Include="Information\ClassSelector\Group.cs" />
     <Compile Include="Information\DefaultXpData.cs" />
     <Compile Include="Information\DummyXp.cs" />
@@ -498,7 +498,12 @@
       <HintPath>LiB\Wwise-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EndskApi\EndskApi.csproj">
+      <Project>{e95d147e-b86f-4a34-8b58-62447fdf42c3}</Project>
+      <Name>EndskApi</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

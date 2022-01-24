@@ -9,6 +9,7 @@ using Player;
 using DamageNumbers;
 using DamageNumbers.API;
 using GTFuckingXP.Enums;
+using EndskApi.Api;
 
 namespace GTFuckingXP.Scripts
 {
@@ -17,8 +18,6 @@ namespace GTFuckingXP.Scripts
     /// </summary>
     public class XpHandler : MonoBehaviour
     {
-        private readonly InstanceCache _instanceCache = InstanceCache.Instance;
-
         private bool _hasDebuff;
         private float _nextUpdate;
 
@@ -42,26 +41,26 @@ namespace GTFuckingXP.Scripts
 
         public void Awake()
         {
-            if(_instanceCache.TryGetXpStorageData(out var checkpointXpData))
+            if(CacheApiWrapper.TryGetXpStorageData(out var checkpointXpData))
             {
                 LogManager.Message("Found old xp storage data!");
                 //Old level layout may be changed because of xp dev tools or other future plans :)
-                _instanceCache.SetCurrentLevelLayout(checkpointXpData.levelLayout);
+                CacheApiWrapper.SetCurrentLevelLayout(checkpointXpData.levelLayout);
 
                 var level0 = checkpointXpData.levelLayout.Levels.First(it => it.LevelNumber == 0);
                 NextLevel = checkpointXpData.levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == level0.LevelNumber + 1);
-                _instanceCache.SetActiveLevel(level0, false);
+                CacheApiWrapper.SetActiveLevel(level0, false);
                 CurrentTotalXp = 0;
                 AddXp(new DummyXp(checkpointXpData.totalXp, checkpointXpData.totalXp), default, false, false);
             }
             else
             {
-                var levelLayout = _instanceCache.GetCurrentLevelLayout();
+                var levelLayout = CacheApiWrapper.GetCurrentLevelLayout();
                 var newActiveLevel = levelLayout.Levels.First(it => it.LevelNumber == 0);
                 NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
                 CurrentTotalXp = 0;
                 ChangeCurrentLevel(newActiveLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levelLayout.PersistentId, newActiveLevel.LevelNumber));
-                _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
+                CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
             }
             _nextUpdate = Time.time + 300f;
         }
@@ -80,7 +79,7 @@ namespace GTFuckingXP.Scripts
         {
             uint xpValue = forceDebuffXp || _hasDebuff ? xpData.DebuffXp : xpData.XpGain;
 
-            var levelScalingDecreaseXp = (xpData.LevelScalingXpDecrese * _instanceCache.GetActiveLevel().LevelNumber);
+            var levelScalingDecreaseXp = (xpData.LevelScalingXpDecrese * CacheApiWrapper.GetActiveLevel().LevelNumber);
             if(xpValue <= levelScalingDecreaseXp)
             {
                 xpValue = 1;
@@ -104,7 +103,7 @@ namespace GTFuckingXP.Scripts
                 }
             }
 
-            _instanceCache.GetInstance<XpBar>().UpdateUiString(_instanceCache.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
+            CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
         }
 
         /// <summary>
@@ -115,15 +114,15 @@ namespace GTFuckingXP.Scripts
         /// <returns>If a new level got reached when this method got called.</returns>
         public bool CheckForLevelThresholdReached(Vector3 xpTextPosition, out string currentClassName)
         {
-            var levels = _instanceCache.GetCurrentLevelLayout();
+            var levels = CacheApiWrapper.GetCurrentLevelLayout();
             currentClassName = levels.Header;
             if (IsMaxLevel)
             {
                 return false;
             }
 
-            var oldLevel = _instanceCache.GetActiveLevel();
-            var availableLevels = levels.Levels.Where(it => it.LevelNumber > _instanceCache.GetActiveLevel().LevelNumber && it.TotalXpRequired <= CurrentTotalXp);
+            var oldLevel = CacheApiWrapper.GetActiveLevel();
+            var availableLevels = levels.Levels.Where(it => it.LevelNumber > CacheApiWrapper.GetActiveLevel().LevelNumber && it.TotalXpRequired <= CurrentTotalXp);
 
             if (availableLevels.Count() > 0)
             {
@@ -139,7 +138,7 @@ namespace GTFuckingXP.Scripts
                     {
                         DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition,
                        $"<#f00>LV {newLevel.LevelNumber}\n" +
-                       $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * _instanceCache.GetDefaultMaxHp()), 1)}\n" +
+                       $"HP: +<#f80>{Math.Round((newLevel.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp()) - (oldLevel.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp()), 1)}\n" +
                        $"<#f00>MD: <#f80>{Math.Round(newLevel.MeleeDamageMultiplier - oldLevel.MeleeDamageMultiplier, 2)}x \n" +
                        $"<#f00>WD: <#f80>{Math.Round(newLevel.WeaponDamageMultiplier - oldLevel.WeaponDamageMultiplier, 2)}x", 4f));
                     }
@@ -158,15 +157,15 @@ namespace GTFuckingXP.Scripts
 
         internal void ChangeCurrentLevel(Level newLevel, BoosterBuffs newBoosterBuff = null)
         {
-            _instanceCache.SetActiveLevel(newLevel);
-            _instanceCache.SetCurrentBoosterBuff(newBoosterBuff);
+            CacheApiWrapper.SetActiveLevel(newLevel);
+            CacheApiWrapper.SetCurrentBoosterBuff(newBoosterBuff);
 
             BoosterBuffManager.Instance.ApplyBoosterEffects(PlayerManager.GetLocalPlayerAgent(), newBoosterBuff);
             NetworkApiXpManager.SendBoosterStatsReached(newBoosterBuff);
 
             var localDamage = PlayerManager.GetLocalPlayerAgent().Damage;
             var oldMaxHealth = localDamage.HealthMax;
-            var newMaxHealth = _instanceCache.GetDefaultMaxHp() * newLevel.HealthMultiplier;
+            var newMaxHealth = CacheApiWrapper.GetDefaultMaxHp() * newLevel.HealthMultiplier;
 
             localDamage.HealthMax = newMaxHealth;
             localDamage.Health += newMaxHealth - oldMaxHealth;

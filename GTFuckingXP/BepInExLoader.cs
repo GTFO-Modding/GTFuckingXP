@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
+using EndskApi.Api;
 using GTFuckingXP.Information;
 using GTFuckingXP.Managers;
 using GTFuckingXP.Patches;
@@ -16,6 +17,7 @@ namespace GTFuckingXP
 {
     [BepInPlugin(GUID, MODNAME, VERSION)]
     [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("Endskill.EndskApi", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.dak.DamageNumbers", BepInDependency.DependencyFlags.HardDependency)]
     public class BepInExLoader : BasePlugin
     {
@@ -69,10 +71,9 @@ namespace GTFuckingXP
                 ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
             }
 
-            InstanceCache.Instance = new InstanceCache();
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();
-            InstanceCache.Instance.SetInstance(new List<Action<int>>());
+
             NetworkApiXpManager.Setup();
 
             Harmony = new Harmony(GUID);

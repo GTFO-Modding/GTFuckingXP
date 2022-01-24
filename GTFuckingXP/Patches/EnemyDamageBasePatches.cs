@@ -8,6 +8,7 @@ using GTFuckingXP.Extensions;
 using Enemies;
 using Agents;
 using Player;
+using EndskApi.Api;
 
 namespace GTFuckingXP.Patches
 {
@@ -16,13 +17,7 @@ namespace GTFuckingXP.Patches
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
     internal class EnemyDamageBasePatches
     {
-        private static readonly InstanceCache _instanceCache;
         internal static Dictionary<string, Dictionary<int, float>> DamageDistribution;
-
-        static EnemyDamageBasePatches()
-        {
-            _instanceCache = InstanceCache.Instance;
-        }
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.MeleeDamage))]
         [HarmonyPrefix]
@@ -35,7 +30,7 @@ namespace GTFuckingXP.Patches
             {
                 var damage = dam;
                 LogManager.Debug($"Melee damage from local player registered. {damage} was scaled up to:");
-                damage *= _instanceCache.GetActiveLevel().MeleeDamageMultiplier;
+                damage *= CacheApiWrapper.GetActiveLevel().MeleeDamageMultiplier;
                 LogManager.Debug($"{damage}");
                 dam = damage;
             }
@@ -89,7 +84,7 @@ namespace GTFuckingXP.Patches
             {
                 var damage = dam;
                 LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled to:");
-                damage *= _instanceCache.GetActiveLevel().WeaponDamageMultiplier;
+                damage *= CacheApiWrapper.GetActiveLevel().WeaponDamageMultiplier;
                 LogManager.Debug($"{damage}");
                 dam = damage;
             }
@@ -155,7 +150,7 @@ namespace GTFuckingXP.Patches
             position.y = position.y + 1f;
             if (sourceAgent is null)
             {
-                if (_instanceCache.TryGetInstance<XpHandler>(out var xpHandler))
+                if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler))
                 {
                     xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
                 }
@@ -173,7 +168,7 @@ namespace GTFuckingXP.Patches
             var position = killedEnemy.Position;
             position.y = position.y + 1f;
 
-            if (_instanceCache.TryGetInstance<XpHandler>(out var xpHandler))
+            if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler))
             {
                 xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
             }
@@ -182,7 +177,7 @@ namespace GTFuckingXP.Patches
 
         private static EnemyXp GetEnemyXp(EnemyAgent killedEnemy)
         {
-            var enemyData = _instanceCache.GetInstance<List<EnemyXp>>();
+            var enemyData = CacheApi.GetInstance<List<EnemyXp>>();
             var enemyXpData = enemyData.FirstOrDefault(it => it.EnemyId == killedEnemy.EnemyDataID);
             if (enemyXpData is null)
             {
@@ -190,7 +185,7 @@ namespace GTFuckingXP.Patches
                 LogManager.Warn($"There was no enemy XP data found for {killedEnemy.EnemyDataID}!");
                 enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 0);
                 enemyData.Add(enemyXpData);
-                _instanceCache.SetInstance(enemyData);
+                CacheApi.SaveInstance(enemyData);
             }
 
             LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");

@@ -11,7 +11,7 @@ namespace GTFuckingXP.Patches
         [HarmonyPrefix]
         public static void UpdateNamePrefix(PlaceNavMarkerOnGO __instance, ref string name)
         {
-            var playerToLevelMap = InstanceCache.Instance.GetPlayerToLevelMapping();
+            var playerToLevelMap = CacheApiWrapper.GetPlayerToLevelMapping();
             if (playerToLevelMap.TryGetValue(__instance.m_player.PlayerSlotIndex, out var levelNumber))
             {
                 name = $"<color=#F80>Lv.{levelNumber}</color> {name}";

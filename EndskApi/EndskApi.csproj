@@ -32,7 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Api\BoosterApi.cs" />
+    <Compile Include="Api\CacheApi.cs" />
     <Compile Include="BepInExLoader.cs" />
+    <Compile Include="Manager\Internal\InformationCache.cs" />
+    <Compile Include="Manager\LogManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -476,6 +479,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Information\BoosterInfo\" />
     <Folder Include="Patches\BoosterPatches\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

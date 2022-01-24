@@ -1,4 +1,5 @@
-﻿using GTFuckingXP.Extensions;
+﻿using EndskApi.Api;
+using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
@@ -19,20 +20,19 @@ namespace GTFuckingXP.Communication
         {
             try
             {
-                var instanceCache = InstanceCache.Instance;
                 var scriptManager = ScriptManager.Instance;
 
                 scriptManager.UpdateEverything();
 
                 //There is no real need to change the current Levellayout, this information is only set while in an expedition.
-                if (instanceCache.TryGetInformation<LevelLayout>(InstanceCacheExtensions.LevelLayoutKey, out var levelLayout))
+                if (CacheApi.TryGetInformation<LevelLayout>(CacheApiWrapper.LevelLayoutKey, out var levelLayout))
                 {
-                    var lvls = instanceCache.GetInstance<List<LevelLayout>>();
+                    var lvls = CacheApi.GetInstance<List<LevelLayout>>();
                     var newLevelLayout = lvls.FirstOrDefault(it => it.Header == levelLayout.Header);
 
-                    var oldActiveLevel = instanceCache.GetActiveLevel();
+                    var oldActiveLevel = CacheApiWrapper.GetActiveLevel();
 
-                    instanceCache.SetCurrentLevelLayout(newLevelLayout);
+                    CacheApiWrapper.SetCurrentLevelLayout(newLevelLayout);
 
                     SetCurrentLevel(oldActiveLevel.LevelNumber, out _);
                 }
@@ -54,7 +54,7 @@ namespace GTFuckingXP.Communication
         {
             try
             {
-                var xpHandler = InstanceCache.Instance.GetInstance<XpHandler>();
+                var xpHandler = CacheApi.GetInstance<XpHandler>();
                 xpHandler.AddXp(new EnemyXp(0, "", xpAmount, xpAmount, 0), default, false, false);
 
                 return true;
@@ -76,15 +76,14 @@ namespace GTFuckingXP.Communication
         {
             try
             {
-                var instance = InstanceCache.Instance;
-                var xpHandler = InstanceCache.Instance.GetInstance<XpHandler>();
+                var xpHandler = CacheApi.GetInstance<XpHandler>();
 
                 cheatedXp = (int)newTotalXpAmount - (int)xpHandler.CurrentTotalXp;
 
                 xpHandler.CurrentTotalXp = newTotalXpAmount;
                 xpHandler.CheckForLevelThresholdReached(default, out var header);
 
-                instance.GetInstance<XpBar>().UpdateUiString(instance.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, header);
+                CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, header);
                 return true;
             }
             catch (Exception e)
@@ -103,10 +102,8 @@ namespace GTFuckingXP.Communication
         {
             try
             {
-                var instanceCache = InstanceCache.Instance;
-
-                var levelLayout = instanceCache.GetCurrentLevelLayout();
-                var xpHandler = instanceCache.GetInstance<XpHandler>();
+                var levelLayout = CacheApiWrapper.GetCurrentLevelLayout();
+                var xpHandler = CacheApi.GetInstance<XpHandler>();
 
                 var newLevel = levelLayout.Levels.First(it => it.LevelNumber == levelNumber);
 
@@ -116,7 +113,7 @@ namespace GTFuckingXP.Communication
 
                 xpHandler.CurrentTotalXp = newLevel.TotalXpRequired + 1;
                 xpHandler.NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == levelNumber + 1);
-                instanceCache.GetInstance<XpBar>().UpdateUiString(instanceCache.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, levelLayout.Header);
+                CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, levelLayout.Header);
             }
             catch (Exception e)
             {
@@ -137,8 +134,7 @@ namespace GTFuckingXP.Communication
         {
             try
             {
-                var instanceCache = InstanceCache.Instance;
-                var newLevelLayout = instanceCache.GetInstance<List<LevelLayout>>().First(it => it.Header == header);
+                var newLevelLayout = CacheApi.GetInstance<List<LevelLayout>>().First(it => it.Header == header);
                 return ChangeCurrentLevelLayout(newLevelLayout);
             }
             catch (Exception e)
@@ -159,10 +155,9 @@ namespace GTFuckingXP.Communication
             try
             {
                 bool returnBool = true;
-                var instanceCache = InstanceCache.Instance;
 
-                instanceCache.SetCurrentLevelLayout(newActiveLevelLayout);
-                if (instanceCache.TryGetInstance<XpHandler>(out var xpHandler))
+                CacheApiWrapper.SetCurrentLevelLayout(newActiveLevelLayout);
+                if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler))
                 {
                     var oldTotalXp = xpHandler.CurrentTotalXp;
                     returnBool = SetCurrentLevel(0, out _) && SetCurrentTotalXp(oldTotalXp, out _);
@@ -183,7 +178,7 @@ namespace GTFuckingXP.Communication
         /// <param name="lvlUpCallback">The event that should be called, </param>
         public static void AddOnLevelUpCallback(Action<int> lvlUpCallback)
         {
-            var lvlUpCallbackList = InstanceCache.Instance.GetInstance<List<Action<int>>>();
+            var lvlUpCallbackList = CacheApi.GetInstance<List<Action<int>>>();
             lvlUpCallbackList.Add(lvlUpCallback);
         }
     }

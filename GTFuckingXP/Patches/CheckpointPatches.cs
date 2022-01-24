@@ -1,4 +1,4 @@
-﻿using GTFuckingXP.Communication;
+﻿using EndskApi.Api;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Managers;
 using GTFuckingXP.Scripts;
@@ -30,10 +30,9 @@ namespace GTFuckingXP.Patches
 
         public static void CreateCheckpointData()
         {
-            var instanceCache = InstanceCache.Instance;
-            if (instanceCache.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
             {
-                instanceCache.SetXpStorageData(xpHandler.CurrentTotalXp);
+                CacheApiWrapper.SetXpStorageData(xpHandler.CurrentTotalXp);
             }
             else
             {
@@ -43,7 +42,7 @@ namespace GTFuckingXP.Patches
 
         public static void CheckpointsCleanup()
         {
-            InstanceCache.Instance.RemoveInformation(InstanceCacheExtensions.CheckpointData);
+            CacheApi.RemoveInformation(CacheApiWrapper.CheckpointData);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GTFO.API;
+﻿using EndskApi.Api;
+using GTFO.API;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
@@ -22,14 +23,7 @@ namespace GTFuckingXP.Managers
         private const string _receiveHalfAssedXp = "ThisSeemsLikeItComesFromTheXpModAgain";
         private const string _checkpointReachedString = "YouShouldSaveYourXpStuff";
         private const string _cleanUpCheckpointsString = "YouShouldCleanupCheckpoints";
-        private const string _sendBoosterNetworkString = "IHaveReachedBoosterBuffStatus";
-
-        private static readonly InstanceCache _instanceCache;
-
-        static NetworkApiXpManager()
-        {
-            _instanceCache = InstanceCache.Instance;
-        }
+        private const string _sendBoosterNetworkString = "IHaveReachedBoosterBuffStatus";       
 
         public static void Setup()
         {
@@ -44,7 +38,7 @@ namespace GTFuckingXP.Managers
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)
         {
             LogManager.Debug("Received xp networking package");
-            if (_instanceCache.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
             {
                 xpHandler.AddXp(xpData, new UnityEngine.Vector3(xpData.PositionX, xpData.PositionY, xpData.PositionZ));
             }
@@ -53,7 +47,7 @@ namespace GTFuckingXP.Managers
         public static void ReceiveStaticXp(ulong snetPlayer, StaticXpInfo xpInfo)
         {
             LogManager.Debug("Received static xp networking package");
-            if (_instanceCache.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
             {
                 xpHandler.AddXp(xpInfo, xpInfo.Position, false, false);
             }
@@ -68,11 +62,11 @@ namespace GTFuckingXP.Managers
                 {
                     if(player.PlayerSlotIndex == snet.PlayerSlotIndex())
                     {
-                        var newHealth = levelData.HealthMultiplier * InstanceCache.Instance.GetDefaultMaxHp();
+                        var newHealth = levelData.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp();
                         LogManager.Debug($"Setting HP of {player.name} to {newHealth}");
                         player.Damage.HealthMax = newHealth;
 
-                        _instanceCache.GetPlayerToLevelMapping()[player.PlayerSlotIndex] = levelData.LevelNumber;
+                        CacheApiWrapper.GetPlayerToLevelMapping()[player.PlayerSlotIndex] = levelData.LevelNumber;
                     }
                 }
             }

@@ -1,4 +1,6 @@
 ﻿using CellMenu;
+using EndskApi.Api;
+using GTFuckingXP.Extensions;
 using GTFuckingXP.Managers;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
@@ -12,11 +14,9 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
         [HarmonyPostfix]
         public static void ShowPagePostfix(MainMenuGuiLayer __instance, eCM_MenuPage pageEnum)
         {
-            var instanceCache = InstanceCache.Instance;
-
             if (pageEnum == eCM_MenuPage.CMP_LOADOUT && (byte)GameStateManager.CurrentStateName < 9)
             {
-                instanceCache.CreateRegisterAndReturnComponent<SelectLevelPathHandler>();
+                CacheApiWrapper.CreateRegisterAndReturnComponent<SelectLevelPathHandler>();
 
                 //foreach (var item in __instance.PageLoadout.m_playerLobbyBars)
                 //{
@@ -31,7 +31,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             }
             else
             {
-                if (instanceCache.TryGetInstance<SelectLevelPathHandler>(out var instance, false))
+                if (CacheApi.TryGetInstance<SelectLevelPathHandler>(out var instance))
                 {
                     instance.gameObject.SetActive(false);
                 }

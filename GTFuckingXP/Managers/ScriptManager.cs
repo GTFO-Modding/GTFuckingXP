@@ -1,4 +1,4 @@
-﻿using Enemies;
+﻿using EndskApi.Api;
 using GameData;
 using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
@@ -27,16 +27,12 @@ namespace GTFuckingXP.Managers
         public const string BoosterLayoutFileName = "BoosterEffects.json";
         public const string GroupFileName = "Groups.json";
 
-        private readonly InstanceCache _instanceCache;
-
         private string _folderPath;
         private bool _initialized = false;
         private bool _versionAllowed;
 
         public ScriptManager()
         {
-            _instanceCache = InstanceCache.Instance;
-
             var response = HttpWebRequest.Create(@"https://endskill.github.io/ActiveXpModVersions/ActiveVersions.json");
             response.Credentials = CredentialCache.DefaultCredentials;
             string jsonString;
@@ -59,7 +55,7 @@ namespace GTFuckingXP.Managers
 
             if(!_versionAllowed)
             {
-                LogManager.Error("This version of the xp mod is not recommended to use! Please update immediately");
+                LogManager.Error("This version of the xp mod is not recommended to use! Please update immediately.");
                 BepInExLoader.Harmony.UnpatchSelf();
             }
         }
@@ -73,7 +69,11 @@ namespace GTFuckingXP.Managers
 
             _initialized = true;
 
-            _instanceCache.SetDefaultMaxHp(PlayerDataBlock.GetBlock(1).health);
+            //Initializing some static values
+            CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, int>());
+            CacheApiWrapper.SetLvlUpCallBackList(new List<Action<int>>());
+            CacheApiWrapper.SetDefaultMaxHp(PlayerDataBlock.GetBlock(1).health);
+            
             if(MtfoUtils.PluginExists)
             {
                 _folderPath = Path.Combine(MtfoUtils.CustomPath, "GtfXP");
@@ -99,12 +99,12 @@ namespace GTFuckingXP.Managers
 
             EnemyDamageBasePatches.DamageDistribution = new Dictionary<string, Dictionary<int, float>>();
 
-            _instanceCache.SetInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
-            _ = _instanceCache.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
-            InstanceCache.Instance.KillScript<SelectLevelPathHandler>();
+            CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
+            _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
+            CacheApiWrapper.KillScript<SelectLevelPathHandler>();
             if (BepInExLoader.RundownDevMode.Value)
             {
-                _instanceCache.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
+                CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
             }
         }
 
@@ -115,10 +115,10 @@ namespace GTFuckingXP.Managers
         {
             if (!_versionAllowed)
                 return;
-            _instanceCache.KillScript<XpHandler>();
-            _instanceCache.KillScript<XpBar>();
-            _instanceCache.KillScript<DevModeTools>();
-            _instanceCache.SetPlayerToLevelMapping(new Dictionary<int, int>());
+            CacheApiWrapper.KillScript<XpHandler>();
+            CacheApiWrapper.KillScript<XpBar>();
+            CacheApiWrapper.KillScript<DevModeTools>();
+            CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, int>());
             EnemyDamageBasePatches.DamageDistribution = null;
         }
 
@@ -182,11 +182,11 @@ namespace GTFuckingXP.Managers
             
             LogManager.Debug($"Received: {newData.enemyXpList.Count} enemies, {newData.levelLayouts.Count} levelLayouts, {newData.boosterBuffs.Count} BoosterLayouts, {newData.groups.Count} Groups");
 
-            _instanceCache.SetInstance(newData.enemyXpList);
+            CacheApi.SaveInstance(newData.enemyXpList);
             //_instanceCache.SetInstance(newData.expeditionLevelLayoutMapping);
-            _instanceCache.SetInstance(newData.levelLayouts);
-            _instanceCache.SetInstance(newData.boosterBuffs);
-            _instanceCache.SetInstance(newData.groups);
+            CacheApi.SaveInstance(newData.levelLayouts);
+            CacheApi.SaveInstance(newData.boosterBuffs);
+            CacheApi.SaveInstance(newData.groups);
         }
 
         private void WriteDefaultJsonBlocks()

@@ -1,4 +1,5 @@
-﻿using GTFuckingXP.Extensions;
+﻿using EndskApi.Api;
+using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using System;
@@ -19,15 +20,12 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
         private static bool _guiInitialized = false;
         private static GUIStyle _normalStyle;
 
-        private readonly InstanceCache _instanceCache;
         protected static GUIStyle _windowHeaderStyle;
 
         private int _currentIndex = 0;
         private bool _active = false;
         public SelectLevelPathHandler(IntPtr intPtr) : base(intPtr)
-        {
-            _instanceCache = InstanceCache.Instance;
-        }
+        {  }
 
         public List<LevelLayout> LevelLayoutsSelectable { get; private set; }
         public int CurrentIndex
@@ -45,12 +43,12 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
                 }
 
                 _currentIndex = value;
-                _instanceCache.SetCurrentLevelLayout(LevelLayoutsSelectable[value]);
+                CacheApiWrapper.SetCurrentLevelLayout(LevelLayoutsSelectable[value]);
             }
         }
         public void Awake()
         {
-            LevelLayoutsSelectable = _instanceCache.GetInstance<List<LevelLayout>>();
+            LevelLayoutsSelectable = CacheApi.GetInstance<List<LevelLayout>>();
             CurrentIndex = 0;
         }
 

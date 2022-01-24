@@ -1,4 +1,5 @@
-﻿using GTFuckingXP.Communication;
+﻿using EndskApi.Api;
+using GTFuckingXP.Communication;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
@@ -17,8 +18,6 @@ namespace GTFuckingXP.Scripts
         private static bool _guiInitialized = false;
         private static GUIStyle _normalStyle;
 
-        private readonly InstanceCache _instanceCache;
-
         private readonly float _xPos = 30f;
         private readonly float _yPos = Screen.height / 2 - 300f;
 
@@ -28,7 +27,6 @@ namespace GTFuckingXP.Scripts
 
         public DevModeTools(IntPtr intPtr) : base(intPtr)
         {
-            _instanceCache = InstanceCache.Instance;
         }
 
         public void Update()
@@ -45,7 +43,7 @@ namespace GTFuckingXP.Scripts
 
             if(Input.GetKeyDown(KeyCode.KeypadPlus))
             {
-                if(XpApi.SetCurrentLevel(_instanceCache.GetActiveLevel().LevelNumber + 1, out var cheatedXp))
+                if(XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber + 1, out var cheatedXp))
                 {
                     CheatedXpMessage(cheatedXp);
                 }
@@ -53,7 +51,7 @@ namespace GTFuckingXP.Scripts
 
             if(Input.GetKeyDown(KeyCode.KeypadMinus))
             {
-                if (XpApi.SetCurrentLevel(_instanceCache.GetActiveLevel().LevelNumber -1, out var cheatedXp))
+                if (XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber -1, out var cheatedXp))
                 {
                     CheatedXpMessage(cheatedXp);
                 }
@@ -66,8 +64,8 @@ namespace GTFuckingXP.Scripts
 
             if(Input.GetKeyDown(KeyCode.KeypadDivide))
             {
-                var levelLayouts = _instanceCache.GetInstance<List<LevelLayout>>();
-                var currentLayout = _instanceCache.GetCurrentLevelLayout();
+                var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>();
+                var currentLayout = CacheApiWrapper.GetCurrentLevelLayout();
 
                 var index = levelLayouts.IndexOf(currentLayout);
                 if(levelLayouts.Count <= index + 1)

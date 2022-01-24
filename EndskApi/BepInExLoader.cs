@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
+using EndskApi.Manager;
 using HarmonyLib;
 
 namespace EndskApi
@@ -17,6 +18,11 @@ namespace EndskApi
 
         public override void Load()
         {
+            LogManager.SetLogger(Log);
+            LogManager._debugMessagesActive = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.").Value;
+
+            LogManager.Debug("Load from EndskApi");
+
             Harmony = new Harmony(GUID);
         }
     }

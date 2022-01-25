@@ -65,7 +65,6 @@
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
-    <Compile Include="Managers\InstanceCache.cs" />
     <Compile Include="Patches\CheckpointPatches.cs" />
     <Compile Include="Patches\EnemyDamageBasePatches.cs" />
     <Compile Include="Patches\Gs_Patches.cs" />

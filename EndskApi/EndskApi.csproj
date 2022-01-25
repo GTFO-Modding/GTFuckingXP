@@ -34,8 +34,13 @@
     <Compile Include="Api\BoosterApi.cs" />
     <Compile Include="Api\CacheApi.cs" />
     <Compile Include="BepInExLoader.cs" />
+    <Compile Include="Enums\Booster\BoosterCategory.cs" />
+    <Compile Include="Information\BoosterInfo\BoosterCondition.cs" />
+    <Compile Include="Information\BoosterInfo\BoosterEffect.cs" />
+    <Compile Include="Information\BoosterInfo\IBooster.cs" />
     <Compile Include="Manager\Internal\InformationCache.cs" />
     <Compile Include="Manager\LogManager.cs" />
+    <Compile Include="Patches\Booster\PersistentInventoryManagerPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -478,9 +483,6 @@
       <HintPath>..\GTFuckingXP\LiB\Wwise-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Information\BoosterInfo\" />
-    <Folder Include="Patches\BoosterPatches\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

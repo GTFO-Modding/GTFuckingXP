@@ -1,19 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using BoosterImplants;
+using System.Collections.Generic;
 
 namespace CustomBoostersXp.Information.BoosterInfo
 {
     public class BoosterLevel
     {
-        public BoosterLevel(int levelNumber, Dictionary<AgentModifier, float> valueToBoosterEffects)
+        public BoosterLevel(List<int> activeInLevels, Dictionary<AgentModifier, float> valueToBoosterEffects,
+            Dictionary<BoosterCondition, float> valueToCondition)
         {
-            LevelNumber = levelNumber;
+            ActiveInLevels = activeInLevels;
             ValueToBoosterEffects = valueToBoosterEffects;
+            ValueToCondition = valueToCondition;
         }
 
         /// <summary>
         /// Gets or sets the number this level represents.
         /// </summary>
-        public int LevelNumber { get; set; }
+        public List<int> ActiveInLevels { get; set; }
 
         //TODO CustomEffects like lifesteal
 
@@ -21,6 +24,8 @@ namespace CustomBoostersXp.Information.BoosterInfo
         /// Gets or sets the values that each active AgentModifier has.
         /// </summary>
         public Dictionary<AgentModifier, float> ValueToBoosterEffects { get; set; }
+
+        public Dictionary<BoosterCondition, float> ValueToCondition { get; set; }
 
         public static implicit operator BoosterLevel(GTFuckingXP.Information.NetworkingInfo.BoosterInfo boosterInfo)
         {

@@ -87,7 +87,6 @@ namespace GTFuckingXP
             Harmony.PatchAll(typeof(PlayerLobbyBarPatches));
 
             //General xp mod usage
-            Harmony.PatchAll(typeof(CheckpointPatches));
             Harmony.PatchAll(typeof(EnemyDamageBasePatches));
             Harmony.PatchAll(typeof(GS_InLevelPatches));
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));

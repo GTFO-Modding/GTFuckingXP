@@ -54,6 +54,12 @@ namespace EndskApi.Manager.Internal
             }
         }
 
+        public bool ContainsKey(object key, string mod)
+        {
+            return TryGetCacheOfMod(mod, out var cache) && 
+                cache.ContainsKey(key);
+        }
+
         private Dictionary<object, object> GetCacheOfMod(string mod)
         {
             if (!_cache.TryGetValue(mod, out var value))

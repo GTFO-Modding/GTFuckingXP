@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BepInExLoader.cs" />
-    <Compile Include="Extensions\BoosterInstanceCacheExtensions.cs" />
+    <Compile Include="Extensions\CacheApiWrapperBooster.cs" />
     <Compile Include="Information\BoosterInfo\Booster.cs" />
     <Compile Include="Information\BoosterInfo\BoosterLevel.cs" />
     <Compile Include="Information\DefaultBoosterData.cs" />
@@ -41,7 +41,7 @@
     <Compile Include="Patches\InitPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Script\BoosterHandler.cs" />
-    <Compile Include="Script\BoosterScriptManager.cs" />
+    <Compile Include="Manager\BoosterScriptManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -484,6 +484,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EndskApi\EndskApi.csproj">
+      <Project>{E95D147E-B86F-4A34-8B58-62447FDF42C3}</Project>
+      <Name>EndskApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GTFuckingXP\GTFuckingXP.csproj">
       <Project>{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}</Project>
       <Name>GTFuckingXP</Name>

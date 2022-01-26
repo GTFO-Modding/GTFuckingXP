@@ -21,8 +21,6 @@ namespace GTFuckingXP.Managers
         private const string _sendXpString = "ThisSeemsLikeItComesFromTheRandomXpMod...";
         private const string _levelStatsDistribution = "ThisSeemsLikeItComesFromTheXpMod";
         private const string _receiveHalfAssedXp = "ThisSeemsLikeItComesFromTheXpModAgain";
-        private const string _checkpointReachedString = "YouShouldSaveYourXpStuff";
-        private const string _cleanUpCheckpointsString = "YouShouldCleanupCheckpoints";
         private const string _sendBoosterNetworkString = "IHaveReachedBoosterBuffStatus";       
 
         public static void Setup()
@@ -30,8 +28,6 @@ namespace GTFuckingXP.Managers
             NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_sendXpString, ReceiveXp);
             NetworkAPI.RegisterEvent<LevelReachedInfo>(_levelStatsDistribution, ReceiveLevelReached);
             NetworkAPI.RegisterEvent<StaticXpInfo>(_receiveHalfAssedXp, ReceiveStaticXp);
-            NetworkAPI.RegisterEvent<DummyStruct>(_checkpointReachedString, ReceiveCheckpointReached);
-            NetworkAPI.RegisterEvent<DummyStruct>(_cleanUpCheckpointsString, ReceiveCleanupXpCheckpoints);
             NetworkAPI.RegisterEvent<BoosterInfo>(_sendBoosterNetworkString, ReceiveBoosterBuffs);
         }
 
@@ -70,16 +66,6 @@ namespace GTFuckingXP.Managers
                     }
                 }
             }
-        }
-
-        internal static void ReceiveCheckpointReached(ulong snetPlayer, DummyStruct _)
-        {
-            CheckpointPatches.CreateCheckpointData();
-        }
-
-        internal static void ReceiveCleanupXpCheckpoints(ulong snetPlayer, DummyStruct _)
-        {
-            CheckpointPatches.CheckpointsCleanup();
         }
 
         internal static void ReceiveBoosterBuffs(ulong snetPlayer, BoosterInfo newInfo)
@@ -132,32 +118,6 @@ namespace GTFuckingXP.Managers
         {
             NetworkAPI.InvokeEvent(_receiveHalfAssedXp, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
         }
-
-        public static void SendLevelReached()
-        {
-            List<SNet_Player> players = new List<SNet_Player>();
-            foreach (var snet in SNet.LobbyPlayers)
-            {
-                if (!snet.IsLocal)
-                {
-                    players.Add(snet);
-                }
-            }
-
-            NetworkAPI.InvokeEvent<DummyStruct>(_checkpointReachedString, default, players);
-        }
-
-        public static void SendCheckpointReached()
-        {
-            NetworkAPI.InvokeEvent(_checkpointReachedString, new DummyStruct());
-        }
-
-        public static void SendCheckpointCleanups()
-        {
-            NetworkAPI.InvokeEvent(_cleanUpCheckpointsString, new DummyStruct());
-
-        }
-
         internal struct DummyStruct
         { }
     }

@@ -33,14 +33,18 @@
   <ItemGroup>
     <Compile Include="Api\BoosterApi.cs" />
     <Compile Include="Api\CacheApi.cs" />
+    <Compile Include="Api\CheckpointApi.cs" />
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Enums\Booster\BoosterCategory.cs" />
+    <Compile Include="Enums\Booster\CustomBoosterModifiers.cs" />
     <Compile Include="Information\BoosterInfo\BoosterCondition.cs" />
     <Compile Include="Information\BoosterInfo\BoosterEffect.cs" />
     <Compile Include="Information\BoosterInfo\IBooster.cs" />
     <Compile Include="Manager\Internal\InformationCache.cs" />
+    <Compile Include="Manager\Internal\NetworkManager.cs" />
     <Compile Include="Manager\LogManager.cs" />
     <Compile Include="Patches\Booster\PersistentInventoryManagerPatches.cs" />
+    <Compile Include="Patches\Checkpoint\CheckpointManagerPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

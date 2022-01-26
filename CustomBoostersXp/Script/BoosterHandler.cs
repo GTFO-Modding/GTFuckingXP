@@ -6,16 +6,14 @@ namespace CustomBoostersXp.Script
 {
     public class BoosterHandler
     {
-        private readonly InstanceCache _instanceCache;
-
         public BoosterHandler()
         {
-            _instanceCache = InstanceCache.Instance;
+        
         }
 
         public int AddBooster(Booster booster)
         {
-            _instanceCache.SetBooster(booster);
+            CacheApi.SetBooster(booster);
         }
 
         public void 

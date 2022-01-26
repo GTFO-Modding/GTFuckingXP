@@ -12,7 +12,9 @@
 
         public string Name { get; set; }
         public string ShortName { get; set; }
+
         public AgentModifier Effect { get; set; }
+
         public float Value { get; set; }
     }
 }

@@ -62,6 +62,8 @@ namespace GTFuckingXP.Managers
 
         public static ScriptManager Instance { get; set; }
 
+        public bool IsInitialized { get; private set; }
+
         public void Initialize()
         {
             if (_initialized || !_versionAllowed)
@@ -85,8 +87,10 @@ namespace GTFuckingXP.Managers
             }
 
             WriteDefaultJsonBlocks();
-
             UpdateEverything();
+
+            CheckpointApi.AddCheckpointReachedCallback(CreateCheckpointData);
+            CheckpointApi.AddCheckpointCleanupCallback(CheckpointsCleanup);
         }
 
         /// <summary>
@@ -189,6 +193,11 @@ namespace GTFuckingXP.Managers
             CacheApi.SaveInstance(newData.groups);
         }
 
+        public string GetFolderPath()
+        {
+            return _folderPath;
+        }
+
         private void WriteDefaultJsonBlocks()
         {
             LogManager.Debug("Writing default JsonBlocks...");
@@ -249,6 +258,23 @@ namespace GTFuckingXP.Managers
                 File.WriteAllText(agentModifierPath, $"--This file is auto-generated. It's not for editing!--\n\n{string.Join("\n", Enum.GetValues(typeof(AgentModifier)))}");
             }
             #endregion
+        }
+
+        private void CreateCheckpointData()
+        {
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
+            {
+                CacheApiWrapper.SetXpStorageData(xpHandler.CurrentTotalXp);
+            }
+            else
+            {
+                LogManager.Error("No XpHandler was found, while trying to store the Checkpoint!");
+            }
+        }
+
+        private void CheckpointsCleanup()
+        {
+            CacheApi.RemoveInformation(CacheApiWrapper.CheckpointData);
         }
     }
 }

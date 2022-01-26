@@ -1,6 +1,6 @@
 ﻿namespace EndskApi.Enums.Booster
 {
-    public enum BoosterCategory
+    public enum CustomBoosterCategory
     {
         Muted,
         Bold,

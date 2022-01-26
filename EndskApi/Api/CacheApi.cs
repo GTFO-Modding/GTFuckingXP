@@ -7,8 +7,9 @@ namespace EndskApi.Api
     /// </summary>
     public static class CacheApi
     {
-        private const string GlobalCache = "EndskApi";
-        
+        private const string GlobalCache = "GlobalCache";
+        internal const string InternalCache = "EndskApi";
+
         private static readonly InformationCache _informationCache;
 
         static CacheApi()
@@ -41,7 +42,7 @@ namespace EndskApi.Api
 
         public static bool TryGetInformation<T>(object key, out T information, string mod = GlobalCache, bool logNotFound = true)
         {
-            return _informationCache.TryGetInformation(key, out information, mod);
+            return _informationCache.TryGetInformation(key, out information, mod, logNotFound);
         }
 
         public static bool TryGetInstance<T>(out T information, string mod = GlobalCache, bool logNotFound = true)
@@ -57,6 +58,11 @@ namespace EndskApi.Api
         public static void RemoveInstance<T>(string mod = GlobalCache)
         {
             RemoveInformation(typeof(T), mod);
+        }
+
+        public static bool ContainsKey(object key, string mod = GlobalCache)
+        {
+            return _informationCache.ContainsKey(key, mod);
         }
     }
 }

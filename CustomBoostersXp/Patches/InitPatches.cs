@@ -1,15 +1,11 @@
 ﻿using CellMenu;
-using CustomBoostersXp.Script;
-using GTFuckingXP.Managers;
+using CustomBoostersXp.Manager;
+using EndskApi.Api;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomBoostersXp.Patches
 {
+    [HarmonyBefore(GTFuckingXP.BepInExLoader.GUID, BepInExLoader.GUID)]
     [HarmonyPatch(typeof(CM_PageRundown_New))]
     public class PageRundownNewPatches
     {
@@ -17,10 +13,11 @@ namespace CustomBoostersXp.Patches
         [HarmonyPostfix]
         public static void PlaceRundownPostFix()
         {
-            InstanceCache.Instance.GetInstance<BoosterScriptManager>().Initialize();
+            CacheApi.GetInstance<BoosterScriptManager>().Initialize();
         }
     }
 
+    [HarmonyBefore(GTFuckingXP.BepInExLoader.GUID, BepInExLoader.GUID)]
     [HarmonyPatch(typeof(GuiManager))]
     public class GUIManagerPatches
     {
@@ -28,7 +25,7 @@ namespace CustomBoostersXp.Patches
         [HarmonyPrefix]
         public static void SetupPrefix()
         {
-            InstanceCache.Instance.GetInstance<BoosterScriptManager>().Initialize();
+            CacheApi.GetInstance<BoosterScriptManager>().Initialize();
         }
     }
 }

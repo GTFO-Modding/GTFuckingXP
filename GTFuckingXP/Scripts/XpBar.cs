@@ -2,7 +2,6 @@
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Level;
-using GTFuckingXP.Managers;
 using System;
 using System.Text;
 using TMPro;
@@ -108,16 +107,22 @@ namespace GTFuckingXP.Scripts
             _textUi.ForceMeshUpdate();
         }
 
+        public void HideTextUi()
+        {
+            _textUi.text = "";
+            _textUi.ForceMeshUpdate();
+        }
+
         /// <summary>
         /// Creates the xpbar and registers it.
         /// </summary>
         public void XpBarStuff()
         {
-            if(CacheApi.TryGetInstance(out _xpBar))
+            if(CacheApi.TryGetInstance(out _xpBar, logNotFound: false))
             {
-                if(CacheApi.TryGetInstance(out _xpProgressBar))
+                if(CacheApi.TryGetInstance(out _xpProgressBar, logNotFound: false))
                 {
-                    if (CacheApi.TryGetInstance(out _textUi))
+                    if (CacheApi.TryGetInstance(out _textUi, logNotFound: false))
                     {
                         return;
                     }
@@ -128,7 +133,7 @@ namespace GTFuckingXP.Scripts
 
             _xpBar = playerstatus.m_health2.gameObject.transform.parent.gameObject.Instantiate<RectTransform>("XpBarRenderer");
 
-            _xpBar.transform.Translate(0, (30 *  1), 0);
+            _xpBar.transform.Translate(0, Screen.height * 50f / 2560f, 0);
 
             _xpBar.Rotate(0, 180, 0);
             _xpBar.localEulerAngles = new Vector3(0, 180, 180);

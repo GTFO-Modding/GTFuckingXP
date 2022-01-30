@@ -9,6 +9,7 @@ using Localization;
 using GTFuckingXP.Information.ClassSelector;
 using System.Linq;
 using EndskApi.Api;
+using SNetwork;
 
 namespace GTFuckingXP.Patches.SelectLevelPatches
 {
@@ -95,7 +96,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             }
         }
 
-        private static void ShowClassesSelector(CM_PlayerLobbyBar lobbyBar)
+        internal static void ShowClassesSelector(CM_PlayerLobbyBar lobbyBar)
         {
             LogManager.Debug("Calling ShowClass Selector method.");
 
@@ -226,6 +227,31 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
 
         private static void AddHeaders(CM_PlayerLobbyBar lobbyBar, List<Group> groups)
         {
+            int counter = 0;
+            var currentPlayerCount = SNet.SessionHub.PlayersInSession.Count;
+            bool addedAtleastOneWithNewSystem = false;
+            foreach (var group in groups)
+            {
+                if (counter <= 5)
+                {
+                    if (group.VisibleForPlayerCount != null && group.VisibleForPlayerCount.Contains(currentPlayerCount))
+                    {
+                        lobbyBar.m_popupScrollWindow.AddHeader(group.Name, group.PersistentId,
+                           (Action<int>)((int headerIndex) =>
+                           {
+                               LogManager.Debug($"Header select call. HeaderIndex was {headerIndex}, or {group.PersistentId}");
+                               ChangeClassHeader(group.Name, group.PersistentId, lobbyBar);
+                           }));
+
+                        addedAtleastOneWithNewSystem = true;
+                        counter++;
+                    }
+                }
+            }
+
+            if (addedAtleastOneWithNewSystem)
+                return;
+
             var group0 = groups.FirstOrDefault(it => it.PersistentId == 0);
             var group1 = groups.FirstOrDefault(it => it.PersistentId == 1);
             var group2 = groups.FirstOrDefault(it => it.PersistentId == 2);

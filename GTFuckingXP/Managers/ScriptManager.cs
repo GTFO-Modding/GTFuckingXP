@@ -10,10 +10,12 @@ using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using GTFuckingXP.StolenCode;
+using Player;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -72,7 +74,7 @@ namespace GTFuckingXP.Managers
             _initialized = true;
 
             //Initializing some static values
-            CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, int>());
+            CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
             CacheApiWrapper.SetLvlUpCallBackList(new List<Action<int>>());
             CacheApiWrapper.SetDefaultMaxHp(PlayerDataBlock.GetBlock(1).health);
             
@@ -119,10 +121,30 @@ namespace GTFuckingXP.Managers
         {
             if (!_versionAllowed)
                 return;
+
+            var list = new List<CustomScalingBuff>();
+            foreach(var customScalingObj in System.Enum.GetValues(typeof(CustomScaling)))
+            {
+                var customScaling = (CustomScaling)customScalingObj;
+                if (customScaling == CustomScaling.AntiFogSphere)
+                {
+                    list.Add(new CustomScalingBuff(customScaling, 1f));
+                        }
+                else
+                {
+                    list.Add(new CustomScalingBuff(customScaling, 0f));
+                }
+            }
+
+            CustomScalingBuffManager.ApplyCustomScalingEffects(PlayerManager.GetLocalPlayerAgent(), list);
+
+            CacheApi.GetInstance<XpBar>().HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
             CacheApiWrapper.KillScript<DevModeTools>();
-            CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, int>());
+            CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
+            CacheApiWrapper.RemoveDefaultMeleeRange();
+            CacheApiWrapper.RemoveDefaultMeleeHitBox();
             EnemyDamageBasePatches.DamageDistribution = null;
         }
 
@@ -249,13 +271,40 @@ namespace GTFuckingXP.Managers
             var SingleUseBuffPath = Path.Combine(_folderPath, "LevelUpBonus_EnumNames.txt");
             if (!File.Exists(SingleUseBuffPath))
             {
-                File.WriteAllText(SingleUseBuffPath, $"--This file is auto-generated. It's not for editing!--\n\n{string.Join("\n", Enum.GetValues(typeof(SingleBuff)))}");
+                var str = new StringBuilder();
+                str.AppendLine("--This file is auto-generated. It's not for editing!--");
+                str.AppendLine();
+                foreach (var mod in Enum.GetValues(typeof(SingleBuff)))
+                {
+                    str.AppendLine(mod.ToString());
+                }
+                File.WriteAllText(SingleUseBuffPath, str.ToString());
             }
 
             var agentModifierPath = Path.Combine(_folderPath, "BoosterEffects_EnumNames.txt");
             if (!File.Exists(agentModifierPath))
             {
-                File.WriteAllText(agentModifierPath, $"--This file is auto-generated. It's not for editing!--\n\n{string.Join("\n", Enum.GetValues(typeof(AgentModifier)))}");
+                var str = new StringBuilder();
+                str.AppendLine("--This file is auto-generated. It's not for editing!--");
+                str.AppendLine();
+                foreach(var mod in Enum.GetValues(typeof(AgentModifier)))
+                {
+                    str.AppendLine(mod.ToString());
+                }
+                File.WriteAllText(agentModifierPath, str.ToString());
+            }
+
+            var customScalingPath = Path.Combine(_folderPath, "CustomScaling_EnumNames.txt");
+            if (!File.Exists(agentModifierPath))
+            {
+                var str = new StringBuilder();
+                str.AppendLine("--This file is auto-generated. It's not for editing!--");
+                str.AppendLine();
+                foreach (var mod in Enum.GetValues(typeof(CustomScaling)))
+                {
+                    str.AppendLine(mod.ToString());
+                }
+                File.WriteAllText(customScalingPath, str.ToString());
             }
             #endregion
         }

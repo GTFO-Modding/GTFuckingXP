@@ -123,7 +123,7 @@ namespace GTFuckingXP.Information
                     singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 1f));
                 }
 
-                levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs));
+                levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
             }
 
             levelLayouts.Add(new LevelLayout(1, "All Rounder", 0, "Scales equally acceptable with everything.", levels));
@@ -142,7 +142,7 @@ namespace GTFuckingXP.Information
                 singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.1f));
                 singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 0.1f));
 
-                glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs));
+                glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
             }
 
             levelLayouts.Add(new LevelLayout(2, "Glass cannon", 0, "Great scaling, but only 12 levels with no HP.", glassLevels));
@@ -164,7 +164,7 @@ namespace GTFuckingXP.Information
                     singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 0.2f));
                 }
 
-                tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs));
+                tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
             }
 
             levelLayouts.Add(new LevelLayout(3, "Tank", 0, "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
@@ -184,7 +184,7 @@ namespace GTFuckingXP.Information
                 singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 1f));
                 singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 1f));
 
-                kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs));
+                kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
             }
 
             levelLayouts.Add(new LevelLayout(4, "Kamikaze", 0, "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
@@ -202,7 +202,7 @@ namespace GTFuckingXP.Information
                 var singleUseBuffs = new List<SingleUseBuff>();
                 singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.2f));
 
-                meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs));
+                meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs, new List<CustomScalingBuff>()));
             }
 
             levelLayouts.Add(new LevelLayout(5, "Melee Main", 0, "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
@@ -220,10 +220,41 @@ namespace GTFuckingXP.Information
 
                 var singleUseBuffs = new List<SingleUseBuff>();
 
-                boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs));
+                boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs, new List<CustomScalingBuff>()));
             }
 
             levelLayouts.Add(new LevelLayout(6, "Boxer", 1, "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
+            #endregion
+
+            #region SpeedRunner
+
+            var speedRunner = new List<Level.Level>();
+
+            for (int i = 0; i <= 20; i++)
+            {
+                var defaultMultiplier = (float)(1 + (0.5f * i));
+                //Random calculation so later levels actually take longer in the default levellayout
+                var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
+
+                var singleUseBuffs = new List<SingleUseBuff>();
+                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 0.2f));
+                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 0.2f));
+                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 0.2f));
+
+                var customScaling = new List<CustomScalingBuff>();
+
+                if (i != 0)
+                {
+                    customScaling.Add(new CustomScalingBuff(CustomScaling.MeleeHitBoxSizeMultiplier, i * 5));
+                    customScaling.Add(new CustomScalingBuff(CustomScaling.MeleeRangeMultiplier, i));
+                    customScaling.Add(new CustomScalingBuff(CustomScaling.MovementSpeedMultiplier, 1 + (i * 0.3f)));
+                    customScaling.Add(new CustomScalingBuff(CustomScaling.AntiFogSphere, i*2));
+                }
+                speedRunner.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs, customScaling));
+            }
+
+            levelLayouts.Add(new LevelLayout(7, "SpeedRunner", 1, "Gets increasingly faster while playing, so you can circle kite even easier.", speedRunner));
+
             #endregion
 
             return levelLayouts;
@@ -243,8 +274,8 @@ namespace GTFuckingXP.Information
         {
             var groups = new List<Group>();
 
-            groups.Add(new Group(0, "Example Classes"));
-            groups.Add(new Group(1, "For gods sake, don't use it"));
+            groups.Add(new Group(0, "Example Classes", new List<int>() { 1,2,3,4}));
+            groups.Add(new Group(1, "For gods sake, don't use it", new List<int> { 1}));
 
             return groups;
         }

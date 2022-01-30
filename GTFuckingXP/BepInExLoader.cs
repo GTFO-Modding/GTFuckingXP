@@ -10,7 +10,6 @@ using GTFuckingXP.Scripts;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
 using System;
-using System.Collections.Generic;
 using UnhollowerRuntimeLib;
 
 namespace GTFuckingXP
@@ -18,14 +17,14 @@ namespace GTFuckingXP
     [BepInPlugin(GUID, MODNAME, VERSION)]
     [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("Endskill.EndskApi", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("com.dak.DamageNumbers", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("com.dak.FloatingTextAPI", BepInDependency.DependencyFlags.HardDependency)]
     public class BepInExLoader : BasePlugin
     {
         public const string
         MODNAME = "GTFuckingXP",
         AUTHOR = "Endskill",
         GUID = AUTHOR + "." + MODNAME,
-        VERSION = "1.2.2";
+        VERSION = "1.3.0";
 
         public static ConfigEntry<bool> RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
@@ -48,7 +47,6 @@ namespace GTFuckingXP
 
             //TODO remove
             TermsOfUsageState = Information.TermsOfUsage.Declined;
-
 
             //TODO uncomment
             //TermsOfUsage = Config.Bind("Terms of Usage", "Accept", "Undecided", "This tells the plugin, if you want to save xp collection data of any played expedition with the XP mod.\n" +
@@ -78,6 +76,8 @@ namespace GTFuckingXP
 
             Harmony = new Harmony(GUID);
             FasterPatching();
+
+            InitApi.AddInitCallback(() => { ScriptManager.Instance.Initialize(); });
         }
 
         private void FasterPatching()
@@ -91,14 +91,7 @@ namespace GTFuckingXP
             Harmony.PatchAll(typeof(GS_InLevelPatches));
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));
             Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
-
-            Harmony.PatchAll(typeof(PageRundownNewPatches));
-            Harmony.PatchAll(typeof(GUIManagerPatches));
-
-            if (!DamagePopups.Value)
-            {
-                Harmony.UnpatchAll(DamageNumbers.Main.GUID);
-            }
+            Harmony.PatchAll(typeof(SnetSessionHubPatches));
         }
 
         private void TermsOfUsageChanged(object sender, EventArgs e)

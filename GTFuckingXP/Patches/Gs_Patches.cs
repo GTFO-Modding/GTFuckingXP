@@ -1,5 +1,4 @@
 ﻿using GTFuckingXP.Managers;
-using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
 
 namespace GTFuckingXP.Patches
@@ -21,7 +20,7 @@ namespace GTFuckingXP.Patches
     public class GS_AfterLevelPatches
     {
         [HarmonyPatch(nameof(GS_AfterLevel.CleanupAfterExpedition))]
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         public static void EnterLevelPostfix()
         {
             ScriptManager.Instance.EndLevelScripts();

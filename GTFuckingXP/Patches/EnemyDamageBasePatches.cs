@@ -9,11 +9,12 @@ using Enemies;
 using Agents;
 using Player;
 using EndskApi.Api;
+using SNetwork;
 
 namespace GTFuckingXP.Patches
 {
 
-    [HarmonyBefore(BepInExLoader.GUID, DamageNumbers.Main.GUID)]
+    [HarmonyBefore(BepInExLoader.GUID, "com.dak.DamageNumbers")]
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
     internal class EnemyDamageBasePatches
     {
@@ -26,13 +27,16 @@ namespace GTFuckingXP.Patches
             if (!__instance.Owner.Alive)
                 return;
 
-            if (sourceAgent.IsLocallyOwned)
+            if (sourceAgent != null)
             {
-                var damage = dam;
-                LogManager.Debug($"Melee damage from local player registered. {damage} was scaled up to:");
-                damage *= CacheApiWrapper.GetActiveLevel().MeleeDamageMultiplier;
-                LogManager.Debug($"{damage}");
-                dam = damage;
+                if (sourceAgent.IsLocallyOwned)
+                {
+                    var damage = dam;
+                    LogManager.Debug($"Melee damage from local player registered. {damage} was scaled up to:");
+                    damage *= CacheApiWrapper.GetActiveLevel().MeleeDamageMultiplier;
+                    LogManager.Debug($"{damage}");
+                    dam = damage;
+                }
             }
         }
 
@@ -50,6 +54,11 @@ namespace GTFuckingXP.Patches
             if (__state)
             {
                 data.source.TryGet(out var agent);
+                if (agent is null)
+                {
+                    return;
+                }
+
                 var source = agent.TryCast<PlayerAgent>();
                 var enemyXpData = GetEnemyXp(__instance.Owner);
                 //For some reason melee damage is consistently halfed ...
@@ -72,7 +81,7 @@ namespace GTFuckingXP.Patches
             }
         }
 
-        [HarmonyBefore(BepInExLoader.GUID, DamageNumbers.Main.GUID)]
+        [HarmonyBefore(BepInExLoader.GUID, "com.dak.DamageNumbers")]
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.BulletDamage))]
         [HarmonyPrefix]
         public static void BulletPostfix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
@@ -80,13 +89,16 @@ namespace GTFuckingXP.Patches
             if (!__instance.Owner.Alive)
                 return;
 
-            if (sourceAgent.IsLocallyOwned)
+            if (sourceAgent != null)
             {
-                var damage = dam;
-                LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled to:");
-                damage *= CacheApiWrapper.GetActiveLevel().WeaponDamageMultiplier;
-                LogManager.Debug($"{damage}");
-                dam = damage;
+                if (sourceAgent.IsLocallyOwned)
+                {
+                    var damage = dam;
+                    LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled to:");
+                    damage *= CacheApiWrapper.GetActiveLevel().WeaponDamageMultiplier;
+                    LogManager.Debug($"{damage}");
+                    dam = damage;
+                }
             }
         }
 
@@ -104,6 +116,11 @@ namespace GTFuckingXP.Patches
             if (__state)
             {
                 data.source.TryGet(out var agent);
+                if(agent is null)
+                {
+                    return;
+                }
+
                 var source = agent.TryCast<PlayerAgent>();
                 var enemyXpData = GetEnemyXp(__instance.Owner);
                 XpDistributionAddDamageDealt(__instance, source, data.damage.Get(__instance.HealthMax));
@@ -125,17 +142,18 @@ namespace GTFuckingXP.Patches
             }
         }
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveExplosionDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ExplosionDamage))]
         [HarmonyPrefix]
         public static void ExplosionPrefix(Dam_EnemyDamageBase __instance, out bool __state)
         {
-            __state = __instance.Owner.Alive;
+            __state = __instance.Owner.Alive && SNet.IsMaster;
         }
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveExplosionDamage))]
-        [HarmonyPrefix]
-        public static void ExplosionPostfix(Dam_EnemyDamageBase __instance, bool __state, pExplosionDamageData data)
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ExplosionDamage))]
+        [HarmonyPostfix]
+        public static void ExplosionPostfix(Dam_EnemyDamageBase __instance, bool __state)
         {
+            LogManager.Debug($"Explosion postfix, Enemy was alive {__state}");
             //Enemy was alive in the postfix but dead now :).
             if (__state && !__instance.Owner.Alive)
             {
@@ -170,9 +188,9 @@ namespace GTFuckingXP.Patches
 
             if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler))
             {
-                xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
+                xpHandler.AddXp(enemyXpData, position, forceDebuffXp, "<#F30>");
             }
-            NetworkApiXpManager.SendReceiveXpToEveryone(enemyXpData, position, forceDebuffXp);
+            NetworkApiXpManager.SendHalfAssedXp(enemyXpData, position, forceDebuffXp);
         }
 
         private static EnemyXp GetEnemyXp(EnemyAgent killedEnemy)

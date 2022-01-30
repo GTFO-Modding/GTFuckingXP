@@ -55,7 +55,7 @@ namespace GTFuckingXP.Communication
             try
             {
                 var xpHandler = CacheApi.GetInstance<XpHandler>();
-                xpHandler.AddXp(new EnemyXp(0, "", xpAmount, xpAmount, 0), default, false, false);
+                xpHandler.AddXp(new EnemyXp(0, "", xpAmount, xpAmount, 0), default, false);
 
                 return true;
             }

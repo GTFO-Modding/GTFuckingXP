@@ -1,5 +1,6 @@
 ﻿using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
+using System.Collections.Generic;
 
 namespace GTFuckingXP.Information.NetworkingInfo
 {

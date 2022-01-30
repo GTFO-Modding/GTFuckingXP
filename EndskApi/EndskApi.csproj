@@ -34,6 +34,7 @@
     <Compile Include="Api\BoosterApi.cs" />
     <Compile Include="Api\CacheApi.cs" />
     <Compile Include="Api\CheckpointApi.cs" />
+    <Compile Include="Api\InitApi.cs" />
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Enums\Booster\BoosterCategory.cs" />
     <Compile Include="Enums\Booster\CustomBoosterModifiers.cs" />
@@ -45,6 +46,8 @@
     <Compile Include="Manager\LogManager.cs" />
     <Compile Include="Patches\Booster\PersistentInventoryManagerPatches.cs" />
     <Compile Include="Patches\Checkpoint\CheckpointManagerPatches.cs" />
+    <Compile Include="Patches\Init\GUIManagerPatches.cs" />
+    <Compile Include="Patches\Init\PageRundownNewPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

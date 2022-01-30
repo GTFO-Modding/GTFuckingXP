@@ -6,10 +6,9 @@ using System.Linq;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using Player;
-using DamageNumbers;
-using DamageNumbers.API;
 using GTFuckingXP.Enums;
 using EndskApi.Api;
+using FloatingTextAPI;
 
 namespace GTFuckingXP.Scripts
 {
@@ -51,7 +50,7 @@ namespace GTFuckingXP.Scripts
                 NextLevel = checkpointXpData.levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == level0.LevelNumber + 1);
                 CacheApiWrapper.SetActiveLevel(level0, false);
                 CurrentTotalXp = 0;
-                AddXp(new DummyXp(checkpointXpData.totalXp, checkpointXpData.totalXp), default, false, false);
+                AddXp(new DummyXp(checkpointXpData.totalXp, checkpointXpData.totalXp), default, false);
             }
             else
             {
@@ -75,7 +74,7 @@ namespace GTFuckingXP.Scripts
             }
         }
 
-        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, bool nerfedXpText = true)
+        public void AddXp(IXpData xpData, Vector3 xpTextPosition, bool forceDebuffXp = false, string xpPopupColor = "<#F80>")
         {
             uint xpValue = forceDebuffXp || _hasDebuff ? xpData.DebuffXp : xpData.XpGain;
 
@@ -91,16 +90,10 @@ namespace GTFuckingXP.Scripts
 
             CurrentTotalXp += xpValue;
             LogManager.Debug($"Giving xp Amount {xpValue}, new total Xp is {CurrentTotalXp}");
-            if(!CheckForLevelThresholdReached(xpTextPosition, out var header) && BepInExLoader.XpPopups.Value)
+            if (!CheckForLevelThresholdReached(xpTextPosition, out var header) && BepInExLoader.XpPopups.Value)
             {
-                if (nerfedXpText)
-                {
-                    DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#F80>{xpValue}XP"));
-                }
-                else
-                {
-                    DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"<#08F>{xpValue}XP"));
-                }
+
+                DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"{xpPopupColor}{xpValue}XP"));
             }
 
             CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
@@ -128,7 +121,6 @@ namespace GTFuckingXP.Scripts
             {
                 var newLevel = availableLevels.OrderByDescending(it => it.LevelNumber).First();
 
-                //TODO NewBoosters check.
                 ChangeCurrentLevel(newLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levels.PersistentId, newLevel.LevelNumber));
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
 
@@ -160,6 +152,8 @@ namespace GTFuckingXP.Scripts
             CacheApiWrapper.SetActiveLevel(newLevel);
             CacheApiWrapper.SetCurrentBoosterBuff(newBoosterBuff);
 
+            LogManager.Debug("saved information.");
+
             BoosterBuffManager.Instance.ApplyBoosterEffects(PlayerManager.GetLocalPlayerAgent(), newBoosterBuff);
             NetworkApiXpManager.SendBoosterStatsReached(newBoosterBuff);
 
@@ -173,6 +167,8 @@ namespace GTFuckingXP.Scripts
             localDamage.Cast<Dam_PlayerDamageLocal>().UpdateHealthGui();
 
             ApplySingleUseBuffs(newLevel);
+            LogManager.Debug("Pre applying custom scaling effects.");
+            CustomScalingBuffManager.ApplyCustomScalingEffects(PlayerManager.GetLocalPlayerAgent(), newLevel.CustomScaling);
         }
 
         private void ApplySingleUseBuffs(Level reachedLevel)

@@ -1,5 +1,4 @@
 ﻿using GTFuckingXP.Extensions;
-using GTFuckingXP.Managers;
 using HarmonyLib;
 
 namespace GTFuckingXP.Patches
@@ -14,7 +13,7 @@ namespace GTFuckingXP.Patches
             var playerToLevelMap = CacheApiWrapper.GetPlayerToLevelMapping();
             if (playerToLevelMap.TryGetValue(__instance.m_player.PlayerSlotIndex, out var levelNumber))
             {
-                name = $"<color=#F80>Lv.{levelNumber}</color> {name}";
+                name = $"<color=#F80>Lv.{levelNumber.LevelNumber}</color> {name}";
             }
         }
     }

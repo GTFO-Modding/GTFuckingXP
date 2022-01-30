@@ -23,6 +23,10 @@ namespace GTFuckingXP.Extensions
         private const string AnchorDifferenceKey = "AnchorDifferenceKey";
         private const string LvlUpCallbackKey = "LvlUpCallbackKey";
 
+        private const string DefaultMeleeRangeKey = "DefaultMeleeRangeKey";
+        private const string DefaultMeleeHitBoxKey = "DefaultMeleeHitBoxKey";
+        private const string DefaultMovmentKey = "DefaultMovmentKeys";
+
         /// <summary>
         /// Creates a new component of type <typeparamref name="Tscript"/> and saves it into the cache.
         /// Returns the newly created <typeparamref name="Tscript"/> after this.
@@ -89,6 +93,11 @@ namespace GTFuckingXP.Extensions
             return CacheApi.GetInformation<LevelLayout>(LevelLayoutKey);
         }
 
+        public static bool TryGetCurrentLevelLayout(out LevelLayout levelLayout)
+        {
+            return CacheApi.TryGetInformation(LevelLayoutKey, out levelLayout);
+        }
+
         /// <summary>
         /// Sets the new current active level to <paramref name="newLevel"/>
         /// </summary>
@@ -126,14 +135,14 @@ namespace GTFuckingXP.Extensions
         /// <summary>
         /// Sets the player to index map dictionary in the <paramref name="instanceCache"/>.
         /// </summary>
-        public static void SetPlayerToLevelMapping(Dictionary<int, int> playerToLevelMap)
+        public static void SetPlayerToLevelMapping(Dictionary<int, Level> playerToLevelMap)
         {
             CacheApi.SaveInformation(PlayerSlotToLevelIndexMappingKey, playerToLevelMap);
         }
 
-        public static Dictionary<int, int> GetPlayerToLevelMapping()
+        public static Dictionary<int, Level> GetPlayerToLevelMapping()
         {
-            return CacheApi.GetInformation<Dictionary<int, int>>(PlayerSlotToLevelIndexMappingKey);
+            return CacheApi.GetInformation<Dictionary<int, Level>>(PlayerSlotToLevelIndexMappingKey);
         }
 
         public static void SetXpStorageData(uint knownXpState)
@@ -154,7 +163,6 @@ namespace GTFuckingXP.Extensions
         public static void SetCurrentBoosterBuff(BoosterBuffs boosterBuff)
         {
             CacheApi.SaveInformation(BoosterBuffKey, boosterBuff);
-            //TODO NetworkAPI new BoosterBuff 
         }
 
         public static void SetAnchorDifference(float anchorDifference)
@@ -180,6 +188,47 @@ namespace GTFuckingXP.Extensions
         public static bool RemoveLvlUpCallback(Action<int> lvlUpCallback)
         {
             return CacheApi.GetInformation<List<Action<int>>>(LvlUpCallbackKey).Remove(lvlUpCallback);
+        }
+
+        public static void SetDefaultMeleeRange(float meleeRange)
+        {
+            CacheApi.SaveInformation(DefaultMeleeRangeKey, meleeRange);
+        }
+
+        public static void RemoveDefaultMeleeRange()
+        {
+            CacheApi.RemoveInformation(DefaultMeleeRangeKey);
+        }
+
+        public static bool TryGetDefaultMeleeRange(out float meleeRange)
+        {
+            return CacheApi.TryGetInformation(DefaultMeleeRangeKey, out meleeRange);
+        }
+
+        public static void SetDefaultMeleeHitBox(float meleeHitbox)
+        {
+            CacheApi.SaveInformation(DefaultMeleeHitBoxKey, meleeHitbox);
+        }
+
+        public static void RemoveDefaultMeleeHitBox()
+        {
+            CacheApi.RemoveInformation(DefaultMeleeHitBoxKey);
+        }
+
+        public static bool TryGetDefaultMeleeHitBox(out float meleeHitbox)
+        {
+            return CacheApi.TryGetInformation(DefaultMeleeHitBoxKey, out meleeHitbox);
+        }
+
+
+        public static bool TryGetDefaultMovment(out (float walk, float run, float air, float crouch) movmentData)
+        {
+            return CacheApi.TryGetInformation(DefaultMovmentKey, out movmentData);
+        }
+
+        public static void SetDefaultMovment(float walk, float run, float air, float crouch)
+        {
+            CacheApi.SaveInformation(DefaultMovmentKey, (walk, run, air, crouch));
         }
     }
 }

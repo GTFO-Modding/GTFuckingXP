@@ -4,11 +4,11 @@ using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Information.NetworkingInfo;
-using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
 using Player;
 using SNetwork;
 using System.Collections.Generic;
+using System.Text.Json;
 using UnityEngine;
 
 namespace GTFuckingXP.Managers
@@ -19,16 +19,18 @@ namespace GTFuckingXP.Managers
     public static class NetworkApiXpManager
     {
         private const string _sendXpString = "ThisSeemsLikeItComesFromTheRandomXpMod...";
-        private const string _levelStatsDistribution = "ThisSeemsLikeItComesFromTheXpMod";
-        private const string _receiveHalfAssedXp = "ThisSeemsLikeItComesFromTheXpModAgain";
-        private const string _sendBoosterNetworkString = "IHaveReachedBoosterBuffStatus";       
+        private const string _levelStatsDistribution = "ReachedSentLevel_XP";
+        private const string _receiveStaticXp = "XpModTriesToGiveYouSomeHalfAssedXP";
+        private const string _undistributedXp = "XpModGivesYouSomeXpWhereYouHadNotToDoAnything";
+        private const string _sendBoosterNetworkString = "MyNewBoostersEffectFromTheXpMod";       
 
         public static void Setup()
         {
             NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_sendXpString, ReceiveXp);
             NetworkAPI.RegisterEvent<LevelReachedInfo>(_levelStatsDistribution, ReceiveLevelReached);
-            NetworkAPI.RegisterEvent<StaticXpInfo>(_receiveHalfAssedXp, ReceiveStaticXp);
+            NetworkAPI.RegisterEvent<StaticXpInfo>(_receiveStaticXp, ReceiveStaticXp);
             NetworkAPI.RegisterEvent<BoosterInfo>(_sendBoosterNetworkString, ReceiveBoosterBuffs);
+            NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_undistributedXp, ReceiveHalfAssedXp);
         }
 
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)
@@ -40,17 +42,26 @@ namespace GTFuckingXP.Managers
             }
         }
 
-        public static void ReceiveStaticXp(ulong snetPlayer, StaticXpInfo xpInfo)
+        public static void ReceiveHalfAssedXp(ulong snetPlayer, GtfoApiXpInfo xpData)
         {
-            LogManager.Debug("Received static xp networking package");
             if (CacheApi.TryGetInstance(out XpHandler xpHandler))
             {
-                xpHandler.AddXp(xpInfo, xpInfo.Position, false, false);
+                xpHandler.AddXp(xpData, new UnityEngine.Vector3(xpData.PositionX, xpData.PositionY, xpData.PositionZ), xpData.ForceDebuffXp, "<#888>");
+            }
+        }
+
+        public static void ReceiveStaticXp(ulong snetPlayer, StaticXpInfo xpInfo)
+        {
+            LogManager.Debug("Received static xp networking pckage");
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
+            {
+                xpHandler.AddXp(xpInfo, xpInfo.Position, false, "<#F30>");
             }
         }
 
         public static void ReceiveLevelReached(ulong snetPlayer, LevelReachedInfo levelData)
         {
+            LogManager.Debug("Receive level reached info");
             if(SNet.TryGetPlayer(snetPlayer, out var snet))
             {
                 var playerAgents = PlayerManager.PlayerAgentsInLevel;
@@ -58,11 +69,14 @@ namespace GTFuckingXP.Managers
                 {
                     if(player.PlayerSlotIndex == snet.PlayerSlotIndex())
                     {
-                        var newHealth = levelData.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp();
+                        Level level = new Level(levelData);
+
+                        var newHealth = level.HealthMultiplier * CacheApiWrapper.GetDefaultMaxHp();
                         LogManager.Debug($"Setting HP of {player.name} to {newHealth}");
                         player.Damage.HealthMax = newHealth;
 
-                        CacheApiWrapper.GetPlayerToLevelMapping()[player.PlayerSlotIndex] = levelData.LevelNumber;
+                        CustomScalingBuffManager.ApplyCustomScalingEffects(player, level.CustomScaling);
+                        CacheApiWrapper.GetPlayerToLevelMapping()[player.PlayerSlotIndex] = level;
                     }
                 }
             }
@@ -89,24 +103,18 @@ namespace GTFuckingXP.Managers
                 receiver.Owner);
         }
 
-        public static void SendReceiveXpToEveryone(EnemyXp xpData, Vector3 position, bool forceDebuffXp)
+        public static void SendHalfAssedXp(EnemyXp xpData, Vector3 position, bool forceDebuffXp)
         {
-            List<SNet_Player> players = new List<SNet_Player>();
-            foreach(var snet in SNet.LobbyPlayers)
-            {
-                if(!snet.IsLocal)
-                {
-                    players.Add(snet);
-                }
-            }
-
-            NetworkAPI.InvokeEvent(_sendXpString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
-                players);
+            NetworkAPI.InvokeEvent(_undistributedXp, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp));
         }
 
         public static void SendNewLevelActive(Level newLevel)
         {
-            NetworkAPI.InvokeEvent(_levelStatsDistribution, new LevelReachedInfo(newLevel));
+            var customScaling = JsonSerializer.Serialize((
+                    newLevel.CustomScaling is null ?
+                    new List<CustomScalingBuff>() :
+                    newLevel.CustomScaling));
+            NetworkAPI.InvokeEvent(_levelStatsDistribution, new LevelReachedInfo(newLevel.LevelNumber, newLevel.HealthMultiplier, customScaling));
         }
 
         public static void SendBoosterStatsReached(BoosterInfo boosterInfo)
@@ -116,9 +124,7 @@ namespace GTFuckingXP.Managers
 
         public static void SendStaticXpInfo(PlayerAgent receiver, uint xpGain, uint debuffXp, int levelScalingDecrease, Vector3 position)
         {
-            NetworkAPI.InvokeEvent(_receiveHalfAssedXp, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
+            NetworkAPI.InvokeEvent(_receiveStaticXp, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
         }
-        internal struct DummyStruct
-        { }
     }
 }

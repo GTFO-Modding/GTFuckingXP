@@ -1,7 +1,6 @@
 ﻿using EndskApi.Api;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
-using GTFuckingXP.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

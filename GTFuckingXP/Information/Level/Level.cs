@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using GTFuckingXP.Information.NetworkingInfo;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace GTFuckingXP.Information.Level
 {
@@ -10,8 +12,12 @@ namespace GTFuckingXP.Information.Level
         public Level()
         { }
 
+        public Level(LevelReachedInfo levelData) : this(levelData.LevelNumber, 0, levelData.HealthMultiplier, 0f, 0f,
+                null, JsonSerializer.Deserialize<List<CustomScalingBuff>>(levelData.CustomScaling))
+        { }
+
         public Level(int levelNumber, uint totalXp, float healthMultiplier, float meleeMultiplier, float weaponMultiplier, List<SingleUseBuff> singleUseBuffs,
-            string customLevelUpPopupText = "", string customLevelStatsText = "")
+            List<CustomScalingBuff> customScaling, string customLevelUpPopupText = "", string customLevelStatsText = "")
         {
             LevelNumber = levelNumber;
             TotalXpRequired = totalXp;
@@ -20,6 +26,10 @@ namespace GTFuckingXP.Information.Level
             MeleeDamageMultiplier = meleeMultiplier;
             WeaponDamageMultiplier = weaponMultiplier;
             LevelUpBonus = singleUseBuffs;
+
+            CustomScaling = customScaling;
+            CustomLevelStatsText = customLevelStatsText;
+            CustomLevelUpPopupText = customLevelUpPopupText;
         }
 
         /// <summary>
@@ -58,6 +68,11 @@ namespace GTFuckingXP.Information.Level
         public float WeaponDamageMultiplier { get; set; }
 
         //public float PrecisionMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets all customscaling options
+        /// </summary>
+        public List<CustomScalingBuff> CustomScaling { get; set; }
 
         /// <summary>
         /// Gets or sets the single use buffs that gets applied when reaching this level.

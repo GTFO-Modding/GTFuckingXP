@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Communication\XpApi.cs" />
+    <Compile Include="Enums\CustomScaling.cs" />
     <Compile Include="Enums\PlayerBuff.cs" />
     <Compile Include="Enums\SingleBuff.cs" />
     <Compile Include="Extensions\GameObjectExtensions.cs" />
@@ -50,18 +51,20 @@
     <Compile Include="Information\FloatingXpTextInfo.cs" />
     <Compile Include="Information\Level\BoosterBuffs.cs" />
     <Compile Include="Information\Level\ConstantMultipliers.cs" />
+    <Compile Include="Information\Level\CustomScalingBuff.cs" />
+    <Compile Include="Information\Level\LevelExt.cs" />
     <Compile Include="Information\Level\SingleUseBuffs.cs" />
     <Compile Include="Information\NetworkingInfo\BoosterInfo.cs" />
     <Compile Include="Information\NetworkingInfo\GtfoApiXpInfo.cs" />
     <Compile Include="Information\IXpData.cs" />
     <Compile Include="Information\Level\Level.cs" />
-    <Compile Include="Information\Level\LevelBuffs.cs" />
     <Compile Include="Information\Level\LevelLayout.cs" />
     <Compile Include="Information\NetworkingInfo\LevelReachedInfo.cs" />
     <Compile Include="Information\NetworkingInfo\StaticXpInfo.cs" />
     <Compile Include="Information\TermsOfUsage.cs" />
     <Compile Include="Information\WebModels\XpWebModel.cs" />
     <Compile Include="Managers\BoosterBuffManager.cs" />
+    <Compile Include="Managers\CustomScalingBuffManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />
@@ -70,7 +73,7 @@
     <Compile Include="Patches\PlaceNavMarkerOnGoPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\MainMenuGuiLayerPatches.cs" />
     <Compile Include="Patches\SelectLevelPatches\PlayerLobbyBarPatches.cs" />
-    <Compile Include="Patches\PageRundownNewPatches.cs" />
+    <Compile Include="Patches\SnetSessionHubPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\DevModeTools.cs" />
     <Compile Include="Scripts\SelectLevelPath\SelectLevelPathHandler.cs" />
@@ -112,9 +115,6 @@
     <Reference Include="Cpp2IL.Core">
       <HintPath>LiB\Cpp2IL.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DamageNumbers">
-      <HintPath>LiB\DamageNumbers.dll</HintPath>
-    </Reference>
     <Reference Include="DevConsoleCommands-ASM">
       <HintPath>LiB\DevConsoleCommands-ASM.dll</HintPath>
     </Reference>
@@ -132,6 +132,9 @@
     </Reference>
     <Reference Include="ExcludeInBuild-ASM">
       <HintPath>LiB\ExcludeInBuild-ASM.dll</HintPath>
+    </Reference>
+    <Reference Include="FloatingTextAPI">
+      <HintPath>LiB\FloatingTextAPI.dll</HintPath>
     </Reference>
     <Reference Include="FluffyUnderware.DevTools">
       <HintPath>LiB\FluffyUnderware.DevTools.dll</HintPath>

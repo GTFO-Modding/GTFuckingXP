@@ -1,4 +1,4 @@
-﻿using DamageNumbers.API;
+﻿using FloatingTextAPI;
 using TMPro;
 using UnityEngine;
 

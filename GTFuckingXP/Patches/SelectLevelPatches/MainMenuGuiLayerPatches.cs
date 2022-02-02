@@ -31,7 +31,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             }
             else
             {
-                if (CacheApi.TryGetInstance<SelectLevelPathHandler>(out var instance))
+                if (CacheApi.TryGetInstance<SelectLevelPathHandler>(out var instance, CacheApiWrapper.XpModCacheName))
                 {
                     instance.gameObject.SetActive(false);
                 }

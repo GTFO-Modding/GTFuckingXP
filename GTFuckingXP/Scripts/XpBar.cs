@@ -30,7 +30,7 @@ namespace GTFuckingXP.Scripts
                 if (Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.S) && BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
                 {
                     BepInExLoader.TermsOfUsage.Value = TermsOfUsage.Accepted.ToString();
-                    var xpHandler = CacheApi.GetInstance<XpHandler>();
+                    var xpHandler = CacheApi.GetInstance<XpHandler>(CacheApiWrapper.XpModCacheName);
                     UpdateUiString(CacheApiWrapper.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, CacheApiWrapper.GetCurrentLevelLayout().Header);
                 }
             }
@@ -118,11 +118,11 @@ namespace GTFuckingXP.Scripts
         /// </summary>
         public void XpBarStuff()
         {
-            if(CacheApi.TryGetInstance(out _xpBar, logNotFound: false))
+            if(CacheApi.TryGetInstance(out _xpBar, CacheApiWrapper.XpModCacheName,  false))
             {
-                if(CacheApi.TryGetInstance(out _xpProgressBar, logNotFound: false))
+                if(CacheApi.TryGetInstance(out _xpProgressBar, CacheApiWrapper.XpModCacheName, false))
                 {
-                    if (CacheApi.TryGetInstance(out _textUi, logNotFound: false))
+                    if (CacheApi.TryGetInstance(out _textUi, CacheApiWrapper.XpModCacheName, false))
                     {
                         return;
                     }
@@ -150,9 +150,9 @@ namespace GTFuckingXP.Scripts
             _textUi = GuiManager.Current.m_watermarkLayer.m_watermark.m_watermarkText.gameObject.Instantiate<TextMeshPro>("XpText");
             _textUi.transform.Translate(new Vector3(-120f, 0f, 0f));
 
-            CacheApi.SaveInstance(_textUi);
-            CacheApi.SaveInstance(_xpBar);
-            CacheApi.SaveInstance(_xpProgressBar);
+            CacheApi.SaveInstance(_textUi, CacheApiWrapper.XpModCacheName);
+            CacheApi.SaveInstance(_xpBar, CacheApiWrapper.XpModCacheName);
+            CacheApi.SaveInstance(_xpProgressBar, CacheApiWrapper.XpModCacheName);
         }
     }
 }

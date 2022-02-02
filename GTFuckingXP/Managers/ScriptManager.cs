@@ -75,7 +75,7 @@ namespace GTFuckingXP.Managers
 
             //Initializing some static values
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
-            CacheApiWrapper.SetLvlUpCallBackList(new List<Action<int>>());
+           
             CacheApiWrapper.SetDefaultMaxHp(PlayerDataBlock.GetBlock(1).health);
             
             if(MtfoUtils.PluginExists)
@@ -105,7 +105,7 @@ namespace GTFuckingXP.Managers
 
             EnemyDamageBasePatches.DamageDistribution = new Dictionary<string, Dictionary<int, float>>();
 
-            CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>());
+            CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>(), CacheApiWrapper.XpModCacheName);
             _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
             CacheApiWrapper.KillScript<SelectLevelPathHandler>();
             if (BepInExLoader.RundownDevMode.Value)
@@ -128,17 +128,17 @@ namespace GTFuckingXP.Managers
                 var customScaling = (CustomScaling)customScalingObj;
                 if (customScaling == CustomScaling.AntiFogSphere)
                 {
-                    list.Add(new CustomScalingBuff(customScaling, 1f));
+                    list.Add(new CustomScalingBuff(customScaling, 0f));
                         }
                 else
                 {
-                    list.Add(new CustomScalingBuff(customScaling, 0f));
+                    list.Add(new CustomScalingBuff(customScaling, 1f));
                 }
             }
 
             CustomScalingBuffManager.ApplyCustomScalingEffects(PlayerManager.GetLocalPlayerAgent(), list);
 
-            CacheApi.GetInstance<XpBar>().HideTextUi();
+            CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
             CacheApiWrapper.KillScript<DevModeTools>();
@@ -208,11 +208,11 @@ namespace GTFuckingXP.Managers
             
             LogManager.Debug($"Received: {newData.enemyXpList.Count} enemies, {newData.levelLayouts.Count} levelLayouts, {newData.boosterBuffs.Count} BoosterLayouts, {newData.groups.Count} Groups");
 
-            CacheApi.SaveInstance(newData.enemyXpList);
+            CacheApi.SaveInstance(newData.enemyXpList, CacheApiWrapper.XpModCacheName);
             //_instanceCache.SetInstance(newData.expeditionLevelLayoutMapping);
-            CacheApi.SaveInstance(newData.levelLayouts);
-            CacheApi.SaveInstance(newData.boosterBuffs);
-            CacheApi.SaveInstance(newData.groups);
+            CacheApi.SaveInstance(newData.levelLayouts, CacheApiWrapper.XpModCacheName);
+            CacheApi.SaveInstance(newData.boosterBuffs, CacheApiWrapper.XpModCacheName);
+            CacheApi.SaveInstance(newData.groups, CacheApiWrapper.XpModCacheName);
         }
 
         public string GetFolderPath()
@@ -311,7 +311,7 @@ namespace GTFuckingXP.Managers
 
         private void CreateCheckpointData()
         {
-            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler, CacheApiWrapper.XpModCacheName))
             {
                 CacheApiWrapper.SetXpStorageData(xpHandler.CurrentTotalXp);
             }
@@ -323,7 +323,7 @@ namespace GTFuckingXP.Managers
 
         private void CheckpointsCleanup()
         {
-            CacheApi.RemoveInformation(CacheApiWrapper.CheckpointData);
+            CacheApi.RemoveInformation(CacheApiWrapper.CheckpointData, CacheApiWrapper.XpModCacheName);
         }
     }
 }

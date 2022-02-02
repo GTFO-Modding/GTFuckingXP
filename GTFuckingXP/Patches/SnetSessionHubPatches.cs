@@ -23,7 +23,7 @@ namespace GTFuckingXP.Patches
             {
                 return;
             }
-            var groups = CacheApi.GetInstance<List<Group>>();
+            var groups = CacheApi.GetInstance<List<Group>>( CacheApiWrapper.XpModCacheName);
 
             var classInGroup = groups.FirstOrDefault(it => it.PersistentId == classLayout.GroupPersistentId);
 
@@ -36,7 +36,7 @@ namespace GTFuckingXP.Patches
                     {
                         if(bar.m_player.Lookup == SNet.LocalPlayer.Lookup)
                         {
-                            CacheApiWrapper.SetCurrentLevelLayout(CacheApi.GetInstance<List<LevelLayout>>()[0]);
+                            CacheApiWrapper.SetCurrentLevelLayout(CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName)[0]);
                             PlayerLobbyBarPatches.ShowClassesSelector(bar);
                             break;
                         }
@@ -44,7 +44,7 @@ namespace GTFuckingXP.Patches
                 }
                 else
                 {
-                    XpApi.ChangeCurrentLevelLayout(CacheApi.GetInstance<List<LevelLayout>>()[0]);
+                    XpApi.ChangeCurrentLevelLayout(CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName)[0]);
                 }
             }
         }

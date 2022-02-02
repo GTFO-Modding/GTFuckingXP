@@ -168,7 +168,7 @@ namespace GTFuckingXP.Patches
             position.y = position.y + 1f;
             if (sourceAgent is null)
             {
-                if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler))
+                if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler, CacheApiWrapper.XpModCacheName))
                 {
                     xpHandler.AddXp(enemyXpData, position, forceDebuffXp);
                 }
@@ -186,7 +186,7 @@ namespace GTFuckingXP.Patches
             var position = killedEnemy.Position;
             position.y = position.y + 1f;
 
-            if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler))
+            if (CacheApi.TryGetInstance<XpHandler>(out var xpHandler, CacheApiWrapper.XpModCacheName))
             {
                 xpHandler.AddXp(enemyXpData, position, forceDebuffXp, "<#F30>");
             }
@@ -195,15 +195,15 @@ namespace GTFuckingXP.Patches
 
         private static EnemyXp GetEnemyXp(EnemyAgent killedEnemy)
         {
-            var enemyData = CacheApi.GetInstance<List<EnemyXp>>();
+            var enemyData = CacheApi.GetInstance<List<EnemyXp>>(CacheApiWrapper.XpModCacheName);
             var enemyXpData = enemyData.FirstOrDefault(it => it.EnemyId == killedEnemy.EnemyDataID);
             if (enemyXpData is null)
             {
                 //No data found, creating a new instance and 
                 LogManager.Warn($"There was no enemy XP data found for {killedEnemy.EnemyDataID}!");
-                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 20000, 10000, 0);
+                enemyXpData = new EnemyXp(killedEnemy.EnemyDataID, killedEnemy.name, 0, 0, 0);
                 enemyData.Add(enemyXpData);
-                CacheApi.SaveInstance(enemyData);
+                CacheApi.SaveInstance(enemyData, CacheApiWrapper.XpModCacheName);
             }
 
             LogManager.Debug($"Enemy kill was registered. Enemy XpData was {enemyXpData.XpGain}.");

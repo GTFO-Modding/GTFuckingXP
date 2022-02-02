@@ -1,4 +1,5 @@
 ﻿using EndskApi.Api;
+using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
 using Player;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace GTFuckingXP.Managers
         {
             #region ClearingOldBoosterEffects
             List<int> playerBoosters;
-            if (!CacheApi.TryGetInformation(targetAgent.Owner.Lookup, out playerBoosters))
+            if (!CacheApi.TryGetInformation(targetAgent.Owner.Lookup, out playerBoosters, CacheApiWrapper.XpModCacheName))
             {
                 playerBoosters = new List<int>();
             }
@@ -37,12 +38,12 @@ namespace GTFuckingXP.Managers
                 }
             }
 
-            CacheApi.SaveInformation(targetAgent.Owner.Lookup, playerBoosters);
+            CacheApi.SaveInformation(targetAgent.Owner.Lookup, playerBoosters, CacheApiWrapper.XpModCacheName);
         }
 
         public BoosterBuffs GetFittingBoosterBuff(int levelLayoutPersistendId, int levelNumber)
         {
-            var boosters = CacheApi.GetInstance<List<BoosterBuffs>>();
+            var boosters = CacheApi.GetInstance<List<BoosterBuffs>>(CacheApiWrapper.XpModCacheName);
             var buff = boosters.FirstOrDefault(it => it.ClassLayoutPersistentId == levelLayoutPersistendId && it.ActiveLevels.Contains(levelNumber));
             LogManager.Debug($"GetfittingBoosterBuff call with {levelLayoutPersistendId} as ID and {levelNumber} as levelNumber. {(buff != null ? $"buff found" : "Buff is null")}");
 

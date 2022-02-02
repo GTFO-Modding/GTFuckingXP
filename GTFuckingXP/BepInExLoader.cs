@@ -2,7 +2,9 @@
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using EndskApi.Api;
+using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
+using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Patches.SelectLevelPatches;
@@ -10,6 +12,7 @@ using GTFuckingXP.Scripts;
 using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using UnhollowerRuntimeLib;
 
 namespace GTFuckingXP
@@ -77,6 +80,7 @@ namespace GTFuckingXP
             Harmony = new Harmony(GUID);
             FasterPatching();
 
+            CacheApiWrapper.SetLvlUpCallBackList(new List<Action<Level>>());
             InitApi.AddInitCallback(() => { ScriptManager.Instance.Initialize(); });
         }
 

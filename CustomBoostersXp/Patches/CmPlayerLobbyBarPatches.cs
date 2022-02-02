@@ -22,7 +22,7 @@ namespace CustomBoostersXp.Patches
             var implantInventory = PersistentInventoryManager.GetBoosterImplantInventory(category);
 
             var activeClass = CacheApiWrapper.GetCurrentLevelLayout();
-            var boosters = CacheApi.GetInstance<List<Booster>>().Where(it => it.Category == category && it.UsableForClassPersistentIds.Contains(activeClass.PersistentId));
+            var boosters = CacheApi.GetInstance<List<Booster>>(CacheApiWrapper.XpModCacheName).Where(it => it.Category == category && it.UsableForClassPersistentIds.Contains(activeClass.PersistentId));
             CacheApiWrapperBooster.TryGetBooster(category, out var booster);
 
 

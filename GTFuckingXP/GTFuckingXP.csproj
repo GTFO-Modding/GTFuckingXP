@@ -65,6 +65,7 @@
     <Compile Include="Information\WebModels\XpWebModel.cs" />
     <Compile Include="Managers\BoosterBuffManager.cs" />
     <Compile Include="Managers\CustomScalingBuffManager.cs" />
+    <Compile Include="Managers\JsonSerializeManager.cs" />
     <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\NetworkApiXpManager.cs" />
     <Compile Include="Managers\ScriptManager.cs" />

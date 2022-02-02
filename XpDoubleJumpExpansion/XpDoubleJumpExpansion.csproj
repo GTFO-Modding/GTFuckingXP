@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E95D147E-B86F-4A34-8B58-62447FDF42C3}</ProjectGuid>
+    <ProjectGuid>{F52C231D-E680-4D38-AEC0-730CC0E7CA7E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EndskApi</RootNamespace>
-    <AssemblyName>EndskApi</AssemblyName>
+    <RootNamespace>XpDoubleJumpExpansion</RootNamespace>
+    <AssemblyName>XpDoubleJumpExpansion</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,25 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Api\BoosterApi.cs" />
-    <Compile Include="Api\CacheApi.cs" />
-    <Compile Include="Api\CheckpointApi.cs" />
-    <Compile Include="Api\EndLevelApi.cs" />
-    <Compile Include="Api\InitApi.cs" />
-    <Compile Include="BepInExLoader.cs" />
-    <Compile Include="Enums\Booster\BoosterCategory.cs" />
-    <Compile Include="Enums\Booster\CustomBoosterModifiers.cs" />
-    <Compile Include="Information\BoosterInfo\BoosterCondition.cs" />
-    <Compile Include="Information\BoosterInfo\BoosterEffect.cs" />
-    <Compile Include="Information\BoosterInfo\IBooster.cs" />
-    <Compile Include="Manager\Internal\InformationCache.cs" />
-    <Compile Include="Manager\Internal\NetworkManager.cs" />
+    <Compile Include="BepinexLoader.cs" />
+    <Compile Include="Information\DoubleJumpExpansionData.cs" />
+    <Compile Include="Manager\DoubleJumpExpansionManager.cs" />
     <Compile Include="Manager\LogManager.cs" />
-    <Compile Include="Patches\Booster\PersistentInventoryManagerPatches.cs" />
-    <Compile Include="Patches\Checkpoint\CheckpointManagerPatches.cs" />
-    <Compile Include="Patches\EndLevel\GsAfterLevelPatches.cs" />
-    <Compile Include="Patches\Init\GUIManagerPatches.cs" />
-    <Compile Include="Patches\Init\PageRundownNewPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,11 +86,17 @@
     <Reference Include="DissonanceVoip">
       <HintPath>..\GTFuckingXP\LiB\DissonanceVoip.dll</HintPath>
     </Reference>
+    <Reference Include="DoubleJump">
+      <HintPath>LiB\DoubleJump.dll</HintPath>
+    </Reference>
     <Reference Include="DropServerSDK-ASM">
       <HintPath>..\GTFuckingXP\LiB\DropServerSDK-ASM.dll</HintPath>
     </Reference>
     <Reference Include="ExcludeInBuild-ASM">
       <HintPath>..\GTFuckingXP\LiB\ExcludeInBuild-ASM.dll</HintPath>
+    </Reference>
+    <Reference Include="FloatingTextAPI">
+      <HintPath>..\GTFuckingXP\LiB\FloatingTextAPI.dll</HintPath>
     </Reference>
     <Reference Include="FluffyUnderware.DevTools">
       <HintPath>..\GTFuckingXP\LiB\FluffyUnderware.DevTools.dll</HintPath>
@@ -492,6 +483,18 @@
       <HintPath>..\GTFuckingXP\LiB\Wwise-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="LiB\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EndskApi\EndskApi.csproj">
+      <Project>{E95D147E-B86F-4A34-8B58-62447FDF42C3}</Project>
+      <Name>EndskApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GTFuckingXP\GTFuckingXP.csproj">
+      <Project>{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}</Project>
+      <Name>GTFuckingXP</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

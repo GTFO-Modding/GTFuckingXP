@@ -36,7 +36,7 @@ namespace GTFuckingXP.Managers
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)
         {
             LogManager.Debug("Received xp networking package");
-            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler, CacheApiWrapper.XpModCacheName))
             {
                 xpHandler.AddXp(xpData, new UnityEngine.Vector3(xpData.PositionX, xpData.PositionY, xpData.PositionZ));
             }
@@ -44,7 +44,7 @@ namespace GTFuckingXP.Managers
 
         public static void ReceiveHalfAssedXp(ulong snetPlayer, GtfoApiXpInfo xpData)
         {
-            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler, CacheApiWrapper.XpModCacheName))
             {
                 xpHandler.AddXp(xpData, new UnityEngine.Vector3(xpData.PositionX, xpData.PositionY, xpData.PositionZ), xpData.ForceDebuffXp, "<#888>");
             }
@@ -53,7 +53,7 @@ namespace GTFuckingXP.Managers
         public static void ReceiveStaticXp(ulong snetPlayer, StaticXpInfo xpInfo)
         {
             LogManager.Debug("Received static xp networking pckage");
-            if (CacheApi.TryGetInstance(out XpHandler xpHandler))
+            if (CacheApi.TryGetInstance(out XpHandler xpHandler, CacheApiWrapper.XpModCacheName))
             {
                 xpHandler.AddXp(xpInfo, xpInfo.Position, false, "<#F30>");
             }

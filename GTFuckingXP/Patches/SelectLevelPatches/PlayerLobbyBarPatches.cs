@@ -53,7 +53,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             LogManager.Debug($"SetupFromPage Postfix on {__instance.GetInstanceID()}");
             var classButton = __instance.m_clothesButton.gameObject.Instantiate<CM_LobbyScrollItem>("ClassSelectorButton");
 
-            CacheApi.SaveInformation(__instance.GetInstanceID(), classButton);
+            CacheApi.SaveInformation(__instance.GetInstanceID(), classButton, CacheApiWrapper.XpModCacheName);
 
             classButton.transform.Translate(new UnityEngine.Vector3(0f, -70f, 0f));
             classButton.SetOnBtnPressCallback((Action<int>)((int test) =>
@@ -79,7 +79,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
                 return;
             }
 
-            var scrollItem = CacheApi.GetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID());
+            var scrollItem = CacheApi.GetInformation<CM_LobbyScrollItem>(__instance.GetInstanceID(), CacheApiWrapper.XpModCacheName);
             if (__instance.m_player.IsLocal)
             {
                 scrollItem.gameObject.SetActive(!hide);
@@ -107,7 +107,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             lobbyBar.m_popupScrollWindow.SetSize(new UnityEngine.Vector2(1600f, 700f));
             lobbyBar.m_popupScrollWindow.ResetHeaders();
 
-            var groups = CacheApi.GetInstance<List<Group>>();
+            var groups = CacheApi.GetInstance<List<Group>>(CacheApiWrapper.XpModCacheName);
 
             AddHeaders(lobbyBar, groups);
 
@@ -140,7 +140,7 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             LogManager.Debug($"Showing groupname {groupName}");
 
             var contentItems = new Il2CppSystem.Collections.Generic.List<iScrollWindowContent>();
-            var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>();
+            var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName);
             var activeLayout = CacheApiWrapper.GetCurrentLevelLayout();
 
             var infoBox = lobbyBar.m_popupScrollWindow.InfoBox;
@@ -215,13 +215,13 @@ namespace GTFuckingXP.Patches.SelectLevelPatches
             if(oldSelectItem != null)
             {
                 oldSelectItem.m_subTitleText.text = "";
-                CacheApi.SaveInstance<CM_LobbyScrollItem>(null);
+                CacheApi.SaveInstance<CM_LobbyScrollItem>(null,CacheApiWrapper.XpModCacheName);
             }
 
             if(newSelectItem != null)
             {
                 newSelectItem.m_subTitleText.text = "<color=orange>" + Text.Get(492U) + "</color>";
-                CacheApi.SaveInstance(newSelectItem);
+                CacheApi.SaveInstance(newSelectItem, CacheApiWrapper.XpModCacheName);
             }
         }
 

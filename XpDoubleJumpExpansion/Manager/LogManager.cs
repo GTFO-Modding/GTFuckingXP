@@ -1,15 +1,15 @@
 ﻿using BepInEx.Logging;
 
-namespace GTFuckingXP.Managers
+namespace XpDoubleJumpExpansion.Manager
 {
-    internal class LogManager
+    public class LogManager
     {
-        private static readonly ManualLogSource logger;
-        private static readonly bool _debugMessagesActive;
-        static LogManager()
+        private static ManualLogSource logger;
+        public static bool _debugMessagesActive;
+
+        internal static void SetLogger(ManualLogSource log)
         {
-            _debugMessagesActive = BepInExLoader.DebugMessages.Value;
-            logger = new ManualLogSource(BepInExLoader.MODNAME);
+            logger = log;
             Logger.Sources.Add(logger);
         }
 
@@ -33,7 +33,7 @@ namespace GTFuckingXP.Managers
 
         public static void Error(object msg)
         {
-                logger.LogError(msg);
+            logger.LogError(msg);
         }
 
         public static void Warn(object msg)

@@ -64,7 +64,7 @@ namespace GTFuckingXP.Scripts
 
             if(Input.GetKeyDown(KeyCode.KeypadDivide))
             {
-                var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>();
+                var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName);
                 var currentLayout = CacheApiWrapper.GetCurrentLevelLayout();
 
                 var index = levelLayouts.IndexOf(currentLayout);

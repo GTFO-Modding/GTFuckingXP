@@ -20,6 +20,12 @@ namespace GTFuckingXP.Scripts
         private bool _hasDebuff;
         private float _nextUpdate;
 
+        //TODO List:
+        //TODO Blink Mod
+        //TODO Blink Mod expansion
+        //TODO Incomming Damage scaling
+        //TODO class specific weapons
+
         public XpHandler(IntPtr intPtr) : base(intPtr)
         {  }
 
@@ -59,7 +65,7 @@ namespace GTFuckingXP.Scripts
                 NextLevel = levelLayout.Levels.FirstOrDefault(it => it.LevelNumber == newActiveLevel.LevelNumber + 1);
                 CurrentTotalXp = 0;
                 ChangeCurrentLevel(newActiveLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levelLayout.PersistentId, newActiveLevel.LevelNumber));
-                CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
+                CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, levelLayout.Header);
             }
             _nextUpdate = Time.time + 300f;
         }
@@ -96,7 +102,7 @@ namespace GTFuckingXP.Scripts
                 DamageNumberFactory.CreateFloatingText<FloatingTextBase>(new FloatingXpTextInfo(xpTextPosition, $"{xpPopupColor}{xpValue}XP"));
             }
 
-            CacheApi.GetInstance<XpBar>().UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
+            CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).UpdateUiString(CacheApiWrapper.GetActiveLevel(), NextLevel, CurrentTotalXp, header);
         }
 
         /// <summary>

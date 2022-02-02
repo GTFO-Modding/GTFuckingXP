@@ -48,7 +48,7 @@ namespace GTFuckingXP.Managers
                     case Enums.CustomScaling.MovementSpeedMultiplier:
                         LogManager.Debug("Pre movment speed");
                         var playerData = targetAgent.PlayerData;
-                        if(!CacheApiWrapper.TryGetDefaultMovment(out var movmentInfo))
+                        if (!CacheApiWrapper.TryGetDefaultMovment(out var movmentInfo))
                         {
                             movmentInfo.walk = playerData.walkMoveSpeed;
                             movmentInfo.run = playerData.runMoveSpeed;
@@ -64,29 +64,29 @@ namespace GTFuckingXP.Managers
                         LogManager.Debug("Post movment speed");
                         break;
                     case Enums.CustomScaling.AntiFogSphere:
-                        if (!targetAgent.IsLocallyOwned)
-                            break;
+                        //if (!targetAgent.IsLocallyOwned)
+                        //    break;
 
-                        var fogSphere = targetAgent.gameObject.GetComponent<FogRepeller_Sphere>();
-                        if (buff.Value > 0.1f)
-                        {
-                            if (fogSphere is null)
-                            {
-                                fogSphere = targetAgent.gameObject.AddComponent<FogRepeller_Sphere>();
-                            }
-                            fogSphere.LifeDuration = 36000f;
-                            fogSphere.GrowDuration = 5f;
-                            fogSphere.Range = buff.Value;
+                        //var fogSphere = targetAgent.gameObject.GetComponent<FogRepeller_Sphere>();
+                        //if (buff.Value > 0.1f)
+                        //{
+                        //    if (fogSphere is null)
+                        //    {
+                        //        fogSphere = targetAgent.gameObject.AddComponent<FogRepeller_Sphere>();
+                        //    }
+                        //    fogSphere.LifeDuration = 36000f;
+                        //    fogSphere.GrowDuration = 5f;
+                        //    fogSphere.Range = buff.Value;
 
-                            StartRepellerWithoutSound(fogSphere);
-                        }
-                        else
-                        {
-                            if(fogSphere != null)
-                            {
-                                fogSphere.StopRepelling();
-                            }
-                        }
+                        //    fogSphere.StartRepelling();
+                        //}
+                        //else
+                        //{
+                        //    if(fogSphere != null)
+                        //    {
+                        //        fogSphere.StopRepelling();
+                        //    }
+                        //}
                         break;
                 }
             }

@@ -47,7 +47,7 @@ namespace GTFuckingXP.Scripts.SelectLevelPath
         }
         public void Awake()
         {
-            LevelLayoutsSelectable = CacheApi.GetInstance<List<LevelLayout>>();
+            LevelLayoutsSelectable = CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName);
             CurrentIndex = 0;
         }
 

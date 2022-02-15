@@ -13,9 +13,8 @@ namespace CustomBoostersXp.Script
 
         public int AddBooster(Booster booster)
         {
-            CacheApi.SetBooster(booster);
+            //CacheApi.SetBooster(booster);
+            return 0;
         }
-
-        public void 
     }
 }

@@ -123,18 +123,16 @@ namespace GTFuckingXP.Managers
                 return;
 
             var list = new List<CustomScalingBuff>();
-            foreach(var customScalingObj in System.Enum.GetValues(typeof(CustomScaling)))
-            {
-                var customScaling = (CustomScaling)customScalingObj;
-                if (customScaling == CustomScaling.AntiFogSphere)
-                {
-                    list.Add(new CustomScalingBuff(customScaling, 0f));
-                        }
-                else
-                {
-                    list.Add(new CustomScalingBuff(customScaling, 1f));
-                }
-            }
+            list.Add(new CustomScalingBuff(CustomScaling.MeleeRangeMultiplier, 1f));
+            list.Add(new CustomScalingBuff(CustomScaling.MeleeHitBoxSizeMultiplier, 1f));
+            list.Add(new CustomScalingBuff(CustomScaling.MovementSpeedMultiplier, 1f));
+            list.Add(new CustomScalingBuff(CustomScaling.AntiFogSphere, 0f));
+            list.Add(new CustomScalingBuff(CustomScaling.JumpVelInitialPlus, 0f));
+            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulDefaultPlus, 0f));
+            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulButtonReleased, 0f));
+            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulAfterPeakPlus, 0f));
+            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulFallingPlus, 0f));
+            list.Add(new CustomScalingBuff(CustomScaling.JumpVerticalVelocityMaxPlus, 0f));
 
             CustomScalingBuffManager.ApplyCustomScalingEffects(PlayerManager.GetLocalPlayerAgent(), list);
 

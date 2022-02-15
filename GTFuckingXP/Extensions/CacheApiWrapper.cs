@@ -27,6 +27,13 @@ namespace GTFuckingXP.Extensions
         private const string DefaultMeleeHitBoxKey = "DefaultMeleeHitBoxKey";
         private const string DefaultMovmentKey = "DefaultMovmentKeys";
 
+        private const string DefaultJumpVelInitialKey = "DefaultVelInitialKey";
+        private const string DefaultJumpGravityMulDefaultKey = "DefaultJumpGravityMulDefaultKey";
+        private const string DefaultJumpGravityMulButtonReleasedKey = "DefaultJumpGravityMulButtonReleasedKey";
+        private const string DefaultJumpGravityMulAfterPeakKey = "DefaultJumpGravityMulAfterPeakKey";
+        private const string DefaultJumpGravityMulFallingKey = "DefaultJumpGravityMulFallingKey";
+        private const string DefaultJumpVelocityMaxKey = "DefaultJumpVelocityMaxKey";
+
         /// <summary>
         /// Creates a new component of type <typeparamref name="Tscript"/> and saves it into the cache.
         /// Returns the newly created <typeparamref name="Tscript"/> after this.
@@ -229,7 +236,6 @@ namespace GTFuckingXP.Extensions
             return CacheApi.TryGetInformation(DefaultMeleeHitBoxKey, out meleeHitbox, XpModCacheName);
         }
 
-
         public static bool TryGetDefaultMovment(out (float walk, float run, float air, float crouch) movmentData)
         {
             return CacheApi.TryGetInformation(DefaultMovmentKey, out movmentData, XpModCacheName);
@@ -238,6 +244,69 @@ namespace GTFuckingXP.Extensions
         public static void SetDefaultMovment(float walk, float run, float air, float crouch)
         {
             CacheApi.SaveInformation(DefaultMovmentKey, (walk, run, air, crouch), XpModCacheName);
+        }
+
+        public static void SetDefaultJumpVelInitial(float value)
+        {
+            CacheApi.SaveInformation(DefaultJumpVelInitialKey, value, XpModCacheName);
+        }
+
+        public static void SetDefaultJumpGravityMulDefault(float value)
+        {
+            CacheApi.SaveInformation(DefaultJumpGravityMulDefaultKey, value, XpModCacheName);
+        }
+
+        public static void SetDefaultJumpGravityMulButtonReleased(float value)
+        {
+            CacheApi.SaveInformation(DefaultJumpGravityMulButtonReleasedKey, value, XpModCacheName);
+        }
+
+        public static void SetDefaultJumpGravityMulAfterPeak(float value)
+        {
+            CacheApi.SaveInformation(DefaultJumpGravityMulAfterPeakKey, value, XpModCacheName);
+        }
+
+        public static void SetDefaultJumpGravityMulFalling(float value)
+        {
+            CacheApi.SaveInformation(DefaultJumpGravityMulFallingKey, value, XpModCacheName);
+        }
+
+        public static void SetDefaultJumpVelocityMax(float value)
+        {
+            CacheApi.SaveInformation(DefaultJumpVelocityMaxKey, value, XpModCacheName);
+        }
+
+
+
+
+        public static bool TryGetDefaultJumpVelInitial(out float value)
+        {
+            return CacheApi.TryGetInformation(DefaultJumpVelInitialKey, out value, XpModCacheName);
+        }
+
+        public static bool TryGetDefaultJumpGravityMulDefault(out float value)
+        {
+            return CacheApi.TryGetInformation(DefaultJumpGravityMulDefaultKey, out value, XpModCacheName);
+        }
+
+        public static bool TryGetDefaultJumpGravityMulButtonReleased(out float value)
+        {
+            return CacheApi.TryGetInformation(DefaultJumpGravityMulButtonReleasedKey, out value, XpModCacheName);
+        }
+
+        public static bool TryGetDefaultJumpGravityMulAfterPeak(out float value)
+        {
+            return CacheApi.TryGetInformation(DefaultJumpGravityMulAfterPeakKey, out value, XpModCacheName);
+        }
+
+        public static bool TryGetDefaultJumpGravityMulFalling(out float value)
+        {
+            return CacheApi.TryGetInformation(DefaultJumpGravityMulFallingKey, out value, XpModCacheName);
+        }
+
+        public static bool TryGetDefaultJumpVelocityMax(out float value)
+        {
+            return CacheApi.TryGetInformation(DefaultJumpVelocityMaxKey, out value, XpModCacheName);
         }
     }
 }

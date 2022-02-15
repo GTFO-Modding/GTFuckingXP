@@ -88,6 +88,60 @@ namespace GTFuckingXP.Managers
                         //    }
                         //}
                         break;
+                    case Enums.CustomScaling.JumpVelInitialPlus:
+                        if (!CacheApiWrapper.TryGetDefaultJumpVelInitial(out var jumpVelInitialDefault))
+                        {
+                            jumpVelInitialDefault = targetAgent.PlayerData.jumpVelInitial;
+                            CacheApiWrapper.SetDefaultJumpVelInitial(jumpVelInitialDefault);
+                        }
+
+                        targetAgent.PlayerData.jumpVelInitial = jumpVelInitialDefault + buff.Value;
+                        break;
+                    case Enums.CustomScaling.JumpGravityMulDefaultPlus:
+                        if (!CacheApiWrapper.TryGetDefaultJumpGravityMulDefault(out var jumpGravityMul))
+                        {
+                            jumpGravityMul = targetAgent.PlayerData.jumpGravityMulDefault;
+                            CacheApiWrapper.SetDefaultJumpGravityMulDefault(jumpGravityMul);
+                        }
+
+                        targetAgent.PlayerData.jumpGravityMulDefault = jumpGravityMul + buff.Value;
+                        break;
+                    case Enums.CustomScaling.JumpGravityMulButtonReleased:
+                        if (!CacheApiWrapper.TryGetDefaultJumpGravityMulButtonReleased(out var jumpButton))
+                        {
+                            jumpButton = targetAgent.PlayerData.jumpGravityMulButtonReleased;
+                            CacheApiWrapper.SetDefaultJumpGravityMulButtonReleased(jumpButton);
+                        }
+
+                        targetAgent.PlayerData.jumpGravityMulButtonReleased = jumpButton + buff.Value;
+                        break;
+                    case Enums.CustomScaling.JumpGravityMulAfterPeakPlus:
+                        if (!CacheApiWrapper.TryGetDefaultJumpVelInitial(out var jumpGravityMulAfterPeak))
+                        {
+                            jumpGravityMulAfterPeak = targetAgent.PlayerData.jumpGravityMulAfterPeak;
+                            CacheApiWrapper.SetDefaultJumpGravityMulAfterPeak(jumpGravityMulAfterPeak);
+                        }
+
+                        targetAgent.PlayerData.jumpGravityMulAfterPeak= jumpGravityMulAfterPeak + buff.Value;
+                        break;
+                    case Enums.CustomScaling.JumpGravityMulFallingPlus:
+                        if (!CacheApiWrapper.TryGetDefaultJumpGravityMulFalling(out var jumpGravityFalling))
+                        {
+                            jumpGravityFalling = targetAgent.PlayerData.jumpGravityMulFalling;
+                            CacheApiWrapper.SetDefaultJumpGravityMulFalling(jumpGravityFalling);
+                        }
+
+                        targetAgent.PlayerData.jumpGravityMulFalling = jumpGravityFalling + buff.Value;
+                        break;
+                    case Enums.CustomScaling.JumpVerticalVelocityMaxPlus:
+                        if (!CacheApiWrapper.TryGetDefaultJumpVelocityMax(out var jumpVelocityMax))
+                        {
+                            jumpVelocityMax = targetAgent.PlayerData.jumpVerticalVelocityMax;
+                            CacheApiWrapper.SetDefaultJumpVelocityMax(jumpVelocityMax);
+                        }
+
+                        targetAgent.PlayerData.jumpVerticalVelocityMax = jumpVelocityMax + buff.Value;
+                        break;
                 }
             }
         }

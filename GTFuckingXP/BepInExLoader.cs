@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using EndskApi.Api;
+using Gear;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Level;
@@ -31,7 +32,6 @@ namespace GTFuckingXP
 
         public static ConfigEntry<bool> RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
-        public static ConfigEntry<bool> DamagePopups { get; private set; }
         public static ConfigEntry<bool> LvlUpPopups { get; private set; }
         public static ConfigEntry<bool> XpPopups { get; private set; }
         public static ConfigEntry<string> TermsOfUsage { get; internal set; }
@@ -43,10 +43,8 @@ namespace GTFuckingXP
             RundownDevMode = Config.Bind("Dev Settings", "RundownDev Mode", false, "This will activate the xp dev tool while in an expedition \nPress \"Delete\" to hide/show it");
             DebugMessages = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.");
             
-            DamagePopups = Config.Bind("Popups", "Damanage popup", true, "If damage numbers should be shown.");
             LvlUpPopups = Config.Bind("Popups", "Lvl up popups", true, "If Lvl UP popups should be shown.");
             XpPopups = Config.Bind("Popups", "XP gain popups", true, "If XP gain popups should be shown");
-
 
             //TODO remove
             TermsOfUsageState = Information.TermsOfUsage.Declined;

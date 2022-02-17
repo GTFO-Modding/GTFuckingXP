@@ -2,7 +2,7 @@
 
 namespace EndskApi.Manager.Internal
 {
-    internal class InformationCache
+    public class InformationCache
     {
         private readonly Dictionary<string, Dictionary<object, object>> _cache;
 

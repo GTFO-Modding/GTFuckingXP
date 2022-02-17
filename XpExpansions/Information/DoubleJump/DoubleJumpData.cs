@@ -1,10 +1,8 @@
-﻿using GTFuckingXP.Information.Level;
-
-namespace XpDoubleJumpExpansion.Information
+﻿namespace XpExpansions.Information.DoubleJump
 {
-    public class DoubleJumpExpansionData
+    internal class DoubleJumpData
     {
-        public DoubleJumpExpansionData(int levelLayoutPersistentId, int unlockAtLevel)
+        public DoubleJumpData(int levelLayoutPersistentId, int unlockAtLevel)
         {
             LevelLayoutPersistentId = levelLayoutPersistentId;
             UnlockAtLevel = unlockAtLevel;

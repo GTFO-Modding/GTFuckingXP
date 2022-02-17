@@ -1,4 +1,6 @@
 ﻿using EndskApi.Patches.Init;
+using Gear;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 

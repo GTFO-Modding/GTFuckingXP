@@ -64,5 +64,10 @@ namespace EndskApi.Api
         {
             return _informationCache.ContainsKey(key, mod);
         }
+
+        public static InformationCache GetInformationCache()
+        {
+            return _informationCache;
+        }
     }
 }

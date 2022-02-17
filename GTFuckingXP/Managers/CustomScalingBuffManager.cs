@@ -116,7 +116,7 @@ namespace GTFuckingXP.Managers
                         targetAgent.PlayerData.jumpGravityMulButtonReleased = jumpButton + buff.Value;
                         break;
                     case Enums.CustomScaling.JumpGravityMulAfterPeakPlus:
-                        if (!CacheApiWrapper.TryGetDefaultJumpVelInitial(out var jumpGravityMulAfterPeak))
+                        if (!CacheApiWrapper.TryGetDefaultJumpGravityMulAfterPeak(out var jumpGravityMulAfterPeak))
                         {
                             jumpGravityMulAfterPeak = targetAgent.PlayerData.jumpGravityMulAfterPeak;
                             CacheApiWrapper.SetDefaultJumpGravityMulAfterPeak(jumpGravityMulAfterPeak);

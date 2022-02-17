@@ -60,11 +60,16 @@ namespace XpDoubleJumpExpansion.Manager
             var doubleJump = _data.FirstOrDefault(it => it.LevelLayoutPersistentId == levelLayout.PersistentId);
             if(doubleJump != null)
             {
-                if (!_harmonyState && doubleJump.ActiveOnLevels.Contains(level.LevelNumber))
+                if (!_harmonyState && doubleJump.UnlockAtLevel <= level.LevelNumber)
                 {
                     var doubleJumpAssembly = Assembly.GetAssembly(typeof(DoubleJump.EntryPoint));
                     _harmony.PatchAll(doubleJumpAssembly);
                     _harmonyState = true;
+                }
+                else if (_harmonyState)
+                {
+                    _harmony.UnpatchSelf();
+                    _harmonyState = false;
                 }
             }
             else if(_harmonyState)
@@ -76,8 +81,6 @@ namespace XpDoubleJumpExpansion.Manager
 
         private void WriteDefaultJsonBlocks()
         {
-           
-
             if (!Directory.Exists(_folderPath))
             {
                 Directory.CreateDirectory(_folderPath);
@@ -109,7 +112,7 @@ namespace XpDoubleJumpExpansion.Manager
 
             for(int i = 0; i < 20; i++)
             {
-                data.Add(new DoubleJumpExpansionData(i, new List<int>() { 3, 4, 5, 6, 7, 8, 9, 10 }));
+                data.Add(new DoubleJumpExpansionData(i, 3));
             }
 
             return data;

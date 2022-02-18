@@ -15,15 +15,16 @@ namespace XpExpansions.Manager
         public const string DoubleJumpXpExpansionId = "Endskill.DoubleJumpExpansion";
         private const string _expansionFileName = "DoubleJumpExpansion.json";
 
-        private readonly Harmony _harmony;
         private bool _harmonyState;
 
         public DoubleJumpManager()
         {
-            Harmony.UnpatchID(DoubleJump.EntryPoint.GUID);
-            _harmony = new Harmony(DoubleJumpXpExpansionId);
+            DoubleJumpHarmonyAbility = new Harmony(DoubleJumpXpExpansionId);
+            DoubleJumpHarmonyAbility.UnpatchAll(DoubleJump.EntryPoint.GUID);
             _harmonyState = false;
         }
+
+        public Harmony DoubleJumpHarmonyAbility { get; private set; }
 
         public override void Initialize()
         {
@@ -35,7 +36,7 @@ namespace XpExpansions.Manager
         {
             if (_harmonyState)
             {
-                _harmony.UnpatchSelf();
+                DoubleJumpHarmonyAbility.UnpatchSelf();
                 _harmonyState = false;
             }
         }
@@ -50,18 +51,18 @@ namespace XpExpansions.Manager
                 if (!_harmonyState && doubleJump.UnlockAtLevel <= level.LevelNumber)
                 {
                     var doubleJumpAssembly = Assembly.GetAssembly(typeof(DoubleJump.EntryPoint));
-                    _harmony.PatchAll(doubleJumpAssembly);
+                    DoubleJumpHarmonyAbility.PatchAll(doubleJumpAssembly);
                     _harmonyState = true;
                 }
                 else if (_harmonyState)
                 {
-                    _harmony.UnpatchSelf();
+                    DoubleJumpHarmonyAbility.UnpatchSelf();
                     _harmonyState = false;
                 }
             }
             else if (_harmonyState)
             {
-                _harmony.UnpatchSelf();
+                DoubleJumpHarmonyAbility.UnpatchSelf();
                 _harmonyState = false;
             }
         }

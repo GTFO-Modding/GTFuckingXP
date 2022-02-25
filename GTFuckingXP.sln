@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBoostersXp", "CustomB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndskApi", "EndskApi\EndskApi.csproj", "{E95D147E-B86F-4A34-8B58-62447FDF42C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpDoubleJumpExpansion", "XpDoubleJumpExpansion\XpDoubleJumpExpansion.csproj", "{F52C231D-E680-4D38-AEC0-730CC0E7CA7E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Obsolete", "Obsolete", "{CACE6F4C-5ED8-4C9D-AB75-EC659F019927}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpExpansions", "XpExpansions\XpExpansions.csproj", "{3A950699-5724-4A08-BBD1-557BB97EFD18}"
 EndProject
 Global
@@ -33,10 +29,6 @@ Global
 		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F52C231D-E680-4D38-AEC0-730CC0E7CA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F52C231D-E680-4D38-AEC0-730CC0E7CA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F52C231D-E680-4D38-AEC0-730CC0E7CA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F52C231D-E680-4D38-AEC0-730CC0E7CA7E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,9 +36,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F52C231D-E680-4D38-AEC0-730CC0E7CA7E} = {CACE6F4C-5ED8-4C9D-AB75-EC659F019927}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50A020CA-7ECA-4CEC-97C3-1D1FED33D8A5}

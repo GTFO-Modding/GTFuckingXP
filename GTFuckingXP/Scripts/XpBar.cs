@@ -12,7 +12,7 @@ namespace GTFuckingXP.Scripts
     /// <summary>
     /// XPBar Ui Element.
     /// </summary>
-    public class XpBar : MonoBehaviour //needs to be a monobehaviour because "Components" caused some problems.
+    internal class XpBar : MonoBehaviour //needs to be a monobehaviour because "Components" caused some problems.
     {
         private RectTransform _xpBar;
         private SpriteRenderer _xpProgressBar;

@@ -50,9 +50,7 @@
     <Compile Include="Information\Enemies\EnemyXp.cs" />
     <Compile Include="Information\FloatingXpTextInfo.cs" />
     <Compile Include="Information\Level\BoosterBuffs.cs" />
-    <Compile Include="Information\Level\ConstantMultipliers.cs" />
     <Compile Include="Information\Level\CustomScalingBuff.cs" />
-    <Compile Include="Information\Level\LevelExt.cs" />
     <Compile Include="Information\Level\SingleUseBuffs.cs" />
     <Compile Include="Information\NetworkingInfo\BoosterInfo.cs" />
     <Compile Include="Information\NetworkingInfo\GtfoApiXpInfo.cs" />

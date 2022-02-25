@@ -13,7 +13,7 @@ namespace GTFuckingXP.Scripts
     /// <summary>
     /// A menu that can be hidden to 
     /// </summary>
-    public class DevModeTools : MonoBehaviour
+    internal class DevModeTools : MonoBehaviour
     {
         private static bool _guiInitialized = false;
         private static GUIStyle _normalStyle;

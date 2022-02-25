@@ -1,11 +1,11 @@
 ﻿using BepInEx.Logging;
 
-namespace XpDoubleJumpExpansion.Manager
+namespace XpExpansions.Manager
 {
-    public class LogManager
+    public static class LogManager
     {
         private static ManualLogSource logger;
-        public static bool _debugMessagesActive;
+        internal static bool _debugMessagesActive;
 
         internal static void SetLogger(ManualLogSource log)
         {

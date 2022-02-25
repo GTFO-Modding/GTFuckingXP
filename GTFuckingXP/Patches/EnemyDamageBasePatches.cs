@@ -16,7 +16,7 @@ namespace GTFuckingXP.Patches
 
     [HarmonyBefore(BepInExLoader.GUID, "com.dak.DamageNumbers")]
     [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
-    internal class EnemyDamageBasePatches
+    public class EnemyDamageBasePatches
     {
         internal static Dictionary<string, Dictionary<int, float>> DamageDistribution;
 

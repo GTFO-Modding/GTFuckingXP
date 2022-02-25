@@ -15,7 +15,7 @@ namespace GTFuckingXP.Scripts
     /// <summary>
     /// Handles all Xp interactions.
     /// </summary>
-    public class XpHandler : MonoBehaviour
+    internal class XpHandler : MonoBehaviour
     {
         private bool _hasDebuff;
         private float _nextUpdate;

@@ -46,22 +46,25 @@ namespace GTFuckingXP.Managers
                         }
                         break;
                     case Enums.CustomScaling.MovementSpeedMultiplier:
-                        LogManager.Debug("Pre movment speed");
-                        var playerData = targetAgent.PlayerData;
-                        if (!CacheApiWrapper.TryGetDefaultMovment(out var movmentInfo))
+                        if (targetAgent.IsLocallyOwned)
                         {
-                            movmentInfo.walk = playerData.walkMoveSpeed;
-                            movmentInfo.run = playerData.runMoveSpeed;
-                            movmentInfo.air = playerData.airMoveSpeed;
-                            movmentInfo.crouch = playerData.crouchMoveSpeed;
-                            CacheApiWrapper.SetDefaultMovment(movmentInfo.walk, movmentInfo.run, movmentInfo.air, movmentInfo.crouch);
-                        }
+                            LogManager.Debug("Pre movment speed");
+                            var playerData = targetAgent.PlayerData;
+                            if (!CacheApiWrapper.TryGetDefaultMovment(out var movmentInfo))
+                            {
+                                movmentInfo.walk = playerData.walkMoveSpeed;
+                                movmentInfo.run = playerData.runMoveSpeed;
+                                movmentInfo.air = playerData.airMoveSpeed;
+                                movmentInfo.crouch = playerData.crouchMoveSpeed;
+                                CacheApiWrapper.SetDefaultMovment(movmentInfo.walk, movmentInfo.run, movmentInfo.air, movmentInfo.crouch);
+                            }
 
-                        playerData.walkMoveSpeed = movmentInfo.walk * buff.Value;
-                        playerData.runMoveSpeed = movmentInfo.run * buff.Value;
-                        playerData.airMoveSpeed = movmentInfo.air * buff.Value;
-                        playerData.crouchMoveSpeed = movmentInfo.crouch * buff.Value;
-                        LogManager.Debug("Post movment speed");
+                            playerData.walkMoveSpeed = movmentInfo.walk * buff.Value;
+                            playerData.runMoveSpeed = movmentInfo.run * buff.Value;
+                            playerData.airMoveSpeed = movmentInfo.air * buff.Value;
+                            playerData.crouchMoveSpeed = movmentInfo.crouch * buff.Value;
+                            LogManager.Debug("Post movment speed");
+                        }
                         break;
                     case Enums.CustomScaling.AntiFogSphere:
                         //if (!targetAgent.IsLocallyOwned)

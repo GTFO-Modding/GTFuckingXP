@@ -5,7 +5,7 @@ namespace GTFuckingXP.Extensions
     /// <summary>
     /// Contains some useful extension methods to have an easier workflow with <see cref="GameObject"/>.
     /// </summary>
-    public static class GameObjectExtensions
+    internal static class GameObjectExtensions
     {
         public static T Instantiate<T>(this GameObject gameObject, string name) where T : Component
         {

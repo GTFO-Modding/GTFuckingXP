@@ -15,6 +15,8 @@ namespace XpExpansions.Manager
 
         public ExpansionManager()
         {
+            LogManager.Message("ExpansionManager constructor.");
+
             InitApi.AddInitCallback(Initialize);
             EndLevelApi.AddEndLevelCallback(LevelCleanup);
             GTFuckingXP.Communication.XpApi.AddOnLevelUpCallback(LevelReached);
@@ -27,10 +29,7 @@ namespace XpExpansions.Manager
             WriteDefaultData();
             var managers = CreateManagers();
 
-            managers.Add(new DoubleJumpManager());
-            managers.Add(new ExplosionAbilityManager());
-
-            CacheApi.SaveInstance(managers);
+            CacheApi.SaveInstance(managers, CacheApiWrapper.ExtensionCacheName);
 
             foreach(var manager in managers)
             {
@@ -40,7 +39,7 @@ namespace XpExpansions.Manager
 
         public override void LevelCleanup()
         {
-            var managers = CacheApi.GetInstance<List<BaseManager>>();
+            var managers = CacheApi.GetInstance<List<BaseManager>>(CacheApiWrapper.ExtensionCacheName);
             foreach (var manager in managers)
             {
                 manager.Initialize();
@@ -49,7 +48,7 @@ namespace XpExpansions.Manager
 
         public override void LevelReached(Level level)
         {
-            var managers = CacheApi.GetInstance<List<BaseManager>>();
+            var managers = CacheApi.GetInstance<List<BaseManager>>(CacheApiWrapper.ExtensionCacheName);
             foreach (var manager in managers)
             {
                 manager.Initialize();
@@ -62,6 +61,8 @@ namespace XpExpansions.Manager
 
             var expansionsPath = Path.Combine(FolderPath, ExpansionActivePath);
             var activeExpansions = JsonSerializer.Deserialize<ActiveExpansions>(File.ReadAllText(expansionsPath));
+
+            LogManager.Debug("CreateManagers method.");
 
             if(activeExpansions != null)
             {

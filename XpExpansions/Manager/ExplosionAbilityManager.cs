@@ -1,5 +1,6 @@
 ﻿using GTFuckingXP.Information.Level;
 using HarmonyLib;
+using XpExpansions.Patches;
 
 namespace XpExpansions.Manager
 {
@@ -14,7 +15,16 @@ namespace XpExpansions.Manager
 
         public Harmony ExplosionHarmony { get; private set; }
 
+        public override void Initialize()
+        {
+            //ExplosionHarmony.PatchAll(typeof(MwsAttackSwingBasePatches));
+        }
+
         public override void LevelReached(Level level)
+        {
+        }
+
+        public override void LevelCleanup()
         {
         }
     }

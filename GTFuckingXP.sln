@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndskApi", "EndskApi\EndskA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpExpansions", "XpExpansions\XpExpansions.csproj", "{3A950699-5724-4A08-BBD1-557BB97EFD18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OverrideXpClasses", "OverrideXpClasses\OverrideXpClasses.csproj", "{A647416D-4215-46AB-96E0-DB5BF52DBA34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

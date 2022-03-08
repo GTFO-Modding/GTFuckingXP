@@ -10,7 +10,6 @@ namespace XpExpansions.Manager
         internal static void SetLogger(ManualLogSource log)
         {
             logger = log;
-            Logger.Sources.Add(logger);
         }
 
         public static void Verbose(object msg)

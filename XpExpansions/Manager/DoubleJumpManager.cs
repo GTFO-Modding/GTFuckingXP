@@ -20,7 +20,7 @@ namespace XpExpansions.Manager
         public DoubleJumpManager()
         {
             DoubleJumpHarmonyAbility = new Harmony(DoubleJumpXpExpansionId);
-            Harmony.UnpatchID(DoubleJump.EntryPoint.GUID);
+            DoubleJumpHarmonyAbility.UnpatchAll(DoubleJump.EntryPoint.GUID);
             _harmonyState = false;
         }
 
@@ -43,6 +43,8 @@ namespace XpExpansions.Manager
 
         public override void LevelReached(Level level)
         {
+            LogManager.Message("LevelReached, DoubleJump");
+
             var levelLayout = GTFuckingXP.Extensions.CacheApiWrapper.GetCurrentLevelLayout();
             var data = CacheApi.GetInstance<List<DoubleJumpData>>(Extensions.CacheApiWrapper.ExtensionCacheName);
             var doubleJump = data.FirstOrDefault(it => it.LevelLayoutPersistentId == levelLayout.PersistentId);

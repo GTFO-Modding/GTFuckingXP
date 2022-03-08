@@ -8,7 +8,6 @@ using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
-using GTFuckingXP.Scripts.SelectLevelPath;
 using GTFuckingXP.StolenCode;
 using Player;
 using System;
@@ -91,6 +90,8 @@ namespace GTFuckingXP.Managers
             WriteDefaultJsonBlocks();
             UpdateEverything();
 
+            CacheApiWrapper.SetCurrentLevelLayout(CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName)[0]);
+
             CheckpointApi.AddCheckpointReachedCallback(CreateCheckpointData);
             CheckpointApi.AddCheckpointCleanupCallback(CheckpointsCleanup);
         }
@@ -107,7 +108,6 @@ namespace GTFuckingXP.Managers
 
             CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>(), CacheApiWrapper.XpModCacheName);
             _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
-            CacheApiWrapper.KillScript<SelectLevelPathHandler>();
             if (BepInExLoader.RundownDevMode.Value)
             {
                 CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();

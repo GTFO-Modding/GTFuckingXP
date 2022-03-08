@@ -2,7 +2,6 @@
 using GTFuckingXP.Communication;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
-using GTFuckingXP.Managers;
 using Player;
 using System;
 using System.Collections.Generic;

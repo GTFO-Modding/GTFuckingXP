@@ -2,7 +2,6 @@
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using EndskApi.Api;
-using Gear;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Level;
@@ -10,7 +9,6 @@ using GTFuckingXP.Managers;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Patches.SelectLevelPatches;
 using GTFuckingXP.Scripts;
-using GTFuckingXP.Scripts.SelectLevelPath;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -64,7 +62,6 @@ namespace GTFuckingXP
 
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
-            ClassInjector.RegisterTypeInIl2Cpp<SelectLevelPathHandler>();
             if (RundownDevMode.Value)
             {
                 ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
@@ -85,7 +82,6 @@ namespace GTFuckingXP
         private void FasterPatching()
         {
             //LevelSelectorPatches
-            Harmony.PatchAll(typeof(MainMenuGuiLayerPatches));
             Harmony.PatchAll(typeof(PlayerLobbyBarPatches));
 
             //General xp mod usage

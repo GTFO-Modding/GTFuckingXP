@@ -1,13 +1,10 @@
 ﻿using BepInEx;
 using EndskApi.Api;
-using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.ClassSelector;
 using GTFuckingXP.Information.Level;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

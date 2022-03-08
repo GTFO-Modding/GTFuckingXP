@@ -116,8 +116,10 @@ namespace GTFuckingXP.Extensions
             {
                 NetworkApiXpManager.SendNewLevelActive(newLevel);
             }
+
             foreach (var callBack in GetLvlUpCallBackList())
             {
+                LogManager.Message("Doing some weird Lvl Up callback stuff");
                 callBack.Invoke(newLevel);
             }
         }

@@ -48,6 +48,8 @@ namespace XpExpansions.Manager
 
         public override void LevelReached(Level level)
         {
+            LogManager.Message("LevelReached in the Expansion Manager.");
+
             var managers = CacheApi.GetInstance<List<BaseManager>>(CacheApiWrapper.ExtensionCacheName);
             foreach (var manager in managers)
             {

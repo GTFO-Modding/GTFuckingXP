@@ -20,6 +20,7 @@ namespace GTFuckingXP
     [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("Endskill.EndskApi", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.dak.FloatingTextAPI", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("Endskill.DevToolbelt", BepInDependency.DependencyFlags.SoftDependency)]
     public class BepInExLoader : BasePlugin
     {
         public const string
@@ -28,7 +29,7 @@ namespace GTFuckingXP
         GUID = AUTHOR + "." + MODNAME,
         VERSION = "1.3.1";
 
-        public static ConfigEntry<bool> RundownDevMode { get; private set; }
+        public static bool RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
         public static ConfigEntry<bool> LvlUpPopups { get; private set; }
         public static ConfigEntry<bool> XpPopups { get; private set; }
@@ -38,7 +39,6 @@ namespace GTFuckingXP
 
         public override void Load()
         {
-            RundownDevMode = Config.Bind("Dev Settings", "RundownDev Mode", false, "This will activate the xp dev tool while in an expedition \nPress \"Delete\" to hide/show it");
             DebugMessages = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.");
             
             LvlUpPopups = Config.Bind("Popups", "Lvl up popups", true, "If Lvl UP popups should be shown.");
@@ -62,10 +62,7 @@ namespace GTFuckingXP
 
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
-            if (RundownDevMode.Value)
-            {
-                ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
-            }
+           
 
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();
@@ -77,6 +74,12 @@ namespace GTFuckingXP
 
             CacheApiWrapper.SetLvlUpCallBackList(new List<Action<Level>>());
             InitApi.AddInitCallback(() => { ScriptManager.Instance.Initialize(); });
+
+            if (IL2CPPChainloader.Instance.Plugins.ContainsKey("Endskill.DevToolbelt"))
+            {
+                RundownDevMode = true;
+                ClassInjector.RegisterTypeInIl2Cpp<DevTools>();
+            }
         }
 
         private void FasterPatching()

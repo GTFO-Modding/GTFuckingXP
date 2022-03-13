@@ -1,15 +1,15 @@
-﻿namespace EndskApi.Api
-{
-    public static class BoosterApi
-    {
-        static BoosterApi()
-        {
-            //TODO CreateBoosterPatches
-        }
+﻿//namespace EndskApi.Api
+//{
+//    public static class BoosterApi
+//    {
+//        static BoosterApi()
+//        {
+//            //TODO CreateBoosterPatches
+//        }
 
-        public static void AddBooster()
-        {
+//        public static void AddBooster()
+//        {
 
-        }
-    }
-}
+//        }
+//    }
+//}

@@ -94,6 +94,12 @@ namespace GTFuckingXP.Managers
 
             CheckpointApi.AddCheckpointReachedCallback(CreateCheckpointData);
             CheckpointApi.AddCheckpointCleanupCallback(CheckpointsCleanup);
+
+            if (BepInExLoader.RundownDevMode)
+            {
+
+                DevToolbelt.Api.DevToolbeltApi.AddPage("Xp Tools", CacheApiWrapper.CreateRegisterAndReturnComponent<DevTools>());
+            }
         }
 
         /// <summary>
@@ -108,10 +114,6 @@ namespace GTFuckingXP.Managers
 
             CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>(), CacheApiWrapper.XpModCacheName);
             _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
-            if (BepInExLoader.RundownDevMode.Value)
-            {
-                CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
-            }
         }
 
         /// <summary>
@@ -139,7 +141,6 @@ namespace GTFuckingXP.Managers
             CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
-            CacheApiWrapper.KillScript<DevModeTools>();
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
             CacheApiWrapper.RemoveDefaultMeleeRange();
             CacheApiWrapper.RemoveDefaultMeleeHitBox();

@@ -73,10 +73,10 @@
     <Compile Include="Patches\SnetSessionHubPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\BlinkKnife.cs" />
-    <Compile Include="Scripts\DevModeTools.cs" />
+    <Compile Include="Scripts\DevTools.cs" />
     <Compile Include="Scripts\XpBar.cs" />
     <Compile Include="Scripts\XpHandler.cs" />
-    <Compile Include="StolenCode\MtfoUtils.cs" />
+    <Compile Include="Utils\MtfoUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -117,6 +117,9 @@
     </Reference>
     <Reference Include="DevConsoloe-ASM">
       <HintPath>LiB\DevConsoloe-ASM.dll</HintPath>
+    </Reference>
+    <Reference Include="DevToolbelt">
+      <HintPath>LiB\Plugins\DevToolbelt.dll</HintPath>
     </Reference>
     <Reference Include="Dissonance-integrations-ASM">
       <HintPath>LiB\Dissonance-integrations-ASM.dll</HintPath>

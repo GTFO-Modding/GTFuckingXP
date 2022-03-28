@@ -39,6 +39,7 @@ namespace GTFuckingXP
 
         public override void Load()
         {
+            RundownDevMode = Config.Bind("Dev Settings", "RundownDev Mode", false, "This will activate the xp dev tool while in an expedition \nPress \"Delete\" to hide/show it").Value;
             DebugMessages = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.");
             
             LvlUpPopups = Config.Bind("Popups", "Lvl up popups", true, "If Lvl UP popups should be shown.");
@@ -62,7 +63,7 @@ namespace GTFuckingXP
 
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
-           
+            ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
 
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();
@@ -75,11 +76,11 @@ namespace GTFuckingXP
             CacheApiWrapper.SetLvlUpCallBackList(new List<Action<Level>>());
             InitApi.AddInitCallback(() => { ScriptManager.Instance.Initialize(); });
 
-            if (IL2CPPChainloader.Instance.Plugins.ContainsKey("Endskill.DevToolbelt"))
-            {
-                RundownDevMode = true;
-                ClassInjector.RegisterTypeInIl2Cpp<DevTools>();
-            }
+            //if (IL2CPPChainloader.Instance.Plugins.ContainsKey("Endskill.DevToolbelt"))
+            //{
+            //    RundownDevMode = true;
+            //    ClassInjector.RegisterTypeInIl2Cpp<DevTools>();
+            //}
         }
 
         private void FasterPatching()

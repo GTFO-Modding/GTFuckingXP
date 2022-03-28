@@ -35,23 +35,28 @@
     <Compile Include="Api\CacheApi.cs" />
     <Compile Include="Api\CheckpointApi.cs" />
     <Compile Include="Api\EndLevelApi.cs" />
+    <Compile Include="Api\EnemyKillApi.cs" />
     <Compile Include="Api\InitApi.cs" />
     <Compile Include="Api\GearSwitchApi.cs" />
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Enums\Booster\BoosterCategory.cs" />
     <Compile Include="Enums\Booster\CustomBoosterModifiers.cs" />
+    <Compile Include="Enums\EnemyKill\LastHitType.cs" />
     <Compile Include="Information\BoosterInfo\BoosterCondition.cs" />
     <Compile Include="Information\BoosterInfo\BoosterEffect.cs" />
     <Compile Include="Information\BoosterInfo\IBooster.cs" />
+    <Compile Include="Information\EnemyKill\EnemyKillDistribution.cs" />
     <Compile Include="Information\WeaponSwitcher\GearInfo.cs" />
     <Compile Include="Manager\Internal\InformationCache.cs" />
     <Compile Include="Manager\Internal\NetworkManager.cs" />
     <Compile Include="Manager\LogManager.cs" />
     <Compile Include="Patches\Checkpoint\CheckpointManagerPatches.cs" />
     <Compile Include="Patches\EndLevel\GsAfterLevelPatches.cs" />
+    <Compile Include="Patches\EnemyKill\EnemyDamageBasePatches.cs" />
     <Compile Include="Patches\Init\GUIManagerPatches.cs" />
     <Compile Include="Patches\Init\PageRundownNewPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\MtfoUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">

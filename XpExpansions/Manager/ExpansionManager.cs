@@ -42,7 +42,7 @@ namespace XpExpansions.Manager
             var managers = CacheApi.GetInstance<List<BaseManager>>(CacheApiWrapper.ExtensionCacheName);
             foreach (var manager in managers)
             {
-                manager.Initialize();
+                manager.LevelCleanup();
             }
         }
 
@@ -53,7 +53,7 @@ namespace XpExpansions.Manager
             var managers = CacheApi.GetInstance<List<BaseManager>>(CacheApiWrapper.ExtensionCacheName);
             foreach (var manager in managers)
             {
-                manager.Initialize();
+                manager.LevelReached(level);
             }
         }
 

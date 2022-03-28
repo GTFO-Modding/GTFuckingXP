@@ -12,7 +12,7 @@ namespace GTFuckingXP.Scripts
     /// <summary>
     /// A menu that can be hidden to 
     /// </summary>
-    internal class DevModeTools : MonoBehaviour
+    public class DevModeTools : MonoBehaviour
     {
         private static bool _guiInitialized = false;
         private static GUIStyle _normalStyle;
@@ -30,44 +30,44 @@ namespace GTFuckingXP.Scripts
 
         public void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Delete))
+            if (Input.GetKeyDown(KeyCode.Delete))
             {
                 _active = !_active;
             }
 
-            if(!_active)
+            if (!_active)
             {
                 return;
             }
 
-            if(Input.GetKeyDown(KeyCode.KeypadPlus))
+            if (Input.GetKeyDown(KeyCode.KeypadPlus))
             {
-                if(XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber + 1, out var cheatedXp))
+                if (XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber + 1, out var cheatedXp))
                 {
                     CheatedXpMessage(cheatedXp);
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.KeypadMinus))
+            if (Input.GetKeyDown(KeyCode.KeypadMinus))
             {
-                if (XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber -1, out var cheatedXp))
+                if (XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber - 1, out var cheatedXp))
                 {
                     CheatedXpMessage(cheatedXp);
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.KeypadMultiply))
+            if (Input.GetKeyDown(KeyCode.KeypadMultiply))
             {
                 XpApi.ReloadData();
             }
 
-            if(Input.GetKeyDown(KeyCode.KeypadDivide))
+            if (Input.GetKeyDown(KeyCode.KeypadDivide))
             {
                 var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName);
                 var currentLayout = CacheApiWrapper.GetCurrentLevelLayout();
 
                 var index = levelLayouts.IndexOf(currentLayout);
-                if(levelLayouts.Count <= index + 1)
+                if (levelLayouts.Count <= index + 1)
                 {
                     XpApi.ChangeCurrentLevelLayout(levelLayouts[0]);
                 }
@@ -110,7 +110,7 @@ namespace GTFuckingXP.Scripts
 
         public void OnGUI()
         {
-            if(!_active)
+            if (!_active)
             {
                 return;
             }
@@ -132,7 +132,7 @@ namespace GTFuckingXP.Scripts
 
         private void AddCharToXpNumber(string number)
         {
-            if(Time.time > _timeTillXpNumberInvalid)
+            if (Time.time > _timeTillXpNumberInvalid)
             {
                 _addXpNumber = string.Empty;
             }

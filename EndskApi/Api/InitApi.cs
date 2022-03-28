@@ -37,7 +37,6 @@ namespace EndskApi.Api
                 }
 
                 CacheApi.RemoveInformation(InitKey, CacheApi.InternalCache);
-
             }
         }
     }

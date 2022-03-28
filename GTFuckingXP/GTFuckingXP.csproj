@@ -73,6 +73,7 @@
     <Compile Include="Patches\SnetSessionHubPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\BlinkKnife.cs" />
+    <Compile Include="Scripts\DevModeTools.cs" />
     <Compile Include="Scripts\DevTools.cs" />
     <Compile Include="Scripts\XpBar.cs" />
     <Compile Include="Scripts\XpHandler.cs" />

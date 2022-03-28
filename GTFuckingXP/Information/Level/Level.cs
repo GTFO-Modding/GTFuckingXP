@@ -78,5 +78,10 @@ namespace GTFuckingXP.Information.Level
         /// Gets or sets the single use buffs that gets applied when reaching this level.
         /// </summary>
         public List<SingleUseBuff> LevelUpBonus { get; set; }
+
+        public override string ToString()
+        {
+            return $"LevelNumber {LevelNumber}";
+        }
     }
 }

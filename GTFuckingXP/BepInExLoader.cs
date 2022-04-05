@@ -74,6 +74,7 @@ namespace GTFuckingXP
             FasterPatching();
 
             CacheApiWrapper.SetLvlUpCallBackList(new List<Action<Level>>());
+            CacheApiWrapper.SetScriptsStartedCallBackList(new List<Action<Level>>());
             InitApi.AddInitCallback(() => { ScriptManager.Instance.Initialize(); });
 
             //if (IL2CPPChainloader.Instance.Plugins.ContainsKey("Endskill.DevToolbelt"))

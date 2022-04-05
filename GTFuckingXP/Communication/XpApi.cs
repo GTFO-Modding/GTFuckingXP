@@ -180,5 +180,14 @@ namespace GTFuckingXP.Communication
         {
             CacheApiWrapper.AddLvlUpCallback(lvlUpCallback);   
         }
+
+        /// <summary>
+        /// Adds <paramref name="scriptsLoadedCallback"/> to the scripts loaded callback list, invoked when the <see cref="XpHandler"/> is finished with initializing the levels.
+        /// </summary>
+        /// <param name="scriptsLoadedCallback">The event that should be invoked.</param>
+        public static void AddScriptsLoaded(Action<Level> scriptsLoadedCallback)
+        {
+            CacheApiWrapper.AddScriptsStartedCallback(scriptsLoadedCallback);
+        }
     }
 }

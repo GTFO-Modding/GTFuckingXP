@@ -21,6 +21,7 @@ namespace XpExpansions.Manager
         }
 
         public abstract void LevelReached(Level level);
+        public virtual void LevelInitialized(Level level) { }
         public virtual void Initialize() { }
         public virtual void LevelCleanup() { }
     }

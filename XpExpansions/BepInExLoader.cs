@@ -1,8 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
 using EndskApi.Api;
+using UnhollowerRuntimeLib;
 using XpExpansions.Extensions;
 using XpExpansions.Manager;
+using XpExpansions.Scripts;
 
 namespace XpExpansions
 {
@@ -22,6 +24,8 @@ namespace XpExpansions
             LogManager.SetLogger(Log);
             LogManager._debugMessagesActive = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.").Value;
             LogManager._debugMessagesActive = true;
+
+            ClassInjector.RegisterTypeInIl2Cpp<ClientSidedBioTrackerAbility>();
 
             CacheApi.SaveInstance(new ExpansionManager(), CacheApiWrapper.ExtensionCacheName);
         }

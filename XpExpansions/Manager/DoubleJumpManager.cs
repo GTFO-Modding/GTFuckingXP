@@ -20,7 +20,7 @@ namespace XpExpansions.Manager
         public DoubleJumpManager()
         {
             DoubleJumpHarmonyAbility = new Harmony(DoubleJumpXpExpansionId);
-            DoubleJumpHarmonyAbility.UnpatchAll(DoubleJump.EntryPoint.GUID);
+            Harmony.UnpatchID(DoubleJump.EntryPoint.GUID);
             _harmonyState = false;
         }
 

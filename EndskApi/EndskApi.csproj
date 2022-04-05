@@ -34,7 +34,7 @@
     <Compile Include="Api\BoosterApi.cs" />
     <Compile Include="Api\CacheApi.cs" />
     <Compile Include="Api\CheckpointApi.cs" />
-    <Compile Include="Api\EndLevelApi.cs" />
+    <Compile Include="Api\LevelApi.cs" />
     <Compile Include="Api\EnemyKillApi.cs" />
     <Compile Include="Api\InitApi.cs" />
     <Compile Include="Api\GearSwitchApi.cs" />
@@ -55,6 +55,7 @@
     <Compile Include="Patches\EnemyKill\EnemyDamageBasePatches.cs" />
     <Compile Include="Patches\Init\GUIManagerPatches.cs" />
     <Compile Include="Patches\Init\PageRundownNewPatches.cs" />
+    <Compile Include="Patches\StartLevel\GsInLevelPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\MtfoUtils.cs" />
   </ItemGroup>

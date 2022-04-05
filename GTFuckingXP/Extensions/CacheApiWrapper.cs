@@ -22,6 +22,7 @@ namespace GTFuckingXP.Extensions
         private const string BoosterBuffKey = "BoosterBuffKey";
         private const string AnchorDifferenceKey = "AnchorDifferenceKey";
         private const string LvlUpCallbackKey = "LvlUpCallbackKey";
+        private const string ScriptsStartedCallbackKey = "ScriptsStartedCallback";
 
         private const string DefaultMeleeRangeKey = "DefaultMeleeRangeKey";
         private const string DefaultMeleeHitBoxKey = "DefaultMeleeHitBoxKey";
@@ -198,14 +199,29 @@ namespace GTFuckingXP.Extensions
             CacheApi.GetInformation<List<Action<Level>>>(LvlUpCallbackKey, XpModCacheName).Add(lvlUpCallback);
         }
 
-        public static bool RemoveLvlUpCallback(Action<Level> lvlUpCallback)
+        public static void SetScriptsStartedCallBackList(List<Action<Level>> lvlUpCallbacks)
         {
-            return CacheApi.GetInformation<List<Action<Level>>>(LvlUpCallbackKey, XpModCacheName).Remove(lvlUpCallback);
+            CacheApi.SaveInformation(ScriptsStartedCallbackKey, lvlUpCallbacks, XpModCacheName);
         }
+
+        public static void AddScriptsStartedCallback(Action<Level> lvlUpCallback)
+        {
+            CacheApi.GetInformation<List<Action<Level>>>(ScriptsStartedCallbackKey, XpModCacheName).Add(lvlUpCallback);
+        }
+
+        //public static bool RemoveLvlUpCallback(Action<Level> lvlUpCallback)
+        //{
+        //    return CacheApi.GetInformation<List<Action<Level>>>(LvlUpCallbackKey, XpModCacheName).Remove(lvlUpCallback);
+        //}
 
         public static List<Action<Level>> GetLvlUpCallBackList()
         {
             return CacheApi.GetInformation<List<Action<Level>>>(LvlUpCallbackKey, XpModCacheName);
+        }
+
+        public static List<Action<Level>> GetScriptsStartedCallbackList()
+        {
+            return CacheApi.GetInformation<List<Action<Level>>>(ScriptsStartedCallbackKey, XpModCacheName);
         }
 
         public static void SetDefaultMeleeRange(float meleeRange)

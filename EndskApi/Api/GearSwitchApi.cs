@@ -13,7 +13,7 @@ namespace EndskApi.Api
     {
         static GearSwitchApi()
         {
-            EndLevelApi.AddEndLevelCallback(LevelEndedCallback);
+            LevelApi.AddEndLevelCallback(LevelEndedCallback);
             SetGearInfoCache(new Dictionary<IntPtr, GearInfo>());
         }
 

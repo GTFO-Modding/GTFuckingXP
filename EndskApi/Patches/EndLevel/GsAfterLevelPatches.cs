@@ -10,7 +10,7 @@ namespace EndskApi.Patches.EndLevel
         [HarmonyPrefix]
         public static void CleanupPrefix()
         {
-            EndLevelApi.InvokeEndLevelCallbacks();
+            LevelApi.InvokeEndLevelCallbacks();
         }
     }
 }

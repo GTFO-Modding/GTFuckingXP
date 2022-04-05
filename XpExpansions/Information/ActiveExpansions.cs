@@ -2,13 +2,14 @@
 {
     public class ActiveExpansions
     {
-        public ActiveExpansions(bool explosionAbility, bool doubleJumpAbility)
+        public ActiveExpansions(bool startingXp, bool doubleJumpAbility)
         {
-            ExplosionAbility = explosionAbility;
             DoubleJumpAbility = doubleJumpAbility;
+            StartingXp = startingXp;
         }
 
-        public bool ExplosionAbility { get; set; }
         public bool DoubleJumpAbility { get; set; }
+        public bool StartingXp { get; set; }
+        public bool LivingBioAbility { get; set; }
     }
 }

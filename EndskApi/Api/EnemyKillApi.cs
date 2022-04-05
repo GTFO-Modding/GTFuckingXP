@@ -11,6 +11,7 @@ namespace EndskApi.Api
 
         static EnemyKillApi()
         {
+            CacheApi.SaveInstance(new Dictionary<string, EnemyKillDistribution>(), CacheApi.InternalCache);
             BepInExLoader.Harmony.PatchAll(typeof(EnemyDamageBasePatches));
         }
 

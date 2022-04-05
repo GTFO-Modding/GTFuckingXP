@@ -18,8 +18,9 @@ namespace XpExpansions.Manager
             LogManager.Message("ExpansionManager constructor.");
 
             InitApi.AddInitCallback(Initialize);
-            EndLevelApi.AddEndLevelCallback(LevelCleanup);
+            LevelApi.AddEndLevelCallback(LevelCleanup);
             GTFuckingXP.Communication.XpApi.AddOnLevelUpCallback(LevelReached);
+            GTFuckingXP.Communication.XpApi.AddScriptsLoaded(LevelInitialized);
         }
 
         public override void Initialize()
@@ -57,6 +58,17 @@ namespace XpExpansions.Manager
             }
         }
 
+        public override void LevelInitialized(Level level)
+        {
+            LogManager.Message("LevelInitialized in the Expansion Manager.");
+
+            var managers = CacheApi.GetInstance<List<BaseManager>>(CacheApiWrapper.ExtensionCacheName);
+            foreach (var manager in managers)
+            {
+                manager.LevelInitialized(level);
+            }
+        }
+
         private List<BaseManager> CreateManagers()
         {
             var managers = new List<BaseManager>();
@@ -73,9 +85,19 @@ namespace XpExpansions.Manager
                     managers.Add(new DoubleJumpManager());
                 }
 
-                if(activeExpansions.ExplosionAbility)
+                //if(activeExpansions.ExplosionAbility)
+                //{
+                //    managers.Add(new ExplosionAbilityManager());
+                //}
+
+                if(activeExpansions.StartingXp)
                 {
-                    managers.Add(new ExplosionAbilityManager());
+                    managers.Add(new StartingLevelXpManager());
+                }
+
+                if(activeExpansions.LivingBioAbility)
+                {
+                    managers.Add(new ClientSidedBioTrackerManager());
                 }
             }
 

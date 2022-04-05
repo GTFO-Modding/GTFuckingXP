@@ -114,6 +114,13 @@ namespace GTFuckingXP.Managers
 
             CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>(), CacheApiWrapper.XpModCacheName);
             _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
+
+            foreach (var callBack in CacheApiWrapper.GetScriptsStartedCallbackList())
+            {
+                //i don't think, anyone other than the XpExpansion mod will use that functionality, so let's just go quering it each loopitem.
+                callBack.Invoke(CacheApiWrapper.GetActiveLevel());
+            }
+
             if (BepInExLoader.RundownDevMode)
             {
                 CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();

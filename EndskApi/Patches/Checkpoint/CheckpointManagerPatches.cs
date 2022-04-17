@@ -1,4 +1,5 @@
 ﻿using EndskApi.Api;
+using EndskApi.Manager;
 using EndskApi.Manager.Internal;
 using HarmonyLib;
 

@@ -23,7 +23,6 @@ namespace XpExpansions
         {
             LogManager.SetLogger(Log);
             LogManager._debugMessagesActive = Config.Bind("Dev Settings", "DebugMessages", false, "This settings activates/deactivates debug messages in the console for this specific plugin.").Value;
-            LogManager._debugMessagesActive = true;
 
             ClassInjector.RegisterTypeInIl2Cpp<ClientSidedBioTrackerAbility>();
 

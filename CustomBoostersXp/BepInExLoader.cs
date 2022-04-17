@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
+using CustomBoostersXp.Manager;
 using CustomBoostersXp.Script;
 using GTFuckingXP.Managers;
 

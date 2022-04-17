@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using DevToolbelt.Information;
 using EndskApi.Api;
+using EndskApi.Scripts;
 using GTFuckingXP.Communication;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
 using Player;
-using UnityEngine;
+using EndskApi.Information.Menus;
+using EndskApi.Manager;
 
 namespace GTFuckingXP.Scripts
 {
-    internal class DevTools : DevToolbelt.Menus.Base.BaseMenu
+    internal class DevTools : BaseMenu
     {
         public DevTools(IntPtr intPtr) : base(intPtr)
         {
             enabled = false;
 
-            _cheats.Add(new Cheat("Reload xp data", new InputCheat(KeyCode.F1, ": [F1]"), false, null));
-            _cheats.Add(new Cheat("Change class", new InputCheat(KeyCode.F2, ": [F2]"), false, null));
-            _cheats.Add(new Cheat("Level up", new InputCheat(KeyCode.F3, ": [F3]"), false, null));
-            _cheats.Add(new Cheat("Level down", new InputCheat(KeyCode.F4, ": [F4]"), false, null));
+            _tools.Add(new Tool("Reload xp data", MenuInputProvider.F1, false, null));
+            _tools.Add(new Tool("Change class", MenuInputProvider.F2, false, null));
+            _tools.Add(new Tool("Level up", MenuInputProvider.F3, false, null));
+            _tools.Add(new Tool("Level down", MenuInputProvider.F4, false, null));
         }
 
-        public void ReloadData(Cheat _)
+        public void ReloadData(Tool _)
         {
             XpApi.ReloadData();
         }
 
-        public void LevelUp(Cheat _)
+        public void LevelUp(Tool _)
         {
             if (XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber + 1, out var cheatedXp))
             {
@@ -35,7 +36,7 @@ namespace GTFuckingXP.Scripts
             }
         }
 
-        public void LevelDown(Cheat _)
+        public void LevelDown(Tool _)
         {
             if (XpApi.SetCurrentLevel(CacheApiWrapper.GetActiveLevel().LevelNumber - 1, out var cheatedXp))
             {
@@ -43,7 +44,7 @@ namespace GTFuckingXP.Scripts
             }
         }
 
-        public void ChangeClass(Cheat _)
+        public void ChangeClass(Tool _)
         {
             var levelLayouts = CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName);
             var currentLayout = CacheApiWrapper.GetCurrentLevelLayout();

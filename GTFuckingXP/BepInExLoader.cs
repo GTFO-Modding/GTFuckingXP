@@ -47,7 +47,6 @@ namespace GTFuckingXP
 
             //TODO remove
             TermsOfUsageState = Information.TermsOfUsage.Declined;
-
             //TODO uncomment
             //TermsOfUsage = Config.Bind("Terms of Usage", "Accept", "Undecided", "This tells the plugin, if you want to save xp collection data of any played expedition with the XP mod.\n" +
             //    "This includes following information: SteamId, PlayFabId, and then you send a package of collected xp every 5 minutes in any modded run.\n" +

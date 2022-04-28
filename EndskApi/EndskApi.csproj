@@ -40,10 +40,12 @@
     <Compile Include="Api\InitApi.cs" />
     <Compile Include="Api\GearSwitchApi.cs" />
     <Compile Include="Api\MenuApi.cs" />
+    <Compile Include="Api\ProfileIndependentDataApi.cs" />
     <Compile Include="BepInExLoader.cs" />
     <Compile Include="Enums\Booster\BoosterCategory.cs" />
     <Compile Include="Enums\Booster\CustomBoosterModifiers.cs" />
     <Compile Include="Enums\EnemyKill\LastHitType.cs" />
+    <Compile Include="Information\Configs\MenuRebinding.cs" />
     <Compile Include="Information\Menus\IExtendedTool.cs" />
     <Compile Include="Information\Menus\ToolExtended.cs" />
     <Compile Include="Enums\Menus\InformationId.cs" />
@@ -103,9 +105,6 @@
     </Reference>
     <Reference Include="Cpp2IL.Core">
       <HintPath>..\GTFuckingXP\LiB\Cpp2IL.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DamageNumbers">
-      <HintPath>..\GTFuckingXP\LiB\DamageNumbers.dll</HintPath>
     </Reference>
     <Reference Include="DevConsoleCommands-ASM">
       <HintPath>..\GTFuckingXP\LiB\DevConsoleCommands-ASM.dll</HintPath>
@@ -276,9 +275,19 @@
     <Reference Include="SteamWorks_ASM">
       <HintPath>..\GTFuckingXP\LiB\SteamWorks_ASM.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GTFuckingXP\LiB\System.Memory.dll</HintPath>
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.Json, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -512,6 +521,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Patches\WeaponSwitch\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

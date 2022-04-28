@@ -40,7 +40,7 @@ namespace EndskApi.Api
 
         internal static void InvokeEndLevelCallbacks()
         {
-            if (CacheApi.TryGetInformation<List<Action>>(StartLevelKey, out var callBackList, CacheApi.InternalCache, false))
+            if (CacheApi.TryGetInformation<List<Action>>(EndLevelKey, out var callBackList, CacheApi.InternalCache, false))
             {
                 foreach (var callBack in callBackList)
                 {

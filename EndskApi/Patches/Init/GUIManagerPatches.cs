@@ -1,5 +1,6 @@
 ﻿using EndskApi.Api;
 using HarmonyLib;
+using LevelGeneration;
 
 namespace EndskApi.Patches.Init
 {
@@ -8,6 +9,7 @@ namespace EndskApi.Patches.Init
     {
         [HarmonyPatch(nameof(GuiManager.Setup))]
         [HarmonyPrefix]
+        [HarmonyWrapSafe]
         public static void SetupPrefix()
         {
             InitApi.InvokeInitCallbacks();

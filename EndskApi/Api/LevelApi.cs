@@ -1,4 +1,5 @@
-﻿using EndskApi.Patches.EndLevel;
+﻿using EndskApi.Manager;
+using EndskApi.Patches.EndLevel;
 using EndskApi.Patches.StartLevel;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,14 @@ namespace EndskApi.Api
             {
                 foreach (var callBack in callBackList)
                 {
-                    callBack.Invoke();
+                    try
+                    {
+                        callBack.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogManager.Error(ex);
+                    }
                 }
             }
         }
@@ -55,7 +63,14 @@ namespace EndskApi.Api
             {
                 foreach (var callBack in callBackList)
                 {
-                    callBack.Invoke();
+                    try
+                    {
+                        callBack.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogManager.Error(ex);
+                    }
                 }
             }
         }

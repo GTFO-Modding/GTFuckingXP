@@ -9,6 +9,7 @@ using GTFuckingXP.Managers;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Patches.SelectLevelPatches;
 using GTFuckingXP.Scripts;
+using GTFuckingXP.Scripts.EasterEgg;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace GTFuckingXP
     [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("Endskill.EndskApi", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.dak.FloatingTextAPI", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("Endskill.DevToolbelt", BepInDependency.DependencyFlags.SoftDependency)]
     public class BepInExLoader : BasePlugin
     {
         public const string
@@ -63,6 +63,10 @@ namespace GTFuckingXP
             ClassInjector.RegisterTypeInIl2Cpp<XpHandler>();
             ClassInjector.RegisterTypeInIl2Cpp<XpBar>();
             ClassInjector.RegisterTypeInIl2Cpp<DevModeTools>();
+
+            ClassInjector.RegisterTypeInIl2Cpp<DevTools>();
+            ClassInjector.RegisterTypeInIl2Cpp<EasterEggScript>();
+            ClassInjector.RegisterTypeInIl2Cpp<UniGif.UniGifImage>();
 
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();

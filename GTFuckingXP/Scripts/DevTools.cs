@@ -8,6 +8,8 @@ using GTFuckingXP.Information.Level;
 using Player;
 using EndskApi.Information.Menus;
 using EndskApi.Manager;
+using UnityEngine;
+using GTFuckingXP.Scripts.EasterEgg;
 
 namespace GTFuckingXP.Scripts
 {
@@ -15,12 +17,26 @@ namespace GTFuckingXP.Scripts
     {
         public DevTools(IntPtr intPtr) : base(intPtr)
         {
-            enabled = false;
+            PageTitle = "Xp dev tools";
 
-            _tools.Add(new Tool("Reload xp data", MenuInputProvider.F1, false, null));
-            _tools.Add(new Tool("Change class", MenuInputProvider.F2, false, null));
-            _tools.Add(new Tool("Level up", MenuInputProvider.F3, false, null));
-            _tools.Add(new Tool("Level down", MenuInputProvider.F4, false, null));
+            _currentState = EndskApi.Enums.Menus.MenuStates.Deactivated;
+            _tools.Add(new Tool("Reload xp data", MenuInputProvider.F1, false, ReloadData));
+            _tools.Add(new Tool("Change class", MenuInputProvider.F2, false, ChangeClass));
+            _tools.Add(new Tool("Level up", MenuInputProvider.F3, false, LevelUp));
+            _tools.Add(new Tool("Level down", MenuInputProvider.F4, false, LevelDown));
+        }
+
+        protected override void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.P))
+            {
+                if (Input.GetKey(KeyCode.J) && Input.GetKey(KeyCode.P))
+                {
+                    MenuApi.ActivateUnknownMenu(CacheApi.GetInstance<EasterEggScript>(CacheApiWrapper.XpModCacheName));
+                }
+            }
+
+            base.Update();
         }
 
         public void ReloadData(Tool _)

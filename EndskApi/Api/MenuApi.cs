@@ -14,6 +14,14 @@ namespace EndskApi.Api
             UnityEngine.Object.DontDestroyOnLoad(gameObj);
         }
 
+        /// <summary>
+        /// Activates an unknown menu in the MainMenu. The added Menu will get removed when opening any other menu again.
+        /// </summary>
+        public static void ActivateUnknownMenu<TScript>(TScript menu) where TScript : BaseMenu
+        {
+            CacheApi.GetInstance<MainMenu>(CacheApi.InternalCache).ActivateUnknownMenu(menu);
+        }
+
         public static TScript AddMenu<TScript>(string pageName) where TScript : BaseMenu
         {
             var mainMenu = CacheApi.GetInstance<MainMenu>(CacheApi.InternalCache);

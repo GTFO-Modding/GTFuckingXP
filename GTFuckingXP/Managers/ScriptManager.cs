@@ -8,6 +8,7 @@ using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Scripts;
+using GTFuckingXP.Scripts.EasterEgg;
 using GTFuckingXP.StolenCode;
 using Player;
 using System;
@@ -97,9 +98,11 @@ namespace GTFuckingXP.Managers
 
             if (BepInExLoader.RundownDevMode)
             {
+                var devtools = MenuApi.AddMenu<DevTools>("Xp dev tools");
                 //CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
                 //DevToolbelt.Api.DevToolbeltApi.AddPage("Xp Tools", CacheApiWrapper.CreateRegisterAndReturnComponent<DevTools>());
             }
+            CacheApiWrapper.CreateRegisterAndReturnComponent<EasterEggScript>();
         }
 
         /// <summary>
@@ -121,10 +124,10 @@ namespace GTFuckingXP.Managers
                 callBack.Invoke(CacheApiWrapper.GetActiveLevel());
             }
 
-            if (BepInExLoader.RundownDevMode)
-            {
-                CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
-            }
+            //if (BepInExLoader.RundownDevMode)
+            //{
+            //    CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
+            //}
         }
 
         /// <summary>

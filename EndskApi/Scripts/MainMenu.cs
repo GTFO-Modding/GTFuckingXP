@@ -1,7 +1,6 @@
 ﻿using EndskApi.Enums.Menus;
 using EndskApi.Information.Menus;
 using EndskApi.Manager;
-using EndskApi.Manager.Internal;
 using GameData;
 using Player;
 using System;
@@ -14,6 +13,7 @@ namespace EndskApi.Scripts
     internal class MainMenu : BaseMenu
     {
         private Dictionary<Tool, BaseMenu> _toolToMenuMap;
+        private List<BaseMenu> _unknownMenus;
         private List<IExtendedTool> _middleMouseClickTools = new List<IExtendedTool>();
         private List<IExtendedTool> _timedTools = new List<IExtendedTool>();
         private float _lastToolActive = Time.time;
@@ -25,6 +25,7 @@ namespace EndskApi.Scripts
         {
             PageTitle = "MainMenu";
             _toolToMenuMap = new Dictionary<Tool, BaseMenu>();
+            _unknownMenus = new List<BaseMenu>();
 
             Instance = this;
         }
@@ -59,6 +60,14 @@ namespace EndskApi.Scripts
                 _enemyNamesIdMap[i] = (enemyBlocks[i].persistentID, enemyBlocks[i].name);
             }
             CurrentEnemyIndex = 0;
+        }
+
+        public void ActivateUnknownMenu<TScript>(TScript menu) where TScript : BaseMenu
+        {
+            MenuToggleUpdated(null, false);
+            _currentState = MenuStates.HiddenAndActive;
+            menu.SetState(MenuStates.Active);
+            _unknownMenus.Add(menu);
         }
 
         public void AddPage(string ToolName, BaseMenu menu)
@@ -165,6 +174,13 @@ namespace EndskApi.Scripts
 
         private void MenuToggleUpdated(Tool Tool, bool newToggle)
         {
+            foreach(var unknown in _unknownMenus)
+            {
+                unknown.SetState(MenuStates.Deactivated);
+            }
+
+            _unknownMenus.Clear();
+
             foreach (var pair in _toolToMenuMap)
             {
                 if (pair.Key.Equals(Tool))

@@ -40,6 +40,8 @@ namespace EndskApi.Information.Menus
         public bool IsToggle { get; set; }
         public bool CurrentToggleState { get; set; }
 
+        public object Extra { get; set; }
+
         public void Toggle()
         {
             CurrentToggleState = !CurrentToggleState;

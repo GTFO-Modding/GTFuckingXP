@@ -1,4 +1,5 @@
-﻿using EndskApi.Patches.Init;
+﻿using EndskApi.Manager;
+using EndskApi.Patches.Init;
 using Gear;
 using HarmonyLib;
 using System;
@@ -33,7 +34,14 @@ namespace EndskApi.Api
             {
                 foreach (var callBack in callBackList)
                 {
-                    callBack.Invoke();
+                    try
+                    {
+                        callBack.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogManager.Error(ex.ToString());
+                    }
                 }
 
                 CacheApi.RemoveInformation(InitKey, CacheApi.InternalCache);

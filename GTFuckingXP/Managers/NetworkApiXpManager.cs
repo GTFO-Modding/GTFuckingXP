@@ -5,6 +5,7 @@ using GTFuckingXP.Information.Enemies;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Information.NetworkingInfo;
 using GTFuckingXP.Scripts;
+using GTFuckingXP.Scripts.EasterEgg;
 using Player;
 using SNetwork;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace GTFuckingXP.Managers
             NetworkAPI.RegisterEvent<StaticXpInfo>(_receiveStaticXp, ReceiveStaticXp);
             NetworkAPI.RegisterEvent<BoosterInfo>(_sendBoosterNetworkString, ReceiveBoosterBuffs);
             NetworkAPI.RegisterEvent<GtfoApiXpInfo>(_undistributedXp, ReceiveHalfAssedXp);
+
+            EasterEggNetworkManager.Setup();
         }
 
         public static void ReceiveXp(ulong snetPlayer, GtfoApiXpInfo xpData)

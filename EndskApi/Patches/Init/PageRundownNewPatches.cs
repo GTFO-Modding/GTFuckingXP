@@ -9,6 +9,7 @@ namespace EndskApi.Patches.Init
     {
         [HarmonyPatch(nameof(CM_PageRundown_New.PlaceRundown))]
         [HarmonyPostfix]
+        [HarmonyWrapSafe]
         public static void PlaceRundownPostFix()
         {
             InitApi.InvokeInitCallbacks();

@@ -1,7 +1,6 @@
 ﻿using EndskApi.Manager;
 using EndskApi.Scripts;
 using GTFO.API;
-using Player;
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -11,10 +10,7 @@ using SNetwork;
 using EndskApi.Enums.Menus;
 using EndskApi.Api;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using System.Collections;
 using UniGif;
-using BepInEx.IL2CPP.Utils.Collections;
 
 namespace GTFuckingXP.Scripts.EasterEgg
 {
@@ -42,7 +38,7 @@ namespace GTFuckingXP.Scripts.EasterEgg
                 ProfileIndependentDataApi.Save(_urls, UriFile);
             }
 
-            PageTitle = "Secret menu";
+            PageTitle = "Horror+ Menu";
 
             _currentState = MenuStates.Deactivated;
             _tools.Add(new Tool("Switch Player{...}", MenuInputProvider.F1, false, SwitchPlayer));
@@ -138,26 +134,22 @@ namespace GTFuckingXP.Scripts.EasterEgg
 
         void ShowMp4(string url, float playBackSpeed, float volume)
         {
-            if (url.EndsWith("mp4"))
+            if (_videoPlayer is null)
             {
+                _videoPlayer = GuiManager.Current.m_CellUIHUDRoot.gameObject.AddComponent<VideoPlayer>();
 
-                if (_videoPlayer is null)
-                {
-                    _videoPlayer = GuiManager.Current.m_CellUIHUDRoot.gameObject.AddComponent<VideoPlayer>();
-
-                    _videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
-                    _videoPlayer.playOnAwake = false;
-                    _videoPlayer.targetCameraAlpha = 0.7f;
-                    _videoPlayer.isLooping = false;
-                    _videoPlayer.aspectRatio = VideoAspectRatio.FitVertically;
-                }
-
-                _videoPlayer.SetDirectAudioVolume(0, volume);
-                _videoPlayer.playbackSpeed = playBackSpeed;
-                _videoPlayer.url = url;
-                _videoPlayer.Play();
-                _videoPlayerState = true;
+                _videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
+                _videoPlayer.playOnAwake = false;
+                _videoPlayer.targetCameraAlpha = 0.7f;
+                _videoPlayer.isLooping = false;
+                _videoPlayer.aspectRatio = VideoAspectRatio.FitVertically;
             }
+
+            _videoPlayer.playbackSpeed = playBackSpeed;
+            _videoPlayer.url = url;
+            _videoPlayer.SetDirectAudioVolume(0, volume);
+            _videoPlayer.Play();
+            _videoPlayerState = true;
         }
 
         void ShowGif(string url)
@@ -165,10 +157,13 @@ namespace GTFuckingXP.Scripts.EasterEgg
             if(_rawImage is null)
             {
                 _rawImage = GuiManager.Current.m_CellUIHUDRoot.gameObject.AddComponent<UniGifImage>();
+                _rawImage.m_imgAspectCtrl = _rawImage.gameObject.AddComponent<UniGifImageAspectController>();
+                _rawImage.m_rawImage = _rawImage.gameObject.AddComponent<RawImage>();
+                _rawImage.gameObject.AddComponent<Canvas>();
                 _rawImage.enabled = false;
             }
 
-            this.StartCoroutine(_rawImage.SetGifFromUrlCoroutine(url).WrapToIl2Cpp());
+            _rawImage.SetGifFromUrl(url);
         }
     }
 

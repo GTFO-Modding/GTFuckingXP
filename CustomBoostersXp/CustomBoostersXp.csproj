@@ -484,9 +484,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EndskApi\EndskApi.csproj">
+    <ProjectReference Include="..\EndskApi\EndskApi_Old.csproj">
       <Project>{E95D147E-B86F-4A34-8B58-62447FDF42C3}</Project>
-      <Name>EndskApi</Name>
+      <Name>EndskApi_Old</Name>
     </ProjectReference>
     <ProjectReference Include="..\GTFuckingXP\GTFuckingXP.csproj">
       <Project>{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}</Project>

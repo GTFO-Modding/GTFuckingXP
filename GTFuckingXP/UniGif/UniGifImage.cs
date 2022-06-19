@@ -35,9 +35,9 @@ namespace UniGif
         }
 
         // Target row image
-        private RawImage m_rawImage;
+        internal RawImage m_rawImage;
         // Image Aspect Controller
-        private UniGifImageAspectController m_imgAspectCtrl;
+        internal UniGifImageAspectController m_imgAspectCtrl;
         // Textures filter mode
         private FilterMode m_filterMode = FilterMode.Point;
         // Textures wrap mode
@@ -240,6 +240,8 @@ namespace UniGif
                     this.height = height;
                     nowState = State.Ready;
 
+                    //if()
+
                     m_imgAspectCtrl.FixAspectRatio(width, height);
 
                     if (m_rotateOnLoading)
@@ -257,6 +259,7 @@ namespace UniGif
                     LogManager.Error("Gif texture get error.");
                     nowState = State.None;
                 }
+                LogManager.Debug("Bruh, idk2");
             },
             m_filterMode, m_wrapMode, m_outputDebugLog)).WrapToIl2Cpp());
 
@@ -301,6 +304,8 @@ namespace UniGif
         /// </summary>
         public void Play()
         {
+            LogManager.Debug("Play method");
+
             if (nowState != State.Ready)
             {
                 LogManager.Warn("State is not READY.");

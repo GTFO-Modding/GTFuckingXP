@@ -31,14 +31,6 @@ namespace UniGif
 
         private void Update()
         {
-#if UNITY_EDITOR
-        if (Application.isPlaying == false)
-        {
-            FixAspectRatio();
-            return;
-        }
-#endif
-
             if (m_fixOnUpdate)
             {
                 FixAspectRatio();

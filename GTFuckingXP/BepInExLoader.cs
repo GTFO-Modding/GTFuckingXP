@@ -14,6 +14,7 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using UnhollowerRuntimeLib;
+using UniGif;
 
 namespace GTFuckingXP
 {
@@ -67,6 +68,7 @@ namespace GTFuckingXP
             ClassInjector.RegisterTypeInIl2Cpp<DevTools>();
             ClassInjector.RegisterTypeInIl2Cpp<EasterEggScript>();
             ClassInjector.RegisterTypeInIl2Cpp<UniGif.UniGifImage>();
+            ClassInjector.RegisterTypeInIl2Cpp<UniGifImageAspectController>();
 
             ScriptManager.Instance = new ScriptManager();
             BoosterBuffManager.Instance = new BoosterBuffManager();

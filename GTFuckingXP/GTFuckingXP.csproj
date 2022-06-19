@@ -498,9 +498,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EndskApi\EndskApi.csproj">
+    <ProjectReference Include="..\EndskApi\EndskApi_Old.csproj">
       <Project>{e95d147e-b86f-4a34-8b58-62447fdf42c3}</Project>
-      <Name>EndskApi</Name>
+      <Name>EndskApi_Old</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,7 +8,7 @@
 	<Import Project="Dependencies.props" />
 
 	<ItemGroup>
-	  <ProjectReference Include="..\EndskApi\EndskApi.csproj" />
+	  <ProjectReference Include="..\EndskApi\EndskApi_Old.csproj" />
 	  <ProjectReference Include="..\GTFuckingXP\GTFuckingXP.csproj" />
 	</ItemGroup>
 

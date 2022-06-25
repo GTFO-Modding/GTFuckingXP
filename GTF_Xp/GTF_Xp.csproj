@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>GTFuckingXp</RootNamespace>
+    <AssemblyName>GTFuckingXp</AssemblyName>
+  </PropertyGroup>
+
+	<Import Project="Dependencies.props" />
+	
+  <ItemGroup>
+    <ProjectReference Include="..\EndskApiNet\EndskApiNet.csproj" />
+  </ItemGroup>
+
+</Project>

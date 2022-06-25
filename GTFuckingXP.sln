@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpExpansions", "XpExpansion
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OverrideXpClasses", "OverrideXpClasses\OverrideXpClasses.csproj", "{A647416D-4215-46AB-96E0-DB5BF52DBA34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndskApiNet", "EndskApiNet\EndskApiNet.csproj", "{AF708C52-C7B0-499A-80B6-394BAE3F6695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndskApiNet", "EndskApiNet\EndskApiNet.csproj", "{AF708C52-C7B0-499A-80B6-394BAE3F6695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTF_Xp", "GTF_Xp\GTF_Xp.csproj", "{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{AF708C52-C7B0-499A-80B6-394BAE3F6695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF708C52-C7B0-499A-80B6-394BAE3F6695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF708C52-C7B0-499A-80B6-394BAE3F6695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

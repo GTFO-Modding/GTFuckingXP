@@ -3,19 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFuckingXP", "GTFuckingXP\GTFuckingXP.csproj", "{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBoostersXp", "CustomBoostersXp\CustomBoostersXp.csproj", "{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndskApi_Old", "EndskApi\EndskApi_Old.csproj", "{E95D147E-B86F-4A34-8B58-62447FDF42C3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XpExpansions", "XpExpansions\XpExpansions.csproj", "{3A950699-5724-4A08-BBD1-557BB97EFD18}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OverrideXpClasses", "OverrideXpClasses\OverrideXpClasses.csproj", "{A647416D-4215-46AB-96E0-DB5BF52DBA34}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndskApiNet", "EndskApiNet\EndskApiNet.csproj", "{AF708C52-C7B0-499A-80B6-394BAE3F6695}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTF_Xp", "GTF_Xp\GTF_Xp.csproj", "{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GTF_Xp", "GTF_Xp\GTF_Xp.csproj", "{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,18 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA920AEA-0989-4FA4-A890-C0B72E0CDEC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3FD3A2B-655D-42D1-AFA5-D22FA53D09D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E95D147E-B86F-4A34-8B58-62447FDF42C3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A950699-5724-4A08-BBD1-557BB97EFD18}.Release|Any CPU.ActiveCfg = Release|Any CPU

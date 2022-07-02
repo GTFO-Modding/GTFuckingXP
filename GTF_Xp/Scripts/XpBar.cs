@@ -23,19 +23,6 @@ namespace GTFuckingXP.Scripts
             XpBarStuff();
         }
 
-        public void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Y) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.S))
-            {
-                if (Input.GetKey(KeyCode.Y) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.S) && BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
-                {
-                    BepInExLoader.TermsOfUsage.Value = TermsOfUsage.Accepted.ToString();
-                    var xpHandler = CacheApi.GetInstance<XpHandler>(CacheApiWrapper.XpModCacheName);
-                    UpdateUiString(CacheApiWrapper.GetActiveLevel(), xpHandler.NextLevel, xpHandler.CurrentTotalXp, CacheApiWrapper.GetCurrentLevelLayout().Header);
-                }
-            }
-        }
-
         /// <summary>
         /// Updates the stats text on the bottom right of your screen.
         /// </summary>
@@ -47,11 +34,11 @@ namespace GTFuckingXP.Scripts
             var stringBuilder = new StringBuilder();
             string statsString;
 
-            if (BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
-            {
-                stringBuilder.AppendLine($"Please accept or decline the terms of usage in the config file, to remove this message");
-                stringBuilder.AppendLine("You can press following keys all at once \"Y\"+\"E\"+\"S\", to accept it now.");
-            }
+            //if (BepInExLoader.TermsOfUsageState == TermsOfUsage.Undecided)
+            //{
+            //    stringBuilder.AppendLine($"Please accept or decline the terms of usage in the config file, to remove this message");
+            //    stringBuilder.AppendLine("You can press following keys all at once \"Y\"+\"E\"+\"S\", to accept it now.");
+            //}
 
             if (string.IsNullOrEmpty(currentLevel.CustomLevelStatsText))
             {
@@ -66,6 +53,7 @@ namespace GTFuckingXP.Scripts
                     stringBuilder.AppendLine($"WD {currentLevel.WeaponDamageMultiplier} => {nextLevel.WeaponDamageMultiplier}");
                     stringBuilder.AppendLine($"Level {currentLevel.LevelNumber} => {currentLevelProgression} / {currentLevelFinish}");
 
+                    _xpProgressBar.gameObject.SetActive(false);
                     var value = currentLevelProgression / Convert.ToDouble(currentLevelFinish);
                     _xpProgressBar.size = new Vector2((float)(value * 300f), 20f);
                 }
@@ -136,10 +124,10 @@ namespace GTFuckingXP.Scripts
             _xpBar.transform.Translate(0, Screen.height * 50f / 2560f, 0);
 
             _xpBar.Rotate(0, 180, 0);
-            _xpBar.localEulerAngles = new Vector3(0, 180, 180);
-            _xpBar.anchorMax = new Vector2(-0.5f, 0.7f);
-            _xpBar.anchorMin = new Vector2(0f, 0f);
-            _xpBar.localScale = new Vector3(3.1f, 1, 1);
+            //_xpBar.localEulerAngles = new Vector3(0, 180, 180);
+            //_xpBar.anchorMax = new Vector2(-0.5f, 0.7f);
+            //_xpBar.anchorMin = new Vector2(0f, 0f);
+            //_xpBar.localScale = new Vector3(3.1f, 1, 1);
 
             _xpBar.GetChild(2).GetComponent<SpriteRenderer>().enabled = false;
 
@@ -153,6 +141,7 @@ namespace GTFuckingXP.Scripts
             CacheApi.SaveInstance(_textUi, CacheApiWrapper.XpModCacheName);
             CacheApi.SaveInstance(_xpBar, CacheApiWrapper.XpModCacheName);
             CacheApi.SaveInstance(_xpProgressBar, CacheApiWrapper.XpModCacheName);
+            _xpBar.gameObject.SetActive(false);
         }
     }
 }

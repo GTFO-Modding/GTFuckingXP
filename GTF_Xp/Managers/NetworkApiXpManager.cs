@@ -96,10 +96,10 @@ namespace GTFuckingXP.Managers
             }
         }
 
-        public static void SendReceiveXp(PlayerAgent receiver, EnemyXp xpData, Vector3 position, bool forceDebuffXp)
+        public static void SendReceiveXp(SNet_Player receiver, EnemyXp xpData, Vector3 position, bool forceDebuffXp)
         {
             NetworkAPI.InvokeEvent(_sendXpString, new GtfoApiXpInfo(xpData.XpGain, xpData.DebuffXp, xpData.LevelScalingXpDecrese, position, forceDebuffXp),
-                receiver.Owner);
+                receiver);
         }
 
         public static void SendHalfAssedXp(EnemyXp xpData, Vector3 position, bool forceDebuffXp)
@@ -121,9 +121,9 @@ namespace GTFuckingXP.Managers
             NetworkAPI.InvokeEvent(_sendBoosterNetworkString, boosterInfo);
         }
 
-        public static void SendStaticXpInfo(PlayerAgent receiver, uint xpGain, uint debuffXp, int levelScalingDecrease, Vector3 position)
+        public static void SendStaticXpInfo(SNet_Player receiver, uint xpGain, uint debuffXp, int levelScalingDecrease, Vector3 position)
         {
-            NetworkAPI.InvokeEvent(_receiveStaticXp, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver.Owner);
+            NetworkAPI.InvokeEvent(_receiveStaticXp, new StaticXpInfo(xpGain, debuffXp, levelScalingDecrease, position), receiver);
         }
     }
 }

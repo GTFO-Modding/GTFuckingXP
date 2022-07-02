@@ -1,18 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>GTFuckingXp</RootNamespace>
-    <AssemblyName>GTFuckingXp</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-	<Import Project="Dependencies.props" />
-	
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\EndskApiNet\EndskApiNet.csproj" />
+    <ProjectReference Include="..\GTF_Xp\GTF_Xp.csproj" />
   </ItemGroup>
+
+	<Import Project="Dependencies.props" />
 
 </Project>

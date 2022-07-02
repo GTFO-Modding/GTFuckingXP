@@ -2,8 +2,6 @@
 using Enemies;
 using Player;
 using SNetwork;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace EndskApi.Information.EnemyKill
 {

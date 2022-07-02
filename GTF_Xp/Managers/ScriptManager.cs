@@ -1,5 +1,6 @@
 ﻿using EndskApi.Api;
 using GameData;
+using GTFuckingXp.Managers;
 using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
@@ -84,6 +85,7 @@ namespace GTFuckingXP.Managers
 
             WriteDefaultJsonBlocks();
             UpdateEverything();
+            EnemyKillManager.Setup();
 
             CacheApiWrapper.SetCurrentLevelLayout(CacheApi.GetInstance<List<LevelLayout>>(CacheApiWrapper.XpModCacheName)[0]);
 
@@ -103,8 +105,6 @@ namespace GTFuckingXP.Managers
         /// </summary>  
         public void StartLevelScripts()
         {
-            EnemyDamageBasePatches.DamageDistribution = new Dictionary<string, Dictionary<int, float>>();
-
             CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>(), CacheApiWrapper.XpModCacheName);
             _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
 
@@ -146,7 +146,6 @@ namespace GTFuckingXP.Managers
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
             CacheApiWrapper.RemoveDefaultMeleeRange();
             CacheApiWrapper.RemoveDefaultMeleeHitBox();
-            EnemyDamageBasePatches.DamageDistribution = null;
         }
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs, List<Group> groups) ReadJsonBlocks()

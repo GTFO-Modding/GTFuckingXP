@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>EndskApi</AssemblyName>
     <RootNamespace>EndskApi</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

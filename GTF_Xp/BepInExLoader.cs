@@ -2,17 +2,17 @@
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using EndskApi.Api;
+using GTFuckingXp.Patches;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.Level;
-using GTFuckingXP.Managers;
 using GTFuckingXP.Patches;
 using GTFuckingXP.Patches.SelectLevelPatches;
 using GTFuckingXP.Scripts;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 
-namespace GTFuckingXP
+namespace GTFuckingXP.Managers
 {
     [BepInPlugin(GUID, MODNAME, VERSION)]
     [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
@@ -88,8 +88,8 @@ namespace GTFuckingXP
             Harmony.PatchAll(typeof(PlayerLobbyBarPatches));
 
             //General xp mod usage
-            Harmony.PatchAll(typeof(EnemyDamageBasePatches));
             Harmony.PatchAll(typeof(GS_InLevelPatches));
+            Harmony.PatchAll(typeof(EnemyDamageBasePatches));
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));
             Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
             Harmony.PatchAll(typeof(SnetSessionHubPatches));

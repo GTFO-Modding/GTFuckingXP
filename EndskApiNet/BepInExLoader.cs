@@ -1,11 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using EndskApi.Manager;
 using EndskApi.Scripts;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
-using System.Text.Json;
 
 namespace EndskApi
 {

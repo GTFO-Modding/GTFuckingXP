@@ -33,7 +33,7 @@ namespace GTFuckingXP.Managers
                 {
                     if (buff.Value != 0f)
                     {
-                        playerBoosters.Add(AgentModifierManager.AddModifierValue(targetAgent, buff.Key, buff.Value));
+                        playerBoosters.Add(AgentModifierManager.AddModifierValue(targetAgent, buff.Key, (buff.Value -1)));
                     }
                 }
             }

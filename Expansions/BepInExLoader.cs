@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using EndskApi.Api;
 using Il2CppInterop.Runtime.Injection;
 using XpExpansions.Extensions;

@@ -69,6 +69,8 @@ namespace EndskApi.Api
                     changedWeapon.AmmunitionInMagazine = item.GetCurrentClip();
                     LogManager.Debug($"Updated Ammo to {changedWeapon.AmmunitionInMagazine}, Max is {changedWeapon.InventorySlotAmmo.BulletClipSize}");
                 }
+
+                return;
             }
 
             changedWeapon = null;

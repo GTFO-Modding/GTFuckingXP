@@ -114,7 +114,7 @@ namespace XpExpansions.Manager
             var activeExpansionsPath = Path.Combine(FolderPath, ExpansionActivePath);
             if(!File.Exists(activeExpansionsPath))
             {
-                File.WriteAllText(activeExpansionsPath, JsonSerializer.Serialize(new ActiveExpansions(false, false)));
+                File.WriteAllText(activeExpansionsPath, JsonSerializer.Serialize(new ActiveExpansions(false, true)));
             }
         }
     }

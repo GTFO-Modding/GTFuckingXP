@@ -48,12 +48,14 @@ namespace GTFuckingXp.Managers
                     else
                     {
                         var damageDealt = info.GetDamageDealtBySnet(player);
-                        var percentageDealt = damageDealt / info.KilledEnemyAgent.Damage.HealthMax;
+                        if (damageDealt > 0.5f)
+                        {
+                            var percentageDealt = damageDealt / info.KilledEnemyAgent.Damage.HealthMax;
+                            LogManager.Debug($"percentageDealt = {percentageDealt} and damageDealt is {damageDealt}");
 
-                        LogManager.Debug($"percentageDealt = {percentageDealt} and damageDealt is {damageDealt}");
-
-                        NetworkApiXpManager.SendStaticXpInfo(player, (uint)(enemyXpData.XpGain * percentageDealt),
-                                    (uint)(enemyXpData.DebuffXp * percentageDealt), (int)(enemyXpData.LevelScalingXpDecrese * percentageDealt), position);
+                            NetworkApiXpManager.SendStaticXpInfo(player, (uint)(enemyXpData.XpGain * percentageDealt),
+                                        (uint)(enemyXpData.DebuffXp * percentageDealt), (int)(enemyXpData.LevelScalingXpDecrese * percentageDealt), position);
+                        }
                     }
                 }
             }

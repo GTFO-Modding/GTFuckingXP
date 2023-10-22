@@ -1,4 +1,5 @@
-﻿using EndskApi.Patches.Checkpoint;
+﻿using EndskApi.Manager.Internal;
+using EndskApi.Patches.Checkpoint;
 using System;
 using System.Collections.Generic;
 
@@ -12,6 +13,7 @@ namespace EndskApi.Api
         static CheckpointApi()
         {
             BepInExLoader.Harmony.PatchAll(typeof(CheckpointManagerPatches));
+            NetworkManager.Setup();
         }
 
         /// <summary>

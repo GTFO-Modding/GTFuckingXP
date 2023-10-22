@@ -42,7 +42,7 @@ namespace GTFuckingXP.Information
 
                 levelScaling = levelScaling > 0 ? levelScaling : 1;
                 enemyXpData.Add(new EnemyXp(enemy.persistentID, enemy.name,
-                    (uint)(maxHp / 2), (uint)(maxHp / 4), levelScaling));
+                    (uint)(maxHp / 2.5), (uint)(maxHp / 5), levelScaling));
             }
 
             return enemyXpData;
@@ -98,187 +98,187 @@ namespace GTFuckingXP.Information
         //    return expeditionMapping;
         //}
 
-        /// <summary>
-        /// Gets a default level layout containing the current rundown levels.
-        /// </summary>
-        public static List<LevelLayout> GetDefaultLevelLayout()
-        {
-            var levelLayouts = new List<LevelLayout>();
-            #region AllRounder
-            var levels = new List<Level.Level>();
+        ///// <summary>
+        ///// Gets a default level layout containing the current rundown levels.
+        ///// </summary>
+        //public static List<LevelLayout> GetDefaultLevelLayout()
+        //{
+        //    var levelLayouts = new List<LevelLayout>();
+        //    #region AllRounder
+        //    var levels = new List<Level.Level>();
 
-            for(int i = 0; i <= 60; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.25f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(250 * (0.8 + (0.2 * i)) * i);
+        //    for(int i = 0; i <= 60; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.25f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(250 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
-                if((i % 5) == 0 && i != 0)
-                {
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 1f));
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 1f));
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 1f));
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 1f));
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 1f));
-                }
+        //        var singleUseBuffs = new List<SingleUseBuff>();
+        //        if((i % 5) == 0 && i != 0)
+        //        {
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 1f));
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 1f));
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 1f));
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 1f));
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 1f));
+        //        }
 
-                levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
-            }
+        //        levels.Add(new Level.Level(i, xpNeed,defaultMultiplier, defaultMultiplier, defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(1, "All Rounder", 0, "Scales equally acceptable with everything.", levels));
-            #endregion
+        //    levelLayouts.Add(new LevelLayout(1, "All Rounder", 0, "Scales equally acceptable with everything.", levels));
+        //    #endregion
 
-            #region GlassCannon
-            var glassLevels = new List<Level.Level>();
+        //    #region GlassCannon
+        //    var glassLevels = new List<Level.Level>();
 
-            for (int i = 0; i <= 12; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.5f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(150 * (0.8 + (0.2 * i)) * i);
+        //    for (int i = 0; i <= 12; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.5f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(150 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.1f));
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 0.1f));
+        //        var singleUseBuffs = new List<SingleUseBuff>();
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.1f));
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 0.1f));
 
-                glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
-            }
+        //        glassLevels.Add(new Level.Level(i, xpNeed, 0.1f * defaultMultiplier, 1.5f * defaultMultiplier, 1.4f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(2, "Glass cannon", 0, "Great scaling, but only 12 levels with no HP.", glassLevels));
-            #endregion
+        //    levelLayouts.Add(new LevelLayout(2, "Glass cannon", 0, "Great scaling, but only 12 levels with no HP.", glassLevels));
+        //    #endregion
 
-            #region Tank
-            var tankLevels = new List<Level.Level>();
+        //    #region Tank
+        //    var tankLevels = new List<Level.Level>();
 
-            for (int i = 0; i <= 80; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.1f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(100 * (0.8 + (0.2 * i)) * i);
+        //    for (int i = 0; i <= 80; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.1f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(100 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
-                if ((i % 2) == 0 && i != 0)
-                {
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.5f));
-                    singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 0.2f));
-                }
+        //        var singleUseBuffs = new List<SingleUseBuff>();
+        //        if ((i % 2) == 0 && i != 0)
+        //        {
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.5f));
+        //            singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Desinfect, 0.2f));
+        //        }
 
-                tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
-            }
+        //        tankLevels.Add(new Level.Level(i, xpNeed, 5f * defaultMultiplier, 0.5f * defaultMultiplier, 0.5f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(3, "Tank", 0, "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
-            #endregion
+        //    levelLayouts.Add(new LevelLayout(3, "Tank", 0, "Slow overall scaling, very good HP but decreased damage output.", tankLevels));
+        //    #endregion
 
-            #region Kamikaze
-            var kamikazeLevels = new List<Level.Level>();
+        //    #region Kamikaze
+        //    var kamikazeLevels = new List<Level.Level>();
 
-            for (int i = 0; i <= 20; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.5f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(400 * (0.8 + (0.2 * i)) * i);
+        //    for (int i = 0; i <= 20; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.5f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(400 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 1f));
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 1f));
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 1f));
+        //        var singleUseBuffs = new List<SingleUseBuff>();
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 1f));
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 1f));
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 1f));
 
-                kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
-            }
+        //        kamikazeLevels.Add(new Level.Level(i, xpNeed, 0.05f * defaultMultiplier, 30f * defaultMultiplier, 0.1f * defaultMultiplier, singleUseBuffs, new List<CustomScalingBuff>()));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(4, "Kamikaze", 0, "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
-            #endregion
+        //    levelLayouts.Add(new LevelLayout(4, "Kamikaze", 0, "No HP, no weapondamage, melee for life\nBut has a curse of getting regulary useless ammunition.", kamikazeLevels));
+        //    #endregion
 
-            #region MeleeMain
-            var meleeMainLevels = new List<Level.Level>();
+        //    #region MeleeMain
+        //    var meleeMainLevels = new List<Level.Level>();
 
-            for (int i = 0; i <= 20; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.25f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
+        //    for (int i = 0; i <= 20; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.25f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.2f));
+        //        var singleUseBuffs = new List<SingleUseBuff>();
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.Heal, 0.2f));
 
-                meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs, new List<CustomScalingBuff>()));
-            }
+        //        meleeMainLevels.Add(new Level.Level(i, xpNeed, 1f * defaultMultiplier, 1f * defaultMultiplier + 1f, (defaultMultiplier * 0.5f) - 0.5f, singleUseBuffs, new List<CustomScalingBuff>()));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(5, "Melee Main", 0, "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
-            #endregion
+        //    levelLayouts.Add(new LevelLayout(5, "Melee Main", 0, "Acceptable scaling, faster leveling\nCapable of tanking some hits and deals great melee damage. May lack a bit of Weapondamage", meleeMainLevels));
+        //    #endregion
 
-            #region Boxer
+        //    #region Boxer
 
-            var boxer = new List<Level.Level>();
+        //    var boxer = new List<Level.Level>();
 
-            for (int i = 0; i <= 20; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.5f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
+        //    for (int i = 0; i <= 20; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.5f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
+        //        var singleUseBuffs = new List<SingleUseBuff>();
 
-                boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs, new List<CustomScalingBuff>()));
-            }
+        //        boxer.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs, new List<CustomScalingBuff>()));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(6, "Boxer", 1, "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
-            #endregion
+        //    levelLayouts.Add(new LevelLayout(6, "Boxer", 1, "Great Scaling.\nNo weapon damage!\nVery tanky against melee damage but can't withstand any shooter.", boxer));
+        //    #endregion
 
-            #region SpeedRunner
+        //    #region SpeedRunner
 
-            var speedRunner = new List<Level.Level>();
+        //    var speedRunner = new List<Level.Level>();
 
-            for (int i = 0; i <= 20; i++)
-            {
-                var defaultMultiplier = (float)(1 + (0.5f * i));
-                //Random calculation so later levels actually take longer in the default levellayout
-                var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
+        //    for (int i = 0; i <= 20; i++)
+        //    {
+        //        var defaultMultiplier = (float)(1 + (0.5f * i));
+        //        //Random calculation so later levels actually take longer in the default levellayout
+        //        var xpNeed = Convert.ToUInt32(200 * (0.8 + (0.2 * i)) * i);
 
-                var singleUseBuffs = new List<SingleUseBuff>();
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 0.2f));
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 0.2f));
-                singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 0.2f));
+        //        var singleUseBuffs = new List<SingleUseBuff>();
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionMain, 0.2f));
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionSpecial, 0.2f));
+        //        singleUseBuffs.Add(new SingleUseBuff(SingleBuff.AmmunitionTool, 0.2f));
 
-                var customScaling = new List<CustomScalingBuff>();
+        //        var customScaling = new List<CustomScalingBuff>();
 
-                if (i != 0)
-                {
-                    customScaling.Add(new CustomScalingBuff(CustomScaling.MeleeHitBoxSizeMultiplier, i * 5));
-                    customScaling.Add(new CustomScalingBuff(CustomScaling.MeleeRangeMultiplier, i));
-                    customScaling.Add(new CustomScalingBuff(CustomScaling.MovementSpeedMultiplier, 1 + (i * 0.3f)));
-                    customScaling.Add(new CustomScalingBuff(CustomScaling.AntiFogSphere, i*2));
-                }
-                speedRunner.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs, customScaling));
-            }
+        //        if (i != 0)
+        //        {
+        //            customScaling.Add(new CustomScalingBuff(CustomScaling.MeleeHitBoxSizeMultiplier, i * 5));
+        //            customScaling.Add(new CustomScalingBuff(CustomScaling.MeleeRangeMultiplier, i));
+        //            customScaling.Add(new CustomScalingBuff(CustomScaling.MovementSpeedMultiplier, 1 + (i * 0.3f)));
+        //            customScaling.Add(new CustomScalingBuff(CustomScaling.AntiFogSphere, i*2));
+        //        }
+        //        speedRunner.Add(new Level.Level(i, xpNeed, defaultMultiplier, defaultMultiplier, 0f, singleUseBuffs, customScaling));
+        //    }
 
-            levelLayouts.Add(new LevelLayout(7, "SpeedRunner", 1, "Gets increasingly faster while playing, so you can circle kite even easier.", speedRunner));
+        //    levelLayouts.Add(new LevelLayout(7, "SpeedRunner", 1, "Gets increasingly faster while playing, so you can circle kite even easier.", speedRunner));
 
-            #endregion
+        //    #endregion
 
-            return levelLayouts;
-        }
+        //    return levelLayouts;
+        //}
 
-        public static List<BoosterBuffs> GetDefaultBoosterBuffs()
-        {
-            var boosters = new List<BoosterBuffs>();
+        //public static List<BoosterBuffs> GetDefaultBoosterBuffs()
+        //{
+        //    var boosters = new List<BoosterBuffs>();
 
-            boosters.Add(new BoosterBuffs(6, new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 },
-                new Dictionary<AgentModifier, float>() { { AgentModifier.MeleeResistance, 1000f }, {AgentModifier.ProjectileResistance, -500f} }));
+        //    boosters.Add(new BoosterBuffs(6, new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 },
+        //        new Dictionary<AgentModifier, float>() { { AgentModifier.MeleeResistance, 1000f }, {AgentModifier.ProjectileResistance, -500f} }));
 
-            return boosters;
-        }
+        //    return boosters;
+        //}
 
-        public static List<Group> GetDefaultGroups()
-        {
-            var groups = new List<Group>();
+        //public static List<Group> GetDefaultGroups()
+        //{
+        //    var groups = new List<Group>();
 
-            groups.Add(new Group(0, "Example Classes", new List<int>() { 1,2,3,4}));
-            groups.Add(new Group(1, "For gods sake, don't use it", new List<int> { 1}));
+        //    groups.Add(new Group(0, "Example Classes", new List<int>() { 1,2,3,4}));
+        //    groups.Add(new Group(1, "For gods sake, don't use it", new List<int> { 1}));
 
-            return groups;
-        }
+        //    return groups;
+        //}
 
         //public static List<EnemyScaling> GetDefaultEnemyScaling()
         //{

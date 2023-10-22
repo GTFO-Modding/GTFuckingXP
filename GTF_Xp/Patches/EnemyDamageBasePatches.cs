@@ -1,4 +1,5 @@
 ﻿using Agents;
+using GTFuckingXP;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Managers;
 using HarmonyLib;

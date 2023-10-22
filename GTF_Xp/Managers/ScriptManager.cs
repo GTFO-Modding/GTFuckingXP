@@ -1,5 +1,6 @@
 ﻿using EndskApi.Api;
 using GameData;
+using GTFuckingXp.Information;
 using GTFuckingXp.Managers;
 using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
@@ -77,7 +78,8 @@ namespace GTFuckingXP.Managers
             {
                 _folderPath = Path.Combine(MtfoUtils.CustomPath, "GtfXP");
             }
-            else
+
+            if(!_folderPath.Contains("BepInEx"))
             {
                 LogManager.Warn("No MTFO was found, using assembly path...");
                 _folderPath = Path.Combine(BepInEx.Paths.PluginPath, "XpJson");
@@ -158,9 +160,12 @@ namespace GTFuckingXP.Managers
                 WriteIndented = true
             };
             serializerSettings.Converters.Add(new JsonStringEnumConverter());
+            var rundownExists = _folderPath.Contains("BepInEx");
 
-            var enemyXpList = JsonSerializer.Deserialize<List<EnemyXp>>(
-                File.ReadAllText(Path.Combine(_folderPath, EnemyXpFileName)), serializerSettings);
+            var enemyXpList = rundownExists ?
+                JsonSerializer.Deserialize<List<EnemyXp>>(
+                File.ReadAllText(Path.Combine(_folderPath, EnemyXpFileName)), serializerSettings)
+                : DefaultXpData.GetDefaultEnemyXp();
 
             if (enemyXpList is null || enemyXpList.Count == 0)
             {
@@ -174,9 +179,12 @@ namespace GTFuckingXP.Managers
             //{
             //    LogManager.Warn("No Data received for expeditionMapping!");
             //}
+            
 
             var levelLayouts = JsonSerializer.Deserialize<List<LevelLayout>>(
-                File.ReadAllText(Path.Combine(_folderPath, LevelLayoutFileName)), serializerSettings);
+                rundownExists 
+                ? File.ReadAllText(Path.Combine(_folderPath, LevelLayoutFileName))
+                : DefaultConstants.ClassLayouts, serializerSettings);
 
             if (levelLayouts is null || levelLayouts.Count == 0)
             {
@@ -184,7 +192,9 @@ namespace GTFuckingXP.Managers
             }
 
             var boosterEffects = JsonSerializer.Deserialize<List<BoosterBuffs>>(
-               File.ReadAllText(Path.Combine(_folderPath, BoosterLayoutFileName)), serializerSettings);
+               rundownExists
+                ? File.ReadAllText(Path.Combine(_folderPath, BoosterLayoutFileName))
+                : DefaultConstants.BoosterEffects, serializerSettings);
 
             if (boosterEffects is null || boosterEffects.Count == 0)
             {
@@ -192,7 +202,9 @@ namespace GTFuckingXP.Managers
             }
 
             var groups = JsonSerializer.Deserialize<List<Group>>(
-                File.ReadAllText(Path.Combine(_folderPath, GroupFileName)), serializerSettings);
+                rundownExists
+                ? File.ReadAllText(Path.Combine(_folderPath, GroupFileName))
+                : DefaultConstants.Groups, serializerSettings);
             
             if(groups is null || groups.Count == 0)
             {
@@ -223,6 +235,9 @@ namespace GTFuckingXP.Managers
         private void WriteDefaultJsonBlocks()
         {
             LogManager.Debug("Writing default JsonBlocks...");
+            if (!_folderPath.Contains("BepInEx"))
+                return;
+
             if(!Directory.Exists(_folderPath))
             {
                 Directory.CreateDirectory(_folderPath);
@@ -252,19 +267,19 @@ namespace GTFuckingXP.Managers
             var levelLayoutsPath = Path.Combine(_folderPath, LevelLayoutFileName);
             if(!File.Exists(levelLayoutsPath))
             {
-                File.WriteAllText(levelLayoutsPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultLevelLayout(), serializerOptions));
+                File.WriteAllText(levelLayoutsPath, DefaultConstants.ClassLayouts);
             }
 
             var boosterLayoutsPath = Path.Combine(_folderPath, BoosterLayoutFileName);
             if(!File.Exists(boosterLayoutsPath))
             {
-                File.WriteAllText(boosterLayoutsPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultBoosterBuffs(), serializerOptions));
+                File.WriteAllText(boosterLayoutsPath, DefaultConstants.BoosterEffects);
             }
 
             var groupsPath = Path.Combine(_folderPath, GroupFileName);
             if(!File.Exists(groupsPath))
             {
-                File.WriteAllText(groupsPath, JsonSerializer.Serialize(DefaultXpData.GetDefaultGroups(), serializerOptions));
+                File.WriteAllText(groupsPath, DefaultConstants.Groups);
             }
 
             #region EnumValues

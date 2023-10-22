@@ -49,6 +49,6 @@
 	<ItemGroup>
 		<Reference Include="$(PluginsFolder)/GTFO-API.dll"/>
 		<Reference Include="$(PluginsFolder)/FloatingTextAPI.dll"/>
-		<Reference Include="$(PluginsFolder)/XpFolder/Expansions/DoubleJump.dll"/>
+		<Reference Include="$(PluginsFolder)/DoubleJump.dll"/>
 	</ItemGroup>
 </Project>

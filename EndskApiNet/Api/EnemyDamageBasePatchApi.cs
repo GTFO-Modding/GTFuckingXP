@@ -1,5 +1,6 @@
 ﻿using Agents;
-using EndskApi.NativePatches;
+using EndskApi.Patches.EnemyKill;
+using HarmonyLib;
 using UnityEngine;
 
 namespace EndskApi.Api
@@ -49,23 +50,23 @@ namespace EndskApi.Api
             set => CacheApi.SaveInstance<List<(double, ReceiveExplosionDamage)>>(value);
         }
 
-        internal static List<(double, ProcessReceivedDamage)> ProcessDamagePrefixCallbacks
-        {
-            get => CacheApi.GetInstance<List<(double, ProcessReceivedDamage)>>(CacheApi.InternalCache);
-            set => CacheApi.SaveInstance<List<(double, ProcessReceivedDamage)>>(value, CacheApi.InternalCache);
-        }
+        //internal static List<(double, ProcessReceivedDamage)> ProcessDamagePrefixCallbacks
+        //{
+        //    get => CacheApi.GetInstance<List<(double, ProcessReceivedDamage)>>(CacheApi.InternalCache);
+        //    set => CacheApi.SaveInstance<List<(double, ProcessReceivedDamage)>>(value, CacheApi.InternalCache);
+        //}
 
-        internal static List<(double, ProcessReceivedDamage)> ProcessDamagePostfixCallbacks
-        {
-            get => CacheApi.GetInstance<List<(double, ProcessReceivedDamage)>>();
-            set => CacheApi.SaveInstance<List<(double, ProcessReceivedDamage)>>(value);
-        }
+        //internal static List<(double, ProcessReceivedDamage)> ProcessDamagePostfixCallbacks
+        //{
+        //    get => CacheApi.GetInstance<List<(double, ProcessReceivedDamage)>>();
+        //    set => CacheApi.SaveInstance<List<(double, ProcessReceivedDamage)>>(value);
+        //}
 
         internal static void Setup()
         {
             if (!_setup)
             {
-                CacheApi.SaveInstance(new EnemyDamageBaseNatviePatches(), CacheApi.InternalCache);
+                BepInExLoader.Harmony.PatchAll(typeof(EnemyDamageBasePatches));
 
                 MeleePrefixCallbacks = new List<(double, ReceiveMeleeDamage)>();
                 MeleePostfixCallbacks = new List<(double, ReceiveMeleeDamage)>();
@@ -73,8 +74,8 @@ namespace EndskApi.Api
                 BulletPostfixCallbacks = new List<(double, ReceiveBulletDamage)>();
                 ExplosionPrefixCallbacks = new List<(double, ReceiveExplosionDamage)>();
                 ExplosionPostfixCallbacks = new List<(double, ReceiveExplosionDamage)>();
-                ProcessDamagePrefixCallbacks = new List<(double, ProcessReceivedDamage)>();
-                ProcessDamagePostfixCallbacks = new List<(double, ProcessReceivedDamage)>();
+                //ProcessDamagePrefixCallbacks = new List<(double, ProcessReceivedDamage)>();
+                //ProcessDamagePostfixCallbacks = new List<(double, ProcessReceivedDamage)>();
                 _setup = true;
             }
         }
@@ -121,19 +122,19 @@ namespace EndskApi.Api
             ExplosionPostfixCallbacks = new(ExplosionPostfixCallbacks.OrderBy(x => x.Item1));
         }
 
-        public static void AddProcessReceivedDamagePrefix(double priority, ProcessReceivedDamage method)
-        {
-            Setup();
-            ProcessDamagePrefixCallbacks.Add((priority, method));
-            ProcessDamagePrefixCallbacks = new(ProcessDamagePrefixCallbacks.OrderBy(x => x.Item1));
-        }
+        //public static void AddProcessReceivedDamagePrefix(double priority, ProcessReceivedDamage method)
+        //{
+        //    Setup();
+        //    ProcessDamagePrefixCallbacks.Add((priority, method));
+        //    ProcessDamagePrefixCallbacks = new(ProcessDamagePrefixCallbacks.OrderBy(x => x.Item1));
+        //}
 
-        public static void AddProcessReceivedDamagePostfix(double priority, ProcessReceivedDamage method)
-        {
-            Setup();
-            ProcessDamagePostfixCallbacks.Add((priority, method));
-            ProcessDamagePostfixCallbacks = new(ProcessDamagePostfixCallbacks.OrderBy(x => x.Item1));
-        }
+        //public static void AddProcessReceivedDamagePostfix(double priority, ProcessReceivedDamage method)
+        //{
+        //    Setup();
+        //    ProcessDamagePostfixCallbacks.Add((priority, method));
+        //    ProcessDamagePostfixCallbacks = new(ProcessDamagePostfixCallbacks.OrderBy(x => x.Item1));
+        //}
 
         internal static void InvokeReceiveMeleePrefix(Dam_EnemyDamageBase instance, ref pFullDamageData data)
         {
@@ -183,20 +184,20 @@ namespace EndskApi.Api
             }
         }
 
-        internal static void InvokeProcessReceivedDamagePrefix(Dam_EnemyDamageBase instance, ref float damage, Agent damageSource, ref Vector3 position, ref Vector3 direction, ref ES_HitreactType hitreact, ref bool tryForceHitreact, ref int limbID, ref float staggerDamageMulti, ref DamageNoiseLevel damageNoiseLevel)
-        {
-            foreach (var callback in ProcessDamagePrefixCallbacks)
-            {
-                callback.Item2(instance, ref damage, damageSource, ref position, ref direction, ref hitreact, ref tryForceHitreact, ref limbID, ref staggerDamageMulti, ref damageNoiseLevel);
-            }
-        }
+        //internal static void InvokeProcessReceivedDamagePrefix(Dam_EnemyDamageBase instance, ref float damage, Agent damageSource, ref Vector3 position, ref Vector3 direction, ref ES_HitreactType hitreact, ref bool tryForceHitreact, ref int limbID, ref float staggerDamageMulti, ref DamageNoiseLevel damageNoiseLevel)
+        //{
+        //    foreach (var callback in ProcessDamagePrefixCallbacks)
+        //    {
+        //        callback.Item2(instance, ref damage, damageSource, ref position, ref direction, ref hitreact, ref tryForceHitreact, ref limbID, ref staggerDamageMulti, ref damageNoiseLevel);
+        //    }
+        //}
 
-        internal static void InvokeProcessReceivedDamagePostfix(Dam_EnemyDamageBase instance, ref float damage, Agent damageSource, ref Vector3 position, ref Vector3 direction, ref ES_HitreactType hitreact, ref bool tryForceHitreact, ref int limbID, ref float staggerDamageMulti, ref DamageNoiseLevel damageNoiseLevel)
-        {
-            foreach (var callback in ProcessDamagePostfixCallbacks)
-            {
-                callback.Item2(instance, ref damage, damageSource, ref position, ref direction, ref hitreact, ref tryForceHitreact, ref limbID, ref staggerDamageMulti, ref damageNoiseLevel);
-            }
-        }
+        //internal static void InvokeProcessReceivedDamagePostfix(Dam_EnemyDamageBase instance, ref float damage, Agent damageSource, ref Vector3 position, ref Vector3 direction, ref ES_HitreactType hitreact, ref bool tryForceHitreact, ref int limbID, ref float staggerDamageMulti, ref DamageNoiseLevel damageNoiseLevel)
+        //{
+        //    foreach (var callback in ProcessDamagePostfixCallbacks)
+        //    {
+        //        callback.Item2(instance, ref damage, damageSource, ref position, ref direction, ref hitreact, ref tryForceHitreact, ref limbID, ref staggerDamageMulti, ref damageNoiseLevel);
+        //    }
+        //}
     }
 }

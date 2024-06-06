@@ -15,103 +15,44 @@ namespace EndskApi.Patches.EnemyKill
     {
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveMeleeDamage))]
         [HarmonyPrefix]
-        public static void MeleePrefix(Dam_EnemyDamageBase __instance, out bool __state)
+        public static void MeleePrefix(Dam_EnemyDamageBase __instance, ref pFullDamageData data)
         {
-            __state = __instance.Owner.Alive;
+            EnemyDamageBasePatchApi.InvokeReceiveMeleePrefix(__instance, ref data);
         }
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveMeleeDamage))]
         [HarmonyPostfix]
-        public static void MeleePostfix(Dam_EnemyDamageBase __instance, bool __state, pFullDamageData data)
+        public static void MeleePostfix(Dam_EnemyDamageBase __instance, ref pFullDamageData data)
         {
-            if (__state)
-            {
-                data.source.TryGet(out var agent);
-                if (agent is null)
-                {
-                    return;
-                }
-                var source = agent.TryCast<PlayerAgent>();
-                DamageDistributionAddDamageDealt(__instance.Owner, source, data.damage.Get(__instance.HealthMax));
-
-                if (!__instance.Owner.Alive)
-                {
-                    EnemyDied(__instance.Owner, source, LastHitType.Melee);
-                }
-            }
+            EnemyDamageBasePatchApi.InvokeReceiveMeleePostfix(__instance, ref data);
         }
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveBulletDamage))]
         [HarmonyPrefix]
-        public static void BulletPrefix(Dam_EnemyDamageBase __instance, out bool __state)
+        public static void BulletPrefix(Dam_EnemyDamageBase __instance, ref pBulletDamageData data)
         {
-            __state = __instance.Owner.Alive;
+            EnemyDamageBasePatchApi.InvokeReceiveBulletPrefix(__instance, ref data);
         }
 
         [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveBulletDamage))]
         [HarmonyPostfix]
-        public static void BulletPostfix(Dam_EnemyDamageBase __instance, bool __state, pBulletDamageData data)
+        public static void BulletPostfix(Dam_EnemyDamageBase __instance, ref pBulletDamageData data)
         {
-            if (__state)
-            {
-                data.source.TryGet(out var agent);
-                if (agent is null)
-                {
-                    return;
-                }
-                var source = agent.TryCast<PlayerAgent>();
-                DamageDistributionAddDamageDealt(__instance.Owner, source, data.damage.Get(__instance.HealthMax));
-
-                if(!__instance.Owner.Alive)
-                {
-                    EnemyDied(__instance.Owner, source, LastHitType.ShootyWeapon);
-                }
-            }
+            EnemyDamageBasePatchApi.InvokeReceiveBulletPostfix(__instance, ref data);
         }
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ExplosionDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveExplosionDamage))]
         [HarmonyPrefix]
-        public static void ExplosionPrefix(Dam_EnemyDamageBase __instance, out bool __state)
+        public static void ExplosionPrefix(Dam_EnemyDamageBase __instance, ref pExplosionDamageData data)
         {
-            __state = __instance.Owner.Alive && SNet.IsMaster;
+            EnemyDamageBasePatchApi.InvokeReceiveExplosionPrefix(__instance, ref data);
         }
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ExplosionDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageBase.ReceiveExplosionDamage))]
         [HarmonyPostfix]
-        public static void ExplosionPostfix(Dam_EnemyDamageBase __instance, bool __state)
+        public static void ExplosionPostfix(Dam_EnemyDamageBase __instance, ref pExplosionDamageData data)
         {
-            //There is no good way to get the playeragent, that placed this mine.
-            if (__state && !__instance.Owner.Alive)
-            {
-                EnemyDied(__instance.Owner, null, LastHitType.Explosion);
-            }
-        }
-
-        private static void DamageDistributionAddDamageDealt(EnemyAgent hitEnemy, PlayerAgent damageDealer, float damageDealt)
-        {
-            var damageDistribution = CacheApi.GetInstance<Dictionary<string, EnemyKillDistribution>>(CacheApi.InternalCache);
-
-            if (!damageDistribution.ContainsKey(hitEnemy.name))
-            {
-                var distribution = new EnemyKillDistribution(hitEnemy);
-                distribution.AddDamageDealtByPlayerAgent(damageDealer, damageDealt);
-                damageDistribution[hitEnemy.name] = distribution;
-                return;
-            }
-
-            damageDistribution[hitEnemy.name].AddDamageDealtByPlayerAgent(damageDealer, damageDealt);
-        }
-
-        private static void EnemyDied(EnemyAgent hitEnemy, PlayerAgent lastHit, LastHitType lastHitType)
-        {
-            var damageDistribution = CacheApi.GetInstance<Dictionary<string, EnemyKillDistribution>>(CacheApi.InternalCache);
-            if(damageDistribution.TryGetValue(hitEnemy.name, out EnemyKillDistribution distribution))
-            {
-                distribution.LastHitDealtBy = lastHit;
-                distribution.lastHitType = lastHitType;
-                
-                EnemyKillApi.InvokeEnemyKilledCallbacks(distribution);
-            }
+            EnemyDamageBasePatchApi.InvokeReceiveExplosionPostfix(__instance, ref data);
         }
     }
 }

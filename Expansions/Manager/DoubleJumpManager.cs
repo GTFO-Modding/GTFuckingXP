@@ -1,4 +1,5 @@
 ﻿using EndskApi.Api;
+using GTFuckingXp.Information;
 using GTFuckingXP.Information.Level;
 using HarmonyLib;
 using System.Collections.Generic;
@@ -83,14 +84,7 @@ namespace XpExpansions.Manager
             var doubleJumpPath = Path.Combine(FolderPath, _expansionFileName);
             if (!File.Exists(doubleJumpPath))
             {
-                var serializerOptions = new JsonSerializerOptions
-                {
-                    IncludeFields = false,
-                    ReadCommentHandling = JsonCommentHandling.Skip,
-                    PropertyNameCaseInsensitive = true,
-                    WriteIndented = true
-                };
-                File.WriteAllText(doubleJumpPath, JsonSerializer.Serialize(GetDefaultData(), serializerOptions));
+                File.WriteAllText(doubleJumpPath, DefaultConstants.DoubleJumpExpansion);
             }
         }
 

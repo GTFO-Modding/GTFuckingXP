@@ -25,7 +25,7 @@ namespace EndskApi.Api
                 CacheApi.SaveInformation(StartLevelKey, callBackList, CacheApi.InternalCache);
             }
 
-            callBackList.Add(callBack);
+            callBackList.Add(callBack); 
         }
 
         public static void AddEndLevelCallback(Action callBack)

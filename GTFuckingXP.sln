@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OverrideXpClasses", "OverrideXpClasses\OverrideXpClasses.csproj", "{A647416D-4215-46AB-96E0-DB5BF52DBA34}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndskApiNet", "EndskApiNet\EndskApiNet.csproj", "{AF708C52-C7B0-499A-80B6-394BAE3F6695}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GTF_Xp", "GTF_Xp\GTF_Xp.csproj", "{D8E61F2D-8067-4BD8-B651-8BDCBBDA2597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expansions", "Expansions\Expansions.csproj", "{AB0F05D9-17A3-47B3-A559-7D18C775BC01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expansions", "Expansions\Expansions.csproj", "{AB0F05D9-17A3-47B3-A559-7D18C775BC01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A647416D-4215-46AB-96E0-DB5BF52DBA34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF708C52-C7B0-499A-80B6-394BAE3F6695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF708C52-C7B0-499A-80B6-394BAE3F6695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF708C52-C7B0-499A-80B6-394BAE3F6695}.Release|Any CPU.ActiveCfg = Release|Any CPU

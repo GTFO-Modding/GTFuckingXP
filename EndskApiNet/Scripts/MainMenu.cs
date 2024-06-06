@@ -25,6 +25,7 @@ namespace EndskApi.Scripts
             PageTitle = "MainMenu";
             _toolToMenuMap = new Dictionary<Tool, BaseMenu>();
             _unknownMenus = new List<BaseMenu>();
+            _currentState = MenuStates.HiddenAndActive;
 
             Instance = this;
         }
@@ -51,8 +52,6 @@ namespace EndskApi.Scripts
 
         public void Awake()
         {
-            MenuToggleUpdated(new Tool(), false);
-
             var enemyBlocks = EnemyDataBlock.GetAllBlocks();
             _enemyNamesIdMap = new (uint, string)[enemyBlocks.Count];
             for (int i = 0; i < enemyBlocks.Count; i++)
@@ -67,7 +66,6 @@ namespace EndskApi.Scripts
         {
             MenuToggleUpdated(null, false);
             _currentState = MenuStates.HiddenAndActive;
-            menu.SetState(MenuStates.Active);
             _unknownMenus.Add(menu);
         }
 
@@ -82,6 +80,11 @@ namespace EndskApi.Scripts
         {
             _toolToMenuMap.Add(Tool, menu);
             _tools.Add(Tool);
+            //if(_toolToMenuMap.Any(it => it.Key.CurrentToggleState))
+            //{
+                _currentState = MenuStates.Active;
+            //}
+            //_currentState = _toolToMenuMap.Any(it => it.Key.CurrentToggleState) ? MenuStates.Active : MenuStates.HiddenAndActive;
         }
 
         [HideFromIl2Cpp]
@@ -108,6 +111,9 @@ namespace EndskApi.Scripts
         public void AddHiddenTool(Tool tool)
         {
             _hiddenTools.Add(tool);
+            //if()
+
+            //_currentState = _toolToMenuMap.Any(it => it.Key.CurrentToggleState) ? MenuStates.Active : MenuStates.HiddenAndActive;
         }
 
         public void RemoveHiddenTool(Tool tool)

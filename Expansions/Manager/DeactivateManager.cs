@@ -24,6 +24,9 @@ namespace XpExpansions.Manager
 
         private void WriteDefaultJsonBlocks()
         {
+            if (!FolderPath.Contains("BepInEx"))
+                return;
+
             if (!Directory.Exists(FolderPath))
             {
                 Directory.CreateDirectory(FolderPath);

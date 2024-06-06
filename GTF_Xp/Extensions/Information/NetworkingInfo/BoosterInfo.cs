@@ -66,6 +66,12 @@ namespace GTFuckingXP.Information.NetworkingInfo
             F46 = boosterValues[45];
             F47 = boosterValues[46];
             F48 = boosterValues[47];
+            F49 = boosterValues[48];
+            F50 = boosterValues[49];
+            F51 = boosterValues[50];
+            F52 = boosterValues[51];
+            F53 = boosterValues[52];
+            F54 = boosterValues[53];
         }
 
         public float F1;
@@ -115,11 +121,17 @@ namespace GTFuckingXP.Information.NetworkingInfo
         public float F45;
         public float F46;
         public float F47;
-        public float F48;
+        public float F48; 
+        public float F49;
+        public float F50;
+        public float F51;
+        public float F52;
+        public float F53;
+        public float F54;
 
         public float[] GetBoosterValues()
         {
-            return new float[] { F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23, F24, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35, F36, F37, F38, F39, F40, F41, F42, F43, F44, F45, F46, F47, F48 };
+            return new float[] { F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23, F24, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35, F36, F37, F38, F39, F40, F41, F42, F43, F44, F45, F46, F47, F48, F49, F50, F51, F52, F53, F54 };
 
             //float[] boosterValues = new float[48];
             //boosterValues[0] = F1;

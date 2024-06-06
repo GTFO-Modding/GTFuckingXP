@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using GTFuckingXP.Managers;
 using System;
 using System.Linq;

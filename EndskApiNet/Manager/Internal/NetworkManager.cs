@@ -1,4 +1,5 @@
 ﻿using EndskApi.Api;
+using EndskApi.Information.WeaponSwitcher;
 using GTFO.API;
 
 namespace EndskApi.Manager.Internal
@@ -34,7 +35,17 @@ namespace EndskApi.Manager.Internal
             NetworkAPI.InvokeEvent(_sendCheckpointCleanupKey, new DummyStruct());
         }
 
+        public static void SendEquipGear(GearInfo info)
+        {
+
+        }
+
         internal struct DummyStruct
         { }
+
+        internal struct EquipGearStruct
+        {
+
+        }
     }
 }

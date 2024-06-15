@@ -6,13 +6,13 @@ using HarmonyLib;
 
 namespace GTFuckingXp.Patches
 {
-    [HarmonyPatch(typeof(Dam_EnemyDamageBase))]
-    public static class EnemyDamageBasePatches
+    [HarmonyPatch(typeof(Dam_EnemyDamageLimb))]
+    public static class EnemyDamageLimbPatches
     {
 
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.MeleeDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageLimb.MeleeDamage))]
         [HarmonyPrefix]
-        public static void MeleePrefix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
+        public static void MeleePrefix(Dam_EnemyDamageLimb __instance, ref float dam, Agent sourceAgent)
         {
             if (!__instance.Owner.Alive)
                 return;
@@ -30,10 +30,9 @@ namespace GTFuckingXp.Patches
             }
         }
 
-        [HarmonyBefore(BepInExLoader.GUID, "com.dak.DamageNumbers")]
-        [HarmonyPatch(nameof(Dam_EnemyDamageBase.BulletDamage))]
+        [HarmonyPatch(nameof(Dam_EnemyDamageLimb.BulletDamage))]
         [HarmonyPrefix]
-        public static void BulletPostfix(Dam_EnemyDamageBase __instance, ref float dam, Agent sourceAgent)
+        public static void BulletPostfix(Dam_EnemyDamageLimb __instance, ref float dam, Agent sourceAgent)
         {
             if (!__instance.Owner.Alive)
                 return;

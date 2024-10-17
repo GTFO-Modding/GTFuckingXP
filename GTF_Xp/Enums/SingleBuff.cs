@@ -2,8 +2,10 @@
 {
     public enum SingleBuff
     {
+        Invalid = -1,
         Heal,
-        Desinfect,
+        Disinfect,
+        Desinfect = Disinfect,
         AmmunitionMain,
         AmmunitionSpecial,
         AmmunitionTool,

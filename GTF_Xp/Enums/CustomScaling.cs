@@ -2,6 +2,7 @@
 {
     public enum CustomScaling
     {
+        Invalid = -1,
         MeleeRangeMultiplier,
         MeleeHitBoxSizeMultiplier,
         MovementSpeedMultiplier,

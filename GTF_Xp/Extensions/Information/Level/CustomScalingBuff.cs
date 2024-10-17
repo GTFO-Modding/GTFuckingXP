@@ -10,7 +10,7 @@ namespace GTFuckingXP.Information.Level
             Value = value;
         }
 
-        public CustomScaling CustomBuff { get; set; }
-        public float Value { get; set; }
+        public readonly CustomScaling CustomBuff = CustomScaling.Invalid;
+        public readonly float Value;
     }
 }

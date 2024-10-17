@@ -62,13 +62,10 @@ namespace GTFuckingXP.Managers
 
         private static MeleeWeaponFirstPerson GetLocalMeleeWeapon()
         {
-            foreach(var item in PlayerBackpackManager.LocalBackpack.BackpackItems)
+            if (PlayerBackpackManager.LocalBackpack.TryGetBackpackItem(InventorySlot.GearMelee, out var bpItem))
             {
-                if(item.Instance.pItemData.slot == InventorySlot.GearMelee)
-                {
-                    LogManager.Debug("Found Melee");
-                    return item.Instance.Cast<MeleeWeaponFirstPerson>();
-                }
+                LogManager.Debug("Found Melee");
+                return bpItem.Instance.Cast<MeleeWeaponFirstPerson>();
             }
 
             LogManager.Warn("No melee weapon found o.O?");

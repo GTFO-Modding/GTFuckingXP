@@ -23,43 +23,6 @@ namespace GTFuckingXP.Managers
                 SetCustomBuff(buff, targetAgent);
         }
 
-        private static void StartRepellerWithoutSound(FogRepeller_Sphere antiFog)
-        {
-            //antiFog.m_repellerEnabled = true;
-            //if (!antiFog.m_hasLight && FX_Manager.TryAllocateFXLight(out var light, false))
-            //{
-            //    antiFog.m_light = light;
-            //    antiFog.m_hasLight = true;
-            //}
-            //if (antiFog.m_hasLight)
-            //{
-            //    antiFog.m_light.SetColor(new Color(0f,0f,0f));
-            //    antiFog.m_light.SetRange(0.5f);
-            //    antiFog.m_light.m_intensity = 0.6f;
-            //    antiFog.m_light.UpdateData();
-            //    if (antiFog.m_lightColorRoutine != null)
-            //        antiFog.StopCoroutine(antiFog.m_lightColorRoutine);
-            //    antiFog.m_lightColorRoutine = antiFog.StartCoroutine(antiFog.LightColorUpdate());
-            //}
-            //if (antiFog.m_infectionShield == null)
-            //{
-            //    EV_Sphere evSphere = new EV_Sphere();
-            //    evSphere.contents = eEffectVolumeContents.Infection;
-            //    evSphere.modification = eEffectVolumeModification.Shield;
-            //    evSphere.modificationScale = 1f;
-            //    evSphere.position = antiFog.transform.position;
-            //    evSphere.invert = true;
-            //    evSphere.effectOrder = 1;
-            //    antiFog.m_infectionShield = evSphere;
-            //    EffectVolumeManager.RegisterVolume((EffectVolume)antiFog.m_infectionShield);
-            //}
-
-            //if (!antiFog.m_isInitialized)
-            //    antiFog.ChangeState(eFogRepellerSphereState.Initialize, 3f);
-            //else
-            //    antiFog.ChangeState(eFogRepellerSphereState.Grow, antiFog.GrowDuration);
-        }
-
         private static MeleeWeaponFirstPerson GetLocalMeleeWeapon()
         {
             if (PlayerBackpackManager.LocalBackpack.TryGetBackpackItem(InventorySlot.GearMelee, out var bpItem))
@@ -181,5 +144,42 @@ namespace GTFuckingXP.Managers
                     break;
             }
         }
+
+        /*private static void StartRepellerWithoutSound(FogRepeller_Sphere antiFog)
+        {
+            antiFog.m_repellerEnabled = true;
+            if (!antiFog.m_hasLight && FX_Manager.TryAllocateFXLight(out var light, false))
+            {
+                antiFog.m_light = light;
+                antiFog.m_hasLight = true;
+            }
+            if (antiFog.m_hasLight)
+            {
+                antiFog.m_light.SetColor(new Color(0f,0f,0f));
+                antiFog.m_light.SetRange(0.5f);
+                antiFog.m_light.m_intensity = 0.6f;
+                antiFog.m_light.UpdateData();
+                if (antiFog.m_lightColorRoutine != null)
+                    antiFog.StopCoroutine(antiFog.m_lightColorRoutine);
+                antiFog.m_lightColorRoutine = antiFog.StartCoroutine(antiFog.LightColorUpdate());
+            }
+            if (antiFog.m_infectionShield == null)
+            {
+                EV_Sphere evSphere = new EV_Sphere();
+                evSphere.contents = eEffectVolumeContents.Infection;
+                evSphere.modification = eEffectVolumeModification.Shield;
+                evSphere.modificationScale = 1f;
+                evSphere.position = antiFog.transform.position;
+                evSphere.invert = true;
+                evSphere.effectOrder = 1;
+                antiFog.m_infectionShield = evSphere;
+                EffectVolumeManager.RegisterVolume((EffectVolume)antiFog.m_infectionShield);
+            }
+
+            if (!antiFog.m_isInitialized)
+                antiFog.ChangeState(eFogRepellerSphereState.Initialize, 3f);
+            else
+                antiFog.ChangeState(eFogRepellerSphereState.Grow, antiFog.GrowDuration);
+        }*/
     }
 }

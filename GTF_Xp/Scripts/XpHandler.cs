@@ -190,7 +190,6 @@ namespace GTFuckingXP.Scripts
         private void ApplySingleUseBuffs(Level reachedLevel)
         {
             var player = PlayerManager.GetLocalPlayerAgent();
-            var ammoStorage = PlayerBackpackManager.LocalBackpack.AmmoStorage;
             foreach(var singleUseBuff in reachedLevel.LevelUpBonus)
             {
                 switch(singleUseBuff.SingleBuff)
@@ -202,19 +201,37 @@ namespace GTFuckingXP.Scripts
                         player.GiveDisinfection(player, singleUseBuff.Value);
                         break;
                     case SingleBuff.AmmunitionMain:
-                        if (!ammoStorage.StandardAmmo.IsFull)
-                            player.GiveAmmoRel(player, singleUseBuff.Value, 0f, 0f);
+                        GiveAmmoRel(player, singleUseBuff.Value, InventorySlot.GearStandard);
                         break;
                     case SingleBuff.AmmunitionSpecial:
-                        if (!ammoStorage.SpecialAmmo.IsFull)
-                            player.GiveAmmoRel(player, 0f, singleUseBuff.Value, 0f);
+                        GiveAmmoRel(player, singleUseBuff.Value, InventorySlot.GearSpecial);
                         break;
                     case SingleBuff.AmmunitionTool:
-                        if (!ammoStorage.ClassAmmo.IsFull)
-                            player.GiveAmmoRel(player, 0f, 0f, singleUseBuff.Value);
+                        GiveAmmoRel(player, singleUseBuff.Value, InventorySlot.GearClass);
                         break;
                 }
             }
+        }
+
+        private static void GiveAmmoRel(PlayerAgent player, float ammoRel, InventorySlot slot)
+        {
+            var block = player.PlayerData;
+            var ammoStorage = PlayerBackpackManager.LocalBackpack.AmmoStorage;
+            var slotAmmo = ammoStorage.GetInventorySlotAmmo(slot);
+            if (slotAmmo.IsFull) return;
+
+            float cap = slot switch
+            {
+                InventorySlot.GearStandard => block.AmmoStandardResourcePackMaxCap,
+                InventorySlot.GearSpecial => block.AmmoSpecialResourcePackMaxCap,
+                InventorySlot.GearClass => block.AmmoClassResourcePackMaxCap,
+                _ => 0
+            };
+
+            slotAmmo.AddAmmo(ammoRel * cap);
+            ammoStorage.UpdateSlotAmmoUI(InventorySlot.GearStandard);
+            ammoStorage.NeedsSync = true;
+            PlayerBackpackManager.ForceLocalAmmoStorageUpdate();
         }
     }
 }

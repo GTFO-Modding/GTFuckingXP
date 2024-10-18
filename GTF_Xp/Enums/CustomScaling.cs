@@ -6,12 +6,13 @@
         MeleeRangeMultiplier,
         MeleeHitBoxSizeMultiplier,
         MovementSpeedMultiplier,
-        AntiFogSphere,
+        //AntiFogSphere,
         JumpVelInitialPlus,
         JumpGravityMulDefaultPlus,
         JumpGravityMulButtonReleased,
         JumpGravityMulAfterPeakPlus,
         JumpGravityMulFallingPlus,
-        JumpVerticalVelocityMaxPlus
+        JumpVerticalVelocityMaxPlus,
+        RegenStartDelayMultiplier
     }
 }

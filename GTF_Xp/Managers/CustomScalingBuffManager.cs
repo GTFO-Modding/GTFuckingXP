@@ -15,9 +15,7 @@ namespace GTFuckingXP.Managers
             if (buffs is null || buffs.Count == 0)
                 return;
 
-            foreach (Enums.CustomScaling customBuff in Enum.GetValues(typeof(Enums.CustomScaling)))
-                if (CacheApiWrapper.HasDefaultCustomScaling(customBuff))
-                    SetCustomBuff(customBuff, 1f, targetAgent);
+            ResetCustomBuffs(targetAgent);
 
             foreach(var buff in buffs)
                 SetCustomBuff(buff, targetAgent);
@@ -86,8 +84,8 @@ namespace GTFuckingXP.Managers
                         playerData.crouchMoveSpeed = movementInfo.crouch * value;
                     }
                     break;
-                case Enums.CustomScaling.AntiFogSphere:
-                    break;
+                //case Enums.CustomScaling.AntiFogSphere:
+                //    break;
                 case Enums.CustomScaling.JumpVelInitialPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpVelInitialDefault))
                     {
@@ -142,7 +140,39 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpVerticalVelocityMax = jumpVelocityMax + value;
                     break;
+                case Enums.CustomScaling.RegenStartDelayMultiplier:
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float regenDelay))
+                    {
+                        regenDelay = targetAgent.PlayerData.healthRegenStartDelayAfterDamage;
+                        CacheApiWrapper.SetDefaultCustomScaling(customBuff, regenDelay);
+                    }
+
+                    targetAgent.PlayerData.healthRegenStartDelayAfterDamage = regenDelay * value;
+                    targetAgent.Damage.m_nextRegen = Math.Min(targetAgent.Damage.m_nextRegen, Clock.Time + regenDelay * value);
+                    break;
             }
+        }
+
+        public static void ResetCustomBuffs(PlayerAgent targetAgent)
+        {
+            foreach (Enums.CustomScaling customBuff in Enum.GetValues(typeof(Enums.CustomScaling)))
+                if (CacheApiWrapper.HasDefaultCustomScaling(customBuff))
+                    SetCustomBuff(customBuff, GetResetModifier(customBuff), targetAgent);
+        }
+
+        private static float GetResetModifier(Enums.CustomScaling customBuff)
+        {
+            return customBuff switch
+            {
+                //Enums.CustomScaling.AntiFogSphere 
+                Enums.CustomScaling.JumpVelInitialPlus 
+                or Enums.CustomScaling.JumpGravityMulDefaultPlus 
+                or Enums.CustomScaling.JumpGravityMulButtonReleased 
+                or Enums.CustomScaling.JumpGravityMulAfterPeakPlus 
+                or Enums.CustomScaling.JumpGravityMulFallingPlus 
+                or Enums.CustomScaling.JumpVerticalVelocityMaxPlus => 0f,
+                _ => 1f,
+            };
         }
 
         /*private static void StartRepellerWithoutSound(FogRepeller_Sphere antiFog)

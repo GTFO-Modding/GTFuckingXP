@@ -39,7 +39,7 @@ namespace GTFuckingXp.Patches
 
             if (sourceAgent != null)
             {
-                if (sourceAgent.IsLocallyOwned)
+                if (sourceAgent.IsLocallyOwned && !SentryGunCheckPatches.SentryShot)
                 {
                     var damage = dam;
                     LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled to:");

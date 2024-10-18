@@ -3,7 +3,6 @@ using HarmonyLib;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Enums;
 using Agents;
-using GTFuckingXP.Managers;
 
 namespace GTFuckingXp.Patches
 {
@@ -20,11 +19,7 @@ namespace GTFuckingXp.Patches
 
             CustomScalingBuff? buff = CacheApiWrapper.GetActiveLevel().CustomScaling.FirstOrDefault(buff => buff.CustomBuff == CustomScaling.BleedResistance);
             if (buff != null)
-            {
-                LogManager.Message($"Fire damage from local player registered. {dam} was scaled to:");
                 dam *= 2f - buff.Value;
-                LogManager.Message($"{dam}");
-            }
         }
     }
 }

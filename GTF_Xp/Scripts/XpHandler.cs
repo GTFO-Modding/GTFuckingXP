@@ -128,6 +128,13 @@ namespace GTFuckingXP.Scripts
             if (availableLevels.Count() > 0)
             {
                 var newLevel = availableLevels.OrderByDescending(it => it.LevelNumber).First();
+                foreach (var level in availableLevels)
+                {
+                    if (level.LevelNumber == newLevel.LevelNumber) continue;
+                    if (level.LevelNumber == oldLevel.LevelNumber) break;
+
+                    ApplySingleUseBuffs(level);
+                }
 
                 ChangeCurrentLevel(newLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levels.PersistentId, newLevel.LevelNumber));
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
@@ -183,6 +190,7 @@ namespace GTFuckingXP.Scripts
         private void ApplySingleUseBuffs(Level reachedLevel)
         {
             var player = PlayerManager.GetLocalPlayerAgent();
+            var ammoStorage = PlayerBackpackManager.LocalBackpack.AmmoStorage;
             foreach(var singleUseBuff in reachedLevel.LevelUpBonus)
             {
                 switch(singleUseBuff.SingleBuff)
@@ -194,13 +202,16 @@ namespace GTFuckingXP.Scripts
                         player.GiveDisinfection(player, singleUseBuff.Value);
                         break;
                     case SingleBuff.AmmunitionMain:
-                        player.GiveAmmoRel(player, singleUseBuff.Value, 0f, 0f);
+                        if (!ammoStorage.StandardAmmo.IsFull)
+                            player.GiveAmmoRel(player, singleUseBuff.Value, 0f, 0f);
                         break;
                     case SingleBuff.AmmunitionSpecial:
-                        player.GiveAmmoRel(player, 0f, singleUseBuff.Value, 0f);
+                        if (!ammoStorage.SpecialAmmo.IsFull)
+                            player.GiveAmmoRel(player, 0f, singleUseBuff.Value, 0f);
                         break;
                     case SingleBuff.AmmunitionTool:
-                        player.GiveAmmoRel(player, 0f, 0f, singleUseBuff.Value);
+                        if (!ammoStorage.ClassAmmo.IsFull)
+                            player.GiveAmmoRel(player, 0f, 0f, singleUseBuff.Value);
                         break;
                 }
             }

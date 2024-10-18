@@ -128,6 +128,13 @@ namespace GTFuckingXP.Scripts
             if (availableLevels.Count() > 0)
             {
                 var newLevel = availableLevels.OrderByDescending(it => it.LevelNumber).First();
+                foreach (var level in availableLevels)
+                {
+                    if (level.LevelNumber == newLevel.LevelNumber) continue;
+                    if (level.LevelNumber == oldLevel.LevelNumber) break;
+
+                    ApplySingleUseBuffs(level);
+                }
 
                 ChangeCurrentLevel(newLevel, BoosterBuffManager.Instance.GetFittingBoosterBuff(levels.PersistentId, newLevel.LevelNumber));
                 NextLevel = levels.Levels.FirstOrDefault(it => it.LevelNumber == newLevel.LevelNumber + 1);
@@ -194,16 +201,37 @@ namespace GTFuckingXP.Scripts
                         player.GiveDisinfection(player, singleUseBuff.Value);
                         break;
                     case SingleBuff.AmmunitionMain:
-                        player.GiveAmmoRel(player, singleUseBuff.Value, 0f, 0f);
+                        GiveAmmoRel(player, singleUseBuff.Value, InventorySlot.GearStandard);
                         break;
                     case SingleBuff.AmmunitionSpecial:
-                        player.GiveAmmoRel(player, 0f, singleUseBuff.Value, 0f);
+                        GiveAmmoRel(player, singleUseBuff.Value, InventorySlot.GearSpecial);
                         break;
                     case SingleBuff.AmmunitionTool:
-                        player.GiveAmmoRel(player, 0f, 0f, singleUseBuff.Value);
+                        GiveAmmoRel(player, singleUseBuff.Value, InventorySlot.GearClass);
                         break;
                 }
             }
+        }
+
+        private static void GiveAmmoRel(PlayerAgent player, float ammoRel, InventorySlot slot)
+        {
+            var block = player.PlayerData;
+            var ammoStorage = PlayerBackpackManager.LocalBackpack.AmmoStorage;
+            var slotAmmo = ammoStorage.GetInventorySlotAmmo(slot);
+            if (slotAmmo.IsFull) return;
+
+            float cap = slot switch
+            {
+                InventorySlot.GearStandard => block.AmmoStandardResourcePackMaxCap,
+                InventorySlot.GearSpecial => block.AmmoSpecialResourcePackMaxCap,
+                InventorySlot.GearClass => block.AmmoClassResourcePackMaxCap,
+                _ => 0
+            };
+
+            slotAmmo.AddAmmo(ammoRel * cap);
+            ammoStorage.UpdateSlotAmmoUI(InventorySlot.GearStandard);
+            ammoStorage.NeedsSync = true;
+            PlayerBackpackManager.ForceLocalAmmoStorageUpdate();
         }
     }
 }

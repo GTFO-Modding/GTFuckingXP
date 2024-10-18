@@ -10,7 +10,7 @@ namespace GTFuckingXP.Information.Level
             Value = value;
         }
 
-        public SingleBuff SingleBuff { get; set; }
+        public SingleBuff SingleBuff { get; set; } = SingleBuff.Invalid;
 
         public float Value { get; set; }
     }

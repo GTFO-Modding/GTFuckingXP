@@ -2,15 +2,18 @@
 {
     public enum CustomScaling
     {
+        Invalid = -1,
         MeleeRangeMultiplier,
         MeleeHitBoxSizeMultiplier,
         MovementSpeedMultiplier,
-        AntiFogSphere,
+        //AntiFogSphere,
         JumpVelInitialPlus,
         JumpGravityMulDefaultPlus,
         JumpGravityMulButtonReleased,
         JumpGravityMulAfterPeakPlus,
         JumpGravityMulFallingPlus,
-        JumpVerticalVelocityMaxPlus
+        JumpVerticalVelocityMaxPlus,
+        RegenStartDelayMultiplier,
+        BleedResistance
     }
 }

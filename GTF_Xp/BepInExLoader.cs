@@ -26,7 +26,7 @@ namespace GTFuckingXP
         MODNAME = "GTFuckingXP",
         AUTHOR = "Endskill",
         GUID = AUTHOR + "." + MODNAME,
-        VERSION = "1.3.1";
+        VERSION = "2.1.0";
 
         public static bool RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
@@ -92,6 +92,8 @@ namespace GTFuckingXP
             //General xp mod usage
             Harmony.PatchAll(typeof(GS_InLevelPatches));
             Harmony.PatchAll(typeof(EnemyDamageLimbPatches));
+            Harmony.PatchAll(typeof(PlayerFireDamagePatches));
+            Harmony.PatchAll(typeof(SentryGunCheckPatches));
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));
             Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
             Harmony.PatchAll(typeof(SnetSessionHubPatches));

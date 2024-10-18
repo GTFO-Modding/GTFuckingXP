@@ -224,107 +224,24 @@ namespace GTFuckingXP.Extensions
             return CacheApi.GetInformation<List<Action<Level>>>(ScriptsStartedCallbackKey, XpModCacheName);
         }
 
-        public static void SetDefaultMeleeRange(float meleeRange)
+        public static void SetDefaultCustomScaling<T>(Enums.CustomScaling customScaling, T info) where T : notnull
         {
-            CacheApi.SaveInformation(DefaultMeleeRangeKey, meleeRange, XpModCacheName);
+            CacheApi.SaveInformation(customScaling, info, XpModCacheName);
         }
 
-        public static void RemoveDefaultMeleeRange()
+        public static bool TryGetDefaultCustomScaling<T>(Enums.CustomScaling customScaling, out T info)
         {
-            CacheApi.RemoveInformation(DefaultMeleeRangeKey, XpModCacheName);
+            return CacheApi.TryGetInformation(customScaling, out info, XpModCacheName);
         }
 
-        public static bool TryGetDefaultMeleeRange(out float meleeRange)
+        public static bool HasDefaultCustomScaling(Enums.CustomScaling customScaling)
         {
-            return CacheApi.TryGetInformation(DefaultMeleeRangeKey, out meleeRange, XpModCacheName);
+            return CacheApi.ContainsKey(customScaling, XpModCacheName);
         }
 
-        public static void SetDefaultMeleeHitBox(float meleeHitbox)
+        public static void RemoveDefaultCustomScaling(Enums.CustomScaling customScaling)
         {
-            CacheApi.SaveInformation(DefaultMeleeHitBoxKey, meleeHitbox, XpModCacheName);
-        }
-
-        public static void RemoveDefaultMeleeHitBox()
-        {
-            CacheApi.RemoveInformation(DefaultMeleeHitBoxKey, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultMeleeHitBox(out float meleeHitbox)
-        {
-            return CacheApi.TryGetInformation(DefaultMeleeHitBoxKey, out meleeHitbox, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultMovment(out (float walk, float run, float air, float crouch) movmentData)
-        {
-            return CacheApi.TryGetInformation(DefaultMovmentKey, out movmentData, XpModCacheName);
-        }
-
-        public static void SetDefaultMovment(float walk, float run, float air, float crouch)
-        {
-            CacheApi.SaveInformation(DefaultMovmentKey, (walk, run, air, crouch), XpModCacheName);
-        }
-
-        public static void SetDefaultJumpVelInitial(float value)
-        {
-            CacheApi.SaveInformation(DefaultJumpVelInitialKey, value, XpModCacheName);
-        }
-
-        public static void SetDefaultJumpGravityMulDefault(float value)
-        {
-            CacheApi.SaveInformation(DefaultJumpGravityMulDefaultKey, value, XpModCacheName);
-        }
-
-        public static void SetDefaultJumpGravityMulButtonReleased(float value)
-        {
-            CacheApi.SaveInformation(DefaultJumpGravityMulButtonReleasedKey, value, XpModCacheName);
-        }
-
-        public static void SetDefaultJumpGravityMulAfterPeak(float value)
-        {
-            CacheApi.SaveInformation(DefaultJumpGravityMulAfterPeakKey, value, XpModCacheName);
-        }
-
-        public static void SetDefaultJumpGravityMulFalling(float value)
-        {
-            CacheApi.SaveInformation(DefaultJumpGravityMulFallingKey, value, XpModCacheName);
-        }
-
-        public static void SetDefaultJumpVelocityMax(float value)
-        {
-            CacheApi.SaveInformation(DefaultJumpVelocityMaxKey, value, XpModCacheName);
-        }
-
-
-
-
-        public static bool TryGetDefaultJumpVelInitial(out float value)
-        {
-            return CacheApi.TryGetInformation(DefaultJumpVelInitialKey, out value, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultJumpGravityMulDefault(out float value)
-        {
-            return CacheApi.TryGetInformation(DefaultJumpGravityMulDefaultKey, out value, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultJumpGravityMulButtonReleased(out float value)
-        {
-            return CacheApi.TryGetInformation(DefaultJumpGravityMulButtonReleasedKey, out value, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultJumpGravityMulAfterPeak(out float value)
-        {
-            return CacheApi.TryGetInformation(DefaultJumpGravityMulAfterPeakKey, out value, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultJumpGravityMulFalling(out float value)
-        {
-            return CacheApi.TryGetInformation(DefaultJumpGravityMulFallingKey, out value, XpModCacheName);
-        }
-
-        public static bool TryGetDefaultJumpVelocityMax(out float value)
-        {
-            return CacheApi.TryGetInformation(DefaultJumpVelocityMaxKey, out value, XpModCacheName);
+            CacheApi.RemoveInformation(customScaling, XpModCacheName);
         }
     }
 }

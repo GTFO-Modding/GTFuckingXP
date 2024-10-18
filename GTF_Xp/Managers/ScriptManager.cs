@@ -127,27 +127,15 @@ namespace GTFuckingXP.Managers
         /// </summary>
         public void EndLevelScripts()
         {
-            var list = new List<CustomScalingBuff>();
-            list.Add(new CustomScalingBuff(CustomScaling.MeleeRangeMultiplier, 1f));
-            list.Add(new CustomScalingBuff(CustomScaling.MeleeHitBoxSizeMultiplier, 1f));
-            list.Add(new CustomScalingBuff(CustomScaling.MovementSpeedMultiplier, 1f));
-            list.Add(new CustomScalingBuff(CustomScaling.AntiFogSphere, 0f));
-            list.Add(new CustomScalingBuff(CustomScaling.JumpVelInitialPlus, 0f));
-            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulDefaultPlus, 0f));
-            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulButtonReleased, 0f));
-            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulAfterPeakPlus, 0f));
-            list.Add(new CustomScalingBuff(CustomScaling.JumpGravityMulFallingPlus, 0f));
-            list.Add(new CustomScalingBuff(CustomScaling.JumpVerticalVelocityMaxPlus, 0f));
-
-            CustomScalingBuffManager.ApplyCustomScalingEffects(PlayerManager.GetLocalPlayerAgent(), list);
+            CustomScalingBuffManager.ResetCustomBuffs(PlayerManager.GetLocalPlayerAgent());
 
             CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
             CacheApiWrapper.KillScript<DevModeTools>();
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
-            CacheApiWrapper.RemoveDefaultMeleeRange();
-            CacheApiWrapper.RemoveDefaultMeleeHitBox();
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeRangeMultiplier);
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeHitBoxSizeMultiplier);
         }
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs, List<Group> groups) ReadJsonBlocks()

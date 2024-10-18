@@ -13,6 +13,7 @@
         JumpGravityMulAfterPeakPlus,
         JumpGravityMulFallingPlus,
         JumpVerticalVelocityMaxPlus,
-        RegenStartDelayMultiplier
+        RegenStartDelayMultiplier,
+        BleedResistance
     }
 }

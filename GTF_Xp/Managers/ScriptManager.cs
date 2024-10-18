@@ -328,7 +328,7 @@ namespace GTFuckingXP.Managers
         {
             if (CacheApi.TryGetInstance(out XpHandler xpHandler, CacheApiWrapper.XpModCacheName))
             {
-                CacheApiWrapper. (xpHandler.CurrentTotalXp);
+                CacheApiWrapper.SetXpStorageData(xpHandler.CurrentTotalXp);
             }
             else
             {

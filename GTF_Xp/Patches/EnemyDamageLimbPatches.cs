@@ -14,7 +14,7 @@ namespace GTFuckingXp.Patches
         [HarmonyPrefix]
         public static void MeleePrefix(Dam_EnemyDamageLimb __instance, ref float dam, Agent sourceAgent)
         {
-            if (!__instance.Owner.Alive)
+            if (!__instance.m_base.Owner.Alive)
                 return;
 
             if (sourceAgent != null)
@@ -34,7 +34,7 @@ namespace GTFuckingXp.Patches
         [HarmonyPrefix]
         public static void BulletPostfix(Dam_EnemyDamageLimb __instance, ref float dam, Agent sourceAgent)
         {
-            if (!__instance.Owner.Alive)
+            if (!__instance.m_base.Owner.Alive)
                 return;
 
             if (sourceAgent != null)

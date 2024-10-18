@@ -21,7 +21,7 @@ namespace GTFuckingXp.Patches
 
         [HarmonyPatch(nameof(BulletWeapon.BulletHit))]
         [HarmonyPostfix]
-        private static void Postfix_SentryGunFiringBullet()
+        private static void Postfix_BulletHit()
         {
             SentryShot = false;
         }

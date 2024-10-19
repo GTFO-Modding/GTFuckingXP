@@ -1,8 +1,6 @@
 ﻿using EndskApi.Api;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Managers;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GTFuckingXP.Extensions
@@ -23,17 +21,6 @@ namespace GTFuckingXP.Extensions
         private const string AnchorDifferenceKey = "AnchorDifferenceKey";
         private const string LvlUpCallbackKey = "LvlUpCallbackKey";
         private const string ScriptsStartedCallbackKey = "ScriptsStartedCallback";
-
-        private const string DefaultMeleeRangeKey = "DefaultMeleeRangeKey";
-        private const string DefaultMeleeHitBoxKey = "DefaultMeleeHitBoxKey";
-        private const string DefaultMovmentKey = "DefaultMovmentKeys";
-
-        private const string DefaultJumpVelInitialKey = "DefaultVelInitialKey";
-        private const string DefaultJumpGravityMulDefaultKey = "DefaultJumpGravityMulDefaultKey";
-        private const string DefaultJumpGravityMulButtonReleasedKey = "DefaultJumpGravityMulButtonReleasedKey";
-        private const string DefaultJumpGravityMulAfterPeakKey = "DefaultJumpGravityMulAfterPeakKey";
-        private const string DefaultJumpGravityMulFallingKey = "DefaultJumpGravityMulFallingKey";
-        private const string DefaultJumpVelocityMaxKey = "DefaultJumpVelocityMaxKey";
 
         /// <summary>
         /// Creates a new component of type <typeparamref name="Tscript"/> and saves it into the cache.

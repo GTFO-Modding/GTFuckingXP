@@ -75,16 +75,13 @@ namespace GTFuckingXP.Managers
                             movementInfo.run = playerData.runMoveSpeed;
                             movementInfo.air = playerData.airMoveSpeed;
                             movementInfo.crouch = playerData.crouchMoveSpeed;
-                            LogManager.Message($"Saved default speed: ({playerData.walkMoveSpeed}, {playerData.runMoveSpeed}, {playerData.airMoveSpeed}, {playerData.crouchMoveSpeed})");
                             CacheApiWrapper.SetDefaultCustomScaling(customBuff, movementInfo);
                         }
 
-                        LogManager.Message($"Pulled from default speed: ({movementInfo.walk}, {movementInfo.run}, {movementInfo.air}, {movementInfo.crouch})");
                         playerData.walkMoveSpeed = movementInfo.walk * value;
                         playerData.runMoveSpeed = movementInfo.run * value;
                         playerData.airMoveSpeed = movementInfo.air * value;
                         playerData.crouchMoveSpeed = movementInfo.crouch * value;
-                        LogManager.Message($"Set speed to: ({playerData.walkMoveSpeed}, {playerData.runMoveSpeed}, {playerData.airMoveSpeed}, {playerData.crouchMoveSpeed})");
                     }
                     break;
                 //case Enums.CustomScaling.AntiFogSphere:

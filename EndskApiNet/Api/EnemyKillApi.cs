@@ -78,7 +78,7 @@ namespace EndskApi.Api
             if (_enemyStates.TryGetValue(instance.Pointer, out var state) && state)
             {
                 data.source.TryGet(out var agent);
-                if (agent is null)
+                if (agent == null)
                 {
                     return;
                 }
@@ -102,7 +102,7 @@ namespace EndskApi.Api
             if (_enemyStates.TryGetValue(instance.Pointer, out var state) && state)
             {
                 data.source.TryGet(out var agent);
-                if (agent is null)
+                if (agent == null)
                 {
                     return;
                 }
@@ -116,18 +116,23 @@ namespace EndskApi.Api
             }
         }
 
-        private static void ReceiveExplosionPrefix(Dam_EnemyDamageBase instance, ref pExplosionDamageData data)
+        private static void ReceiveExplosionPrefix(Dam_EnemyDamageBase instance, PlayerAgent? source, ref pExplosionDamageData data)
         {
             _enemyStates[instance.Pointer] = instance.Owner.Alive;
         }
 
-        private static void ReceiveExplosionPostfix(Dam_EnemyDamageBase instance, ref pExplosionDamageData data)
+        private static void ReceiveExplosionPostfix(Dam_EnemyDamageBase instance, PlayerAgent? source, ref pExplosionDamageData data)
         {
             if (_enemyStates.TryGetValue(instance.Pointer, out var state) && state)
             {
-                if(!instance.Owner.Alive)
+                if (source != null)
                 {
-                    EnemyDied(instance.Owner, null, LastHitType.Explosion);
+                    DamageDistributionAddDamageDealt(instance.Owner, source, data.damage.Get(instance.HealthMax));
+                }
+
+                if (!instance.Owner.Alive)
+                {
+                    EnemyDied(instance.Owner, source, LastHitType.Explosion);
                 }
             }
         }

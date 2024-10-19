@@ -1,6 +1,7 @@
 ﻿using Agents;
 using EndskApi.Patches.EnemyKill;
-using HarmonyLib;
+using EndskApi.Patches.MineSource;
+using Player;
 using UnityEngine;
 
 namespace EndskApi.Api
@@ -11,7 +12,7 @@ namespace EndskApi.Api
 
         public unsafe delegate void ReceiveMeleeDamage(Dam_EnemyDamageBase instance, ref pFullDamageData data);
         public delegate void ReceiveBulletDamage(Dam_EnemyDamageBase instance, ref pBulletDamageData data);
-        public delegate void ReceiveExplosionDamage(Dam_EnemyDamageBase instance, ref pExplosionDamageData data);
+        public delegate void ReceiveExplosionDamage(Dam_EnemyDamageBase instance, PlayerAgent? source, ref pExplosionDamageData data);
         public delegate void ProcessReceivedDamage(Dam_EnemyDamageBase instance, ref float damage, Agent damageSource, ref Vector3 position, ref Vector3 direction, ref ES_HitreactType hitreact, ref bool tryForceHitreact, ref int limbID, ref float staggerDamageMulti, ref DamageNoiseLevel damageNoiseLevel);
 
         internal static List<(double, ReceiveMeleeDamage)> MeleePrefixCallbacks
@@ -172,7 +173,7 @@ namespace EndskApi.Api
         {
             foreach (var callback in ExplosionPrefixCallbacks)
             {
-                callback.Item2(instance, ref data);
+                callback.Item2(instance, MineDeployerExplosivePatches.CachedAgent, ref data);
             }
         }
 
@@ -180,7 +181,7 @@ namespace EndskApi.Api
         {
             foreach (var callback in ExplosionPostfixCallbacks)
             {
-                callback.Item2(instance, ref data);
+                callback.Item2(instance, MineDeployerExplosivePatches.CachedAgent, ref data);
             }
         }
 

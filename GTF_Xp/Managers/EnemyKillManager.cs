@@ -18,7 +18,8 @@ namespace GTFuckingXp.Managers
 
         public static void EnemyKilled(EnemyKillDistribution info)
         {
-            if(info.lastHitType == EndskApi.Enums.EnemyKill.LastHitType.Explosion)
+            // LastHitDealtBy may be null if a non-Tripmine explosion killed (e.g. EEC explosion)
+            if (info.LastHitDealtBy == null)
             {
                 GiveXpToEveryone(info.KilledEnemyAgent);
                 return;

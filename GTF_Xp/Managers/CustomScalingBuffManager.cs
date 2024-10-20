@@ -215,15 +215,16 @@ namespace GTFuckingXP.Managers
             InventorySlotAmmo slotAmmo = ammoStorage.GetInventorySlotAmmo(slot);
 
             int newClip = 0;
-            if (slotAmmo.BulletClipSize > 0) // Tools don't have a clip
+            if (slotAmmo.BulletClipSize > 0)
             {
+                // Add clip ammo to reserves, apply modifier, then fill clip up to previous number if possible.
                 slotAmmo.AmmoInPack += item.GetCurrentClip() * slotAmmo.CostOfBullet;
                 slotAmmo.Setup(slotAmmo.CostOfBullet *= lastValue / value, slotAmmo.BulletClipSize);
                 newClip = Math.Min(slotAmmo.BulletsInPack, item.GetCurrentClip());
                 item.SetCurrentClip(newClip);
                 slotAmmo.AmmoInPack -= newClip * slotAmmo.CostOfBullet;
             }
-            else
+            else // Tools don't have a clip
             {
                 slotAmmo.Setup(slotAmmo.CostOfBullet *= lastValue / value, slotAmmo.BulletClipSize);
             }

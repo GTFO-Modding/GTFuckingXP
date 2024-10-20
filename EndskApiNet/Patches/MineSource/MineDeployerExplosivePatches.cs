@@ -8,6 +8,7 @@ namespace EndskApi.Patches.MineSource
     {
         public static PlayerAgent? CachedAgent { get; private set; } = null;
 
+        // Since this only runs on host, enemies hit will run ReceiveExplosionDamage before postfix runs.
         [HarmonyPatch(nameof(MineDeployerInstance_Detonate_Explosive.DoExplode))]
         [HarmonyPrefix]
         public static void ExplodePrefix(MineDeployerInstance_Detonate_Explosive __instance)

@@ -24,7 +24,7 @@ namespace GTFuckingXP.Patches
 
             var core = __instance.m_core.Cast<SentryGunInstance>();
             // Cost of bullet updates every update before UpdateAmmo so don't need to worry about double calcs.
-            // Apparently correctly modifies ammo on sentry screen??? I have no idea how.
+            // Apparently correctly modifies ammo shown on deployed sentry screen??? I have no idea how.
             core.CostOfBullet /= buff.Value;
         }
     }

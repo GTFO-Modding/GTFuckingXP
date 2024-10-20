@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Player;
 
-namespace EndskApi.Patches.MineSource
+namespace EndskApi.Patches.EnemyKill
 {
     [HarmonyPatch(typeof(MineDeployerInstance_Detonate_Explosive))]
     internal static class MineDeployerExplosivePatches

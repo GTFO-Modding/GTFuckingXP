@@ -2,7 +2,6 @@
 using System.Text.Json;
 using GTFuckingXP.Information.Level;
 using GTFuckingXP.Enums;
-using GTFuckingXP.Managers;
 
 namespace GTFuckingXP.Extensions.Information.Level.Json
 {
@@ -12,6 +11,9 @@ namespace GTFuckingXP.Extensions.Information.Level.Json
         {
             if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException("Expected CustomBuff to be an object");
             reader.Read();
+
+            if (reader.TokenType == JsonTokenType.EndObject)
+                return new SingleUseBuff(SingleBuff.Invalid, 0f);
 
             if (reader.TokenType != JsonTokenType.PropertyName) throw new JsonException("Expected CustomBuff name or \"CustomBuff\" property");
 

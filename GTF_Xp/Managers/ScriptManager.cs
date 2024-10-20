@@ -129,14 +129,13 @@ namespace GTFuckingXP.Managers
         public void EndLevelScripts()
         {
             CustomScalingBuffManager.ResetCustomBuffs(PlayerManager.GetLocalPlayerAgent());
+            CustomScalingBuffManager.ClearDefaultCustomBuffs();
 
             CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
             CacheApiWrapper.KillScript<DevModeTools>();
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
-            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeRangeMultiplier);
-            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeHitBoxSizeMultiplier);
         }
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs, List<Group> groups) ReadJsonBlocks()

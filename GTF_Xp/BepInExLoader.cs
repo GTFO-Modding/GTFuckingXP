@@ -94,6 +94,7 @@ namespace GTFuckingXP
             Harmony.PatchAll(typeof(EnemyDamageLimbPatches));
             Harmony.PatchAll(typeof(PlayerFireDamagePatches));
             Harmony.PatchAll(typeof(SentryGunCheckPatches));
+            Harmony.PatchAll(typeof(SentryGunFiringPatches));
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));
             Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
             Harmony.PatchAll(typeof(SnetSessionHubPatches));

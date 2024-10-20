@@ -68,6 +68,7 @@ namespace EndskApi.Api
             if (!_setup)
             {
                 BepInExLoader.Harmony.PatchAll(typeof(EnemyDamageBasePatches));
+                BepInExLoader.Harmony.PatchAll(typeof(MineDeployerExplosivePatches));
 
                 MeleePrefixCallbacks = new List<(double, ReceiveMeleeDamage)>();
                 MeleePostfixCallbacks = new List<(double, ReceiveMeleeDamage)>();

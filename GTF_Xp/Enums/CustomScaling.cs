@@ -14,6 +14,8 @@
         JumpGravityMulFallingPlus,
         JumpVerticalVelocityMaxPlus,
         RegenStartDelayMultiplier,
-        BleedResistance
+        BleedResistance,
+        AmmoEfficiency,
+        ToolEfficiency
     }
 }

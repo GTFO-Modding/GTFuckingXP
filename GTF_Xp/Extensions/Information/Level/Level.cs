@@ -1,6 +1,5 @@
-﻿using GTFuckingXP.Information.NetworkingInfo;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using GTFuckingXP.Extensions.Information.Level.Json;
+using GTFuckingXP.Information.NetworkingInfo;
 
 namespace GTFuckingXP.Information.Level
 {
@@ -13,7 +12,7 @@ namespace GTFuckingXP.Information.Level
         { }
 
         public Level(LevelReachedInfo levelData) : this(levelData.LevelNumber, 0, levelData.HealthMultiplier, 0f, 0f,
-                null, JsonSerializer.Deserialize<List<CustomScalingBuff>>(levelData.CustomScaling))
+                null, BuffJson.Deserialize<List<CustomScalingBuff>>(levelData.CustomScaling))
         { }
 
         public Level(int levelNumber, uint totalXp, float healthMultiplier, float meleeMultiplier, float weaponMultiplier, List<SingleUseBuff> singleUseBuffs,

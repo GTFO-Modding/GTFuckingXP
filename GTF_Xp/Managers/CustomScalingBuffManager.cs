@@ -1,10 +1,8 @@
-﻿using FX_EffectSystem;
-using Gear;
+﻿using Gear;
+using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
 using GTFuckingXP.Information.Level;
 using Player;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace GTFuckingXP.Managers
 {
@@ -12,12 +10,12 @@ namespace GTFuckingXP.Managers
     {
         public static void ApplyCustomScalingEffects(PlayerAgent targetAgent, List<CustomScalingBuff> buffs)
         {
-            if (buffs is null || buffs.Count == 0)
+            if (buffs is null)
                 return;
 
             ResetCustomBuffs(targetAgent);
 
-            foreach(var buff in buffs)
+            foreach (var buff in buffs)
                 SetCustomBuff(buff, targetAgent);
         }
 
@@ -35,11 +33,11 @@ namespace GTFuckingXP.Managers
 
         private static void SetCustomBuff(CustomScalingBuff customScalingBuff, PlayerAgent targetAgent) => SetCustomBuff(customScalingBuff.CustomBuff, customScalingBuff.Value, targetAgent);
 
-        private static void SetCustomBuff(Enums.CustomScaling customBuff, float value, PlayerAgent targetAgent)
+        private static void SetCustomBuff(CustomScaling customBuff, float value, PlayerAgent targetAgent)
         {       
             switch (customBuff)
             {
-                case Enums.CustomScaling.MeleeRangeMultiplier:
+                case CustomScaling.MeleeRangeMultiplier:
                     if (targetAgent.IsLocallyOwned)
                     {
                         var meleeData = GetLocalMeleeWeapon().MeleeArchetypeData;
@@ -52,7 +50,7 @@ namespace GTFuckingXP.Managers
                         meleeData.CameraDamageRayLength = meleeRange * value;
                     }
                     break;
-                case Enums.CustomScaling.MeleeHitBoxSizeMultiplier:
+                case CustomScaling.MeleeHitBoxSizeMultiplier:
                     if (targetAgent.IsLocallyOwned)
                     {
                         var meleeData = GetLocalMeleeWeapon().MeleeArchetypeData;
@@ -65,7 +63,7 @@ namespace GTFuckingXP.Managers
                         meleeData.AttackSphereRadius = meleeHitbox * value;
                     }
                     break;
-                case Enums.CustomScaling.MovementSpeedMultiplier:
+                case CustomScaling.MovementSpeedMultiplier:
                     if (targetAgent.IsLocallyOwned)
                     {
                         var playerData = targetAgent.PlayerData;
@@ -84,9 +82,9 @@ namespace GTFuckingXP.Managers
                         playerData.crouchMoveSpeed = movementInfo.crouch * value;
                     }
                     break;
-                //case Enums.CustomScaling.AntiFogSphere:
+                //case CustomScaling.AntiFogSphere:
                 //    break;
-                case Enums.CustomScaling.JumpVelInitialPlus:
+                case CustomScaling.JumpVelInitialPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpVelInitialDefault))
                     {
                         jumpVelInitialDefault = targetAgent.PlayerData.jumpVelInitial;
@@ -95,7 +93,7 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpVelInitial = jumpVelInitialDefault + value;
                     break;
-                case Enums.CustomScaling.JumpGravityMulDefaultPlus:
+                case CustomScaling.JumpGravityMulDefaultPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpGravityMul))
                     {
                         jumpGravityMul = targetAgent.PlayerData.jumpGravityMulDefault;
@@ -104,7 +102,7 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpGravityMulDefault = jumpGravityMul + value;
                     break;
-                case Enums.CustomScaling.JumpGravityMulButtonReleased:
+                case CustomScaling.JumpGravityMulButtonReleased:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpButton))
                     {
                         jumpButton = targetAgent.PlayerData.jumpGravityMulButtonReleased;
@@ -113,7 +111,7 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpGravityMulButtonReleased = jumpButton + value;
                     break;
-                case Enums.CustomScaling.JumpGravityMulAfterPeakPlus:
+                case CustomScaling.JumpGravityMulAfterPeakPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpGravityMulAfterPeak))
                     {
                         jumpGravityMulAfterPeak = targetAgent.PlayerData.jumpGravityMulAfterPeak;
@@ -122,7 +120,7 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpGravityMulAfterPeak = jumpGravityMulAfterPeak + value;
                     break;
-                case Enums.CustomScaling.JumpGravityMulFallingPlus:
+                case CustomScaling.JumpGravityMulFallingPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpGravityFalling))
                     {
                         jumpGravityFalling = targetAgent.PlayerData.jumpGravityMulFalling;
@@ -131,7 +129,7 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpGravityMulFalling = jumpGravityFalling + value;
                     break;
-                case Enums.CustomScaling.JumpVerticalVelocityMaxPlus:
+                case CustomScaling.JumpVerticalVelocityMaxPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpVelocityMax))
                     {
                         jumpVelocityMax = targetAgent.PlayerData.jumpVerticalVelocityMax;
@@ -140,7 +138,7 @@ namespace GTFuckingXP.Managers
 
                     targetAgent.PlayerData.jumpVerticalVelocityMax = jumpVelocityMax + value;
                     break;
-                case Enums.CustomScaling.RegenStartDelayMultiplier:
+                case CustomScaling.RegenStartDelayMultiplier:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float regenDelay))
                     {
                         regenDelay = targetAgent.PlayerData.healthRegenStartDelayAfterDamage;
@@ -150,29 +148,90 @@ namespace GTFuckingXP.Managers
                     targetAgent.PlayerData.healthRegenStartDelayAfterDamage = regenDelay * value;
                     targetAgent.Damage.m_nextRegen = Math.Min(targetAgent.Damage.m_nextRegen, Clock.Time + regenDelay * value);
                     break;
+                case CustomScaling.AmmoEfficiency:
+                    if (!targetAgent.IsLocallyOwned) break;
+
+                    // Not how defaults are used elsewhere, but has better compatibility with EWC
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float lastAmmo))
+                        lastAmmo = 1f;
+
+                    PlayerAmmoStorage ammoStorage = PlayerBackpackManager.LocalBackpack.AmmoStorage;
+                    ChangeAmmoEfficiency(InventorySlot.GearStandard, ammoStorage, lastAmmo, value);
+                    ChangeAmmoEfficiency(InventorySlot.GearSpecial, ammoStorage, lastAmmo, value);
+                    ammoStorage.NeedsSync = true;
+
+                    CacheApiWrapper.SetDefaultCustomScaling(customBuff, value);
+                    break;
+                case CustomScaling.ToolEfficiency:
+                    if (!targetAgent.IsLocallyOwned) break;
+
+                    // Not how defaults are used elsewhere, but has better compatibility with EWC
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float lastTool))
+                        lastTool = 1f;
+
+                    PlayerAmmoStorage toolStorage = PlayerBackpackManager.LocalBackpack.AmmoStorage;
+                    ChangeAmmoEfficiency(InventorySlot.GearClass, toolStorage, lastTool, value);
+                    toolStorage.NeedsSync = true;
+
+                    CacheApiWrapper.SetDefaultCustomScaling(customBuff, value);
+                    break;
             }
         }
 
         public static void ResetCustomBuffs(PlayerAgent targetAgent)
         {
-            foreach (Enums.CustomScaling customBuff in Enum.GetValues(typeof(Enums.CustomScaling)))
+            foreach (CustomScaling customBuff in Enum.GetValues(typeof(CustomScaling)))
                 if (CacheApiWrapper.HasDefaultCustomScaling(customBuff))
                     SetCustomBuff(customBuff, GetResetModifier(customBuff), targetAgent);
         }
 
-        private static float GetResetModifier(Enums.CustomScaling customBuff)
+        public static void ClearDefaultCustomBuffs()
+        {
+            // Only care about the ones that will change
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeRangeMultiplier);
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeHitBoxSizeMultiplier);
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.AmmoEfficiency);
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.ToolEfficiency);
+        }
+
+        private static float GetResetModifier(CustomScaling customBuff)
         {
             return customBuff switch
             {
-                //Enums.CustomScaling.AntiFogSphere 
-                Enums.CustomScaling.JumpVelInitialPlus 
-                or Enums.CustomScaling.JumpGravityMulDefaultPlus 
-                or Enums.CustomScaling.JumpGravityMulButtonReleased 
-                or Enums.CustomScaling.JumpGravityMulAfterPeakPlus 
-                or Enums.CustomScaling.JumpGravityMulFallingPlus 
-                or Enums.CustomScaling.JumpVerticalVelocityMaxPlus => 0f,
+                //CustomScaling.AntiFogSphere 
+                CustomScaling.JumpVelInitialPlus 
+                or CustomScaling.JumpGravityMulDefaultPlus 
+                or CustomScaling.JumpGravityMulButtonReleased 
+                or CustomScaling.JumpGravityMulAfterPeakPlus 
+                or CustomScaling.JumpGravityMulFallingPlus 
+                or CustomScaling.JumpVerticalVelocityMaxPlus => 0f,
                 _ => 1f,
             };
+        }
+
+        private static void ChangeAmmoEfficiency(InventorySlot slot, PlayerAmmoStorage ammoStorage, float lastValue, float value)
+        {
+            if (!ammoStorage.m_playerBackpack.TryGetBackpackItem(slot, out var bpItem)) return;
+            ItemEquippable item = bpItem.Instance.Cast<ItemEquippable>();
+            InventorySlotAmmo slotAmmo = ammoStorage.GetInventorySlotAmmo(slot);
+
+            int newClip = 0;
+            if (slotAmmo.BulletClipSize > 0)
+            {
+                // Add clip ammo to reserves, apply modifier, then fill clip up to previous number if possible.
+                slotAmmo.AmmoInPack += item.GetCurrentClip() * slotAmmo.CostOfBullet;
+                slotAmmo.Setup(slotAmmo.CostOfBullet *= lastValue / value, slotAmmo.BulletClipSize);
+                newClip = Math.Min(slotAmmo.BulletsInPack, item.GetCurrentClip());
+                item.SetCurrentClip(newClip);
+                slotAmmo.AmmoInPack -= newClip * slotAmmo.CostOfBullet;
+            }
+            else // Tools don't have a clip
+            {
+                slotAmmo.Setup(slotAmmo.CostOfBullet *= lastValue / value, slotAmmo.BulletClipSize);
+            }
+
+            slotAmmo.OnBulletsUpdateCallback?.Invoke(slotAmmo.BulletsInPack);
+            ammoStorage.UpdateSlotAmmoUI(slotAmmo, newClip);
         }
 
         /*private static void StartRepellerWithoutSound(FogRepeller_Sphere antiFog)

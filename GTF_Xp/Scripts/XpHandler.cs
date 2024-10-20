@@ -228,10 +228,19 @@ namespace GTFuckingXP.Scripts
                 _ => 0
             };
 
-            slotAmmo.AddAmmo(ammoRel * cap);
-            ammoStorage.UpdateSlotAmmoUI(InventorySlot.GearStandard);
-            ammoStorage.NeedsSync = true;
+            ammoStorage.PickupAmmo(SlotToAmmo(slot), ammoRel * cap);
             PlayerBackpackManager.ForceLocalAmmoStorageUpdate();
+        }
+
+        private static AmmoType SlotToAmmo(InventorySlot slot)
+        {
+            return slot switch
+            {
+                InventorySlot.GearStandard => AmmoType.Standard,
+                InventorySlot.GearSpecial => AmmoType.Special,
+                InventorySlot.GearClass => AmmoType.Class,
+                _ => AmmoType.None
+            };
         }
     }
 }

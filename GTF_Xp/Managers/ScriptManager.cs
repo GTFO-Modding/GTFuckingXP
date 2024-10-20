@@ -4,6 +4,7 @@ using GTFuckingXp.Information;
 using GTFuckingXp.Managers;
 using GTFuckingXP.Enums;
 using GTFuckingXP.Extensions;
+using GTFuckingXP.Extensions.Information.Level.Json;
 using GTFuckingXP.Information;
 using GTFuckingXP.Information.ClassSelector;
 using GTFuckingXP.Information.Enemies;
@@ -128,14 +129,13 @@ namespace GTFuckingXP.Managers
         public void EndLevelScripts()
         {
             CustomScalingBuffManager.ResetCustomBuffs(PlayerManager.GetLocalPlayerAgent());
+            CustomScalingBuffManager.ClearDefaultCustomBuffs();
 
             CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
             CacheApiWrapper.KillScript<DevModeTools>();
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
-            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeRangeMultiplier);
-            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeHitBoxSizeMultiplier);
         }
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs, List<Group> groups) ReadJsonBlocks()
@@ -148,6 +148,8 @@ namespace GTFuckingXP.Managers
                 WriteIndented = true
             };
             serializerSettings.Converters.Add(new JsonStringEnumConverter());
+            serializerSettings.Converters.Add(new CustomBuffConverter());
+            serializerSettings.Converters.Add(new SingleBuffConverter());
             var rundownExists = _folderPath.Contains("BepInEx");
 
             var enemyXpList = rundownExists ?

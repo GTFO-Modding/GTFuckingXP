@@ -191,6 +191,7 @@ namespace GTFuckingXP.Managers
             CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeRangeMultiplier);
             CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.MeleeHitBoxSizeMultiplier);
             CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.AmmoEfficiency);
+            CacheApiWrapper.RemoveDefaultCustomScaling(CustomScaling.ToolEfficiency);
         }
 
         private static float GetResetModifier(CustomScaling customBuff)

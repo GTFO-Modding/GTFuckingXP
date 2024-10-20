@@ -41,7 +41,10 @@ namespace GTFuckingXP.Extensions.Information.Level.Json
                     switch (propertyName)
                     {
                         case nameof(SingleUseBuff.SingleBuff):
-                            buff.SingleBuff = reader.GetString().ToEnum(SingleBuff.Invalid);
+                            if (reader.TokenType == JsonTokenType.String)
+                                buff.SingleBuff = reader.GetString().ToEnum(SingleBuff.Invalid);
+                            else
+                                buff.SingleBuff = (SingleBuff)reader.GetInt32();
                             break;
                         case nameof(SingleUseBuff.Value):
                             buff.Value = reader.GetSingle();

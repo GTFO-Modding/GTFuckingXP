@@ -34,123 +34,115 @@ namespace GTFuckingXP.Managers
         private static void SetCustomBuff(CustomScalingBuff customScalingBuff, PlayerAgent targetAgent) => SetCustomBuff(customScalingBuff.CustomBuff, customScalingBuff.Value, targetAgent);
 
         private static void SetCustomBuff(CustomScaling customBuff, float value, PlayerAgent targetAgent)
-        {       
+        {
+            if (!targetAgent.IsLocallyOwned) return;
+
+            var playerData = targetAgent.PlayerData;
+
             switch (customBuff)
             {
                 case CustomScaling.MeleeRangeMultiplier:
-                    if (targetAgent.IsLocallyOwned)
+                    var meleeData = GetLocalMeleeWeapon().MeleeArchetypeData;
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float meleeRange))
                     {
-                        var meleeData = GetLocalMeleeWeapon().MeleeArchetypeData;
-                        if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float meleeRange))
-                        {
-                            meleeRange = meleeData.CameraDamageRayLength;
-                            CacheApiWrapper.SetDefaultCustomScaling(customBuff, meleeRange);
-                        }
-
-                        meleeData.CameraDamageRayLength = meleeRange * value;
+                        meleeRange = meleeData.CameraDamageRayLength;
+                        CacheApiWrapper.SetDefaultCustomScaling(customBuff, meleeRange);
                     }
+
+                    meleeData.CameraDamageRayLength = meleeRange * value;
                     break;
                 case CustomScaling.MeleeHitBoxSizeMultiplier:
-                    if (targetAgent.IsLocallyOwned)
+                    meleeData = GetLocalMeleeWeapon().MeleeArchetypeData;
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float meleeHitbox))
                     {
-                        var meleeData = GetLocalMeleeWeapon().MeleeArchetypeData;
-                        if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float meleeHitbox))
-                        {
-                            meleeHitbox = meleeData.AttackSphereRadius;
-                            CacheApiWrapper.SetDefaultCustomScaling(customBuff, meleeHitbox);
-                        }
-
-                        meleeData.AttackSphereRadius = meleeHitbox * value;
+                        meleeHitbox = meleeData.AttackSphereRadius;
+                        CacheApiWrapper.SetDefaultCustomScaling(customBuff, meleeHitbox);
                     }
+
+                    meleeData.AttackSphereRadius = meleeHitbox * value;
                     break;
                 case CustomScaling.MovementSpeedMultiplier:
-                    if (targetAgent.IsLocallyOwned)
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out (float walk, float run, float air, float crouch) movementInfo))
                     {
-                        var playerData = targetAgent.PlayerData;
-                        if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out (float walk, float run, float air, float crouch) movementInfo))
-                        {
-                            movementInfo.walk = playerData.walkMoveSpeed;
-                            movementInfo.run = playerData.runMoveSpeed;
-                            movementInfo.air = playerData.airMoveSpeed;
-                            movementInfo.crouch = playerData.crouchMoveSpeed;
-                            CacheApiWrapper.SetDefaultCustomScaling(customBuff, movementInfo);
-                        }
-
-                        playerData.walkMoveSpeed = movementInfo.walk * value;
-                        playerData.runMoveSpeed = movementInfo.run * value;
-                        playerData.airMoveSpeed = movementInfo.air * value;
-                        playerData.crouchMoveSpeed = movementInfo.crouch * value;
+                        movementInfo.walk = playerData.walkMoveSpeed;
+                        movementInfo.run = playerData.runMoveSpeed;
+                        movementInfo.air = playerData.airMoveSpeed;
+                        movementInfo.crouch = playerData.crouchMoveSpeed;
+                        CacheApiWrapper.SetDefaultCustomScaling(customBuff, movementInfo);
                     }
+
+                    playerData.walkMoveSpeed = movementInfo.walk * value;
+                    playerData.runMoveSpeed = movementInfo.run * value;
+                    playerData.airMoveSpeed = movementInfo.air * value;
+                    playerData.crouchMoveSpeed = movementInfo.crouch * value;
                     break;
                 //case CustomScaling.AntiFogSphere:
                 //    break;
                 case CustomScaling.JumpVelInitialPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpVelInitialDefault))
                     {
-                        jumpVelInitialDefault = targetAgent.PlayerData.jumpVelInitial;
+                        jumpVelInitialDefault = playerData.jumpVelInitial;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, jumpVelInitialDefault);
                     }
 
-                    targetAgent.PlayerData.jumpVelInitial = jumpVelInitialDefault + value;
+                    playerData.jumpVelInitial = jumpVelInitialDefault + value;
                     break;
                 case CustomScaling.JumpGravityMulDefaultPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpGravityMul))
                     {
-                        jumpGravityMul = targetAgent.PlayerData.jumpGravityMulDefault;
+                        jumpGravityMul = playerData.jumpGravityMulDefault;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, jumpGravityMul);
                     }
 
-                    targetAgent.PlayerData.jumpGravityMulDefault = jumpGravityMul + value;
+                    playerData.jumpGravityMulDefault = jumpGravityMul + value;
                     break;
                 case CustomScaling.JumpGravityMulButtonReleased:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpButton))
                     {
-                        jumpButton = targetAgent.PlayerData.jumpGravityMulButtonReleased;
+                        jumpButton = playerData.jumpGravityMulButtonReleased;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, jumpButton);
                     }
 
-                    targetAgent.PlayerData.jumpGravityMulButtonReleased = jumpButton + value;
+                    playerData.jumpGravityMulButtonReleased = jumpButton + value;
                     break;
                 case CustomScaling.JumpGravityMulAfterPeakPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpGravityMulAfterPeak))
                     {
-                        jumpGravityMulAfterPeak = targetAgent.PlayerData.jumpGravityMulAfterPeak;
+                        jumpGravityMulAfterPeak = playerData.jumpGravityMulAfterPeak;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, jumpGravityMulAfterPeak);
                     }
 
-                    targetAgent.PlayerData.jumpGravityMulAfterPeak = jumpGravityMulAfterPeak + value;
+                    playerData.jumpGravityMulAfterPeak = jumpGravityMulAfterPeak + value;
                     break;
                 case CustomScaling.JumpGravityMulFallingPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpGravityFalling))
                     {
-                        jumpGravityFalling = targetAgent.PlayerData.jumpGravityMulFalling;
+                        jumpGravityFalling = playerData.jumpGravityMulFalling;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, jumpGravityFalling);
                     }
 
-                    targetAgent.PlayerData.jumpGravityMulFalling = jumpGravityFalling + value;
+                    playerData.jumpGravityMulFalling = jumpGravityFalling + value;
                     break;
                 case CustomScaling.JumpVerticalVelocityMaxPlus:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float jumpVelocityMax))
                     {
-                        jumpVelocityMax = targetAgent.PlayerData.jumpVerticalVelocityMax;
+                        jumpVelocityMax = playerData.jumpVerticalVelocityMax;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, jumpVelocityMax);
                     }
 
-                    targetAgent.PlayerData.jumpVerticalVelocityMax = jumpVelocityMax + value;
+                    playerData.jumpVerticalVelocityMax = jumpVelocityMax + value;
                     break;
                 case CustomScaling.RegenStartDelayMultiplier:
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float regenDelay))
                     {
-                        regenDelay = targetAgent.PlayerData.healthRegenStartDelayAfterDamage;
+                        regenDelay = playerData.healthRegenStartDelayAfterDamage;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, regenDelay);
                     }
 
-                    targetAgent.PlayerData.healthRegenStartDelayAfterDamage = regenDelay * value;
+                    playerData.healthRegenStartDelayAfterDamage = regenDelay * value;
                     targetAgent.Damage.m_nextRegen = Math.Min(targetAgent.Damage.m_nextRegen, Clock.Time + regenDelay * value);
                     break;
                 case CustomScaling.AmmoEfficiency:
-                    if (!targetAgent.IsLocallyOwned) break;
-
                     // Not how defaults are used elsewhere, but has better compatibility with EWC
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float lastAmmo))
                         lastAmmo = 1f;
@@ -163,8 +155,6 @@ namespace GTFuckingXP.Managers
                     CacheApiWrapper.SetDefaultCustomScaling(customBuff, value);
                     break;
                 case CustomScaling.ToolEfficiency:
-                    if (!targetAgent.IsLocallyOwned) break;
-
                     // Not how defaults are used elsewhere, but has better compatibility with EWC
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float lastTool))
                         lastTool = 1f;

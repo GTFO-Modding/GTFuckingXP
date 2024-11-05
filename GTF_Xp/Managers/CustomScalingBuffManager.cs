@@ -10,7 +10,7 @@ namespace GTFuckingXP.Managers
     {
         public static void ApplyCustomScalingEffects(PlayerAgent targetAgent, List<CustomScalingBuff> buffs)
         {
-            if (buffs is null || !targetAgent.IsLocallyOwned)
+            if (buffs is null)
                 return;
 
             ResetCustomBuffs(targetAgent);
@@ -35,6 +35,8 @@ namespace GTFuckingXP.Managers
 
         private static void SetCustomBuff(CustomScaling customBuff, float value, PlayerAgent targetAgent)
         {
+            if (!targetAgent.IsLocallyOwned) return;
+
             var playerData = targetAgent.PlayerData;
 
             switch (customBuff)

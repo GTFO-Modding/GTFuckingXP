@@ -16,6 +16,7 @@
         RegenStartDelayMultiplier,
         BleedResistance,
         AmmoEfficiency,
-        ToolEfficiency
+        ToolEfficiency,
+        ExplosionResistance,
     }
 }

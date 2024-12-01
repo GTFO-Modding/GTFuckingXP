@@ -62,19 +62,25 @@ namespace GTFuckingXP.Managers
                     meleeData.AttackSphereRadius = meleeHitbox * value;
                     break;
                 case CustomScaling.MovementSpeedMultiplier:
-                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out (float walk, float run, float air, float crouch) movementInfo))
+                    if (ESCWrapper.HasESC)
+                    {
+                        ESCWrapper.RefreshMovementSpeed();
+                        break;
+                    }
+
+                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out (float walk, float run, float crouch, float air) movementInfo))
                     {
                         movementInfo.walk = playerData.walkMoveSpeed;
                         movementInfo.run = playerData.runMoveSpeed;
-                        movementInfo.air = playerData.airMoveSpeed;
                         movementInfo.crouch = playerData.crouchMoveSpeed;
+                        movementInfo.air = playerData.airMoveSpeed;
                         CacheApiWrapper.SetDefaultCustomScaling(customBuff, movementInfo);
                     }
 
                     playerData.walkMoveSpeed = movementInfo.walk * value;
                     playerData.runMoveSpeed = movementInfo.run * value;
-                    playerData.airMoveSpeed = movementInfo.air * value;
                     playerData.crouchMoveSpeed = movementInfo.crouch * value;
+                    playerData.airMoveSpeed = movementInfo.air * value;
                     break;
                 //case CustomScaling.AntiFogSphere:
                 //    break;

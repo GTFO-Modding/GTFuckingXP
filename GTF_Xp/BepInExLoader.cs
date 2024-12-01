@@ -20,13 +20,14 @@ namespace GTFuckingXP
     [BepInDependency("dev.gtfomodding.gtfo-api", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("Endskill.EndskApi", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.dak.FloatingTextAPI", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency(ESCWrapper.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     public class BepInExLoader : BasePlugin
     {
         public const string
         MODNAME = "GTFuckingXP",
         AUTHOR = "Endskill",
         GUID = AUTHOR + "." + MODNAME,
-        VERSION = "2.3.0";
+        VERSION = "2.3.1";
 
         public static bool RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
@@ -69,6 +70,7 @@ namespace GTFuckingXP
             BoosterBuffManager.Instance = new BoosterBuffManager();
 
             NetworkApiXpManager.Setup();
+            ESCWrapper.Init();
 
             Harmony = new Harmony(GUID);
             FasterPatching();

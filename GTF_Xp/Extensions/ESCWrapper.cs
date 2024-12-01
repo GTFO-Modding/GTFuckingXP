@@ -24,12 +24,10 @@ namespace GTFuckingXP.Extensions
         private static void AddRefreshCallbackESC() => MovementMultiplierManager.AddRefreshCallback(OnRefresh);
         private static float OnRefresh() => CacheApiWrapper.GetActiveLevel().CustomScaling.FirstOrDefault(buff => buff.CustomBuff == Enums.CustomScaling.MovementSpeedMultiplier)?.Value ?? 1f;
 
-        public static bool RefreshMovementSpeed()
+        public static void RefreshMovementSpeed()
         {
-            if (!HasESC) return false;
-
-            RefreshMovementSpeedESC();
-            return true;
+            if (HasESC)
+                RefreshMovementSpeedESC();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

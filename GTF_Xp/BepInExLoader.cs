@@ -21,6 +21,7 @@ namespace GTFuckingXP
     [BepInDependency("Endskill.EndskApi", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.dak.FloatingTextAPI", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency(ESCWrapper.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CCWrapper.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     public class BepInExLoader : BasePlugin
     {
         public const string
@@ -100,6 +101,8 @@ namespace GTFuckingXP
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));
             Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
             Harmony.PatchAll(typeof(SnetSessionHubPatches));
+            if (!CCWrapper.HasCC) // CConsole native patches the function we need, can't patch if it exists
+                Harmony.PatchAll(typeof(PlayerRegenPatches));
         }
 
         private void TermsOfUsageChanged(object sender, EventArgs e)

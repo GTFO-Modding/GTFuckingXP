@@ -138,16 +138,6 @@ namespace GTFuckingXP.Managers
 
                     playerData.jumpVerticalVelocityMax = jumpVelocityMax + value;
                     break;
-                case CustomScaling.RegenStartDelayMultiplier:
-                    if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float regenDelay))
-                    {
-                        regenDelay = playerData.healthRegenStartDelayAfterDamage;
-                        CacheApiWrapper.SetDefaultCustomScaling(customBuff, regenDelay);
-                    }
-
-                    playerData.healthRegenStartDelayAfterDamage = regenDelay * value;
-                    targetAgent.Damage.m_nextRegen = Math.Min(targetAgent.Damage.m_nextRegen, Clock.Time + regenDelay * value);
-                    break;
                 case CustomScaling.AmmoEfficiency:
                     // Not how defaults are used elsewhere, but has better compatibility with EWC
                     if (!CacheApiWrapper.TryGetDefaultCustomScaling(customBuff, out float lastAmmo))

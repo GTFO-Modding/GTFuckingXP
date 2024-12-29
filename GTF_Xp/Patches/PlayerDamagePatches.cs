@@ -4,14 +4,35 @@ using GTFuckingXP.Information.Level;
 using GTFuckingXP.Enums;
 using Agents;
 using Player;
+using GTFuckingXP.Managers;
 
 namespace GTFuckingXp.Patches
 {
-    [HarmonyPatch(typeof(Dam_SyncedDamageBase))]
+    [HarmonyPatch]
     internal static class PlayerDamagePatches
     {
+        [HarmonyPatch(typeof(Dam_PlayerDamageLimb), nameof(Dam_PlayerDamageLimb.BulletDamage))]
+        [HarmonyPrefix]
+        private static void Prefix_BulletDamage(Dam_PlayerDamageLimb __instance, ref float dam, Agent sourceAgent)
+        {
+            if (!__instance.m_base.Owner.Alive)
+                return;
+
+            if (sourceAgent != null)
+            {
+                if (sourceAgent.IsLocallyOwned && !SentryGunCheckPatches.SentryShot)
+                {
+                    var damage = dam;
+                    LogManager.Debug($"Bullet damage from local player registered. {damage} was scaled up to:");
+                    damage *= CacheApiWrapper.GetActiveLevel().WeaponDamageMultiplier;
+                    LogManager.Debug($"{damage}");
+                    dam = damage;
+                }
+            }
+        }
+
         // Dam_PlayerDamageBase does not override FireDamage
-        [HarmonyPatch(nameof(Dam_SyncedDamageBase.FireDamage))]
+        [HarmonyPatch(typeof(Dam_SyncedDamageBase), nameof(Dam_SyncedDamageBase.FireDamage))]
         [HarmonyPrefix]
         private static void Prefix_FireDamage(Dam_SyncedDamageBase __instance, ref float dam, Agent sourceAgent)
         {
@@ -26,7 +47,7 @@ namespace GTFuckingXp.Patches
         }
 
         // Dam_PlayerDamageBase does not override ExplosionDamage
-        [HarmonyPatch(nameof(Dam_SyncedDamageBase.ExplosionDamage))]
+        [HarmonyPatch(typeof(Dam_SyncedDamageBase), nameof(Dam_SyncedDamageBase.ExplosionDamage))]
         [HarmonyPrefix]
         private static void Prefix_ExplosionDamage(Dam_SyncedDamageBase __instance, ref float dam)
         {

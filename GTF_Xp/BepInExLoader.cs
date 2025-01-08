@@ -28,13 +28,15 @@ namespace GTFuckingXP
         MODNAME = "GTFuckingXP",
         AUTHOR = "Endskill",
         GUID = AUTHOR + "." + MODNAME,
-        VERSION = "2.3.2";
+        VERSION = "2.3.3";
 
         public static bool RundownDevMode { get; private set; }
         public static ConfigEntry<bool> DebugMessages { get; private set; }
         public static ConfigEntry<bool> LvlUpPopups { get; private set; }
         public static ConfigEntry<bool> XpPopups { get; private set; }
         public static ConfigEntry<string> TermsOfUsage { get; internal set; }
+        public static ConfigEntry<bool> ShowPlayerLevels { get; private set; }
+        public static ConfigEntry<string> LevelColor { get; internal set; }
         public static TermsOfUsage TermsOfUsageState { get; private set; }
         public static Harmony Harmony { get; private set; }
 
@@ -45,6 +47,9 @@ namespace GTFuckingXP
             
             LvlUpPopups = Config.Bind("Popups", "Lvl up popups", true, "If Lvl UP popups should be shown.");
             XpPopups = Config.Bind("Popups", "XP gain popups", true, "If XP gain popups should be shown");
+
+            ShowPlayerLevels = Config.Bind("Player Level Text", "Show Player Levels", true, "If levels should be shown above other players' names.");
+            LevelColor = Config.Bind("Player Level Text", "Level Text Color", "F80", "The color used for player levels.");
 
             //TODO remove
             TermsOfUsageState = Information.TermsOfUsage.Declined;
@@ -99,7 +104,8 @@ namespace GTFuckingXP
             Harmony.PatchAll(typeof(SentryGunCheckPatches));
             Harmony.PatchAll(typeof(SentryGunFiringPatches));
             Harmony.PatchAll(typeof(GS_AfterLevelPatches));
-            Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
+            if (ShowPlayerLevels.Value)
+                Harmony.PatchAll(typeof(PlaceNavMarkerOnGoPatches));
             Harmony.PatchAll(typeof(SnetSessionHubPatches));
             if (!CCWrapper.HasCC) // CConsole native patches the function we need, can't patch if it exists
                 Harmony.PatchAll(typeof(PlayerRegenPatches));

@@ -1,4 +1,5 @@
-﻿using EndskApi.Api;
+﻿using BepInEx.Unity.IL2CPP.Utils.Collections;
+using EndskApi.Api;
 using GameData;
 using GTFuckingXp.Information;
 using GTFuckingXp.Managers;
@@ -108,6 +109,19 @@ namespace GTFuckingXP.Managers
         /// </summary>  
         public void StartLevelScripts()
         {
+            CoroutineManager.StartCoroutine(StartWhenPlayerExists().WrapToIl2Cpp());
+
+            //if (BepInExLoader.RundownDevMode)
+            //{
+            //    CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
+            //}
+        }
+
+        private System.Collections.IEnumerator StartWhenPlayerExists()
+        {
+            while (!PlayerManager.HasLocalPlayerAgent())
+                yield return null;
+
             CacheApi.SaveInstance(GuiManager.Current.m_playerLayer.m_playerStatus.gameObject.AddComponent<XpBar>(), CacheApiWrapper.XpModCacheName);
             _ = CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<XpHandler>();
 
@@ -116,11 +130,6 @@ namespace GTFuckingXP.Managers
                 //i don't think, anyone other than the XpExpansion mod will use that functionality, so let's just go quering it each loopitem.
                 callBack.Invoke(CacheApiWrapper.GetActiveLevel());
             }
-
-            //if (BepInExLoader.RundownDevMode)
-            //{
-            //    CacheApiWrapper.DestroyOldCreateRegisterAndReturnComponent<DevModeTools>();
-            //}
         }
 
         /// <summary>
@@ -128,14 +137,13 @@ namespace GTFuckingXP.Managers
         /// </summary>
         public void EndLevelScripts()
         {
-            CustomScalingBuffManager.ResetCustomBuffs(PlayerManager.GetLocalPlayerAgent());
-            CustomScalingBuffManager.ClearDefaultCustomBuffs();
-
             CacheApi.GetInstance<XpBar>(CacheApiWrapper.XpModCacheName).HideTextUi();
             CacheApiWrapper.KillScript<XpHandler>();
             CacheApiWrapper.KillScript<XpBar>();
             CacheApiWrapper.KillScript<DevModeTools>();
             CacheApiWrapper.SetPlayerToLevelMapping(new Dictionary<int, Level>());
+            CustomScalingBuffManager.ResetCustomBuffs(PlayerManager.GetLocalPlayerAgent());
+            CustomScalingBuffManager.ClearDefaultCustomBuffs();
         }
 
         public (List<EnemyXp> enemyXpList, List<LevelLayout> levelLayouts, List<BoosterBuffs> boosterBuffs, List<Group> groups) ReadJsonBlocks()

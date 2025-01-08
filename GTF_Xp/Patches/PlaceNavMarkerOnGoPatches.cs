@@ -13,7 +13,7 @@ namespace GTFuckingXP.Patches
             var playerToLevelMap = CacheApiWrapper.GetPlayerToLevelMapping();
             if (playerToLevelMap.TryGetValue(__instance.m_player.PlayerSlotIndex, out var levelNumber))
             {
-                name = $"<color=#F80>Lv.{levelNumber.LevelNumber}</color> {name}";
+                name = $"<color=#{BepInExLoader.LevelColor.Value}>Lv.{levelNumber.LevelNumber}</color> {name}";
             }
         }
     }

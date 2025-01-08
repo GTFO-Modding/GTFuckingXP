@@ -169,6 +169,8 @@ namespace GTFuckingXP.Managers
             foreach (CustomScaling customBuff in Enum.GetValues(typeof(CustomScaling)))
                 if (CacheApiWrapper.HasDefaultCustomScaling(customBuff))
                     SetCustomBuff(customBuff, GetResetModifier(customBuff), targetAgent);
+
+            ESCWrapper.RefreshMovementSpeed(); // Has no default but we need this to be refreshed on level drop
         }
 
         public static void ClearDefaultCustomBuffs()
